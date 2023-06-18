@@ -4,5 +4,5 @@
 .httr-oauth
 .DS_Store
 learning-cpp.Rproj
-binaries
+bin
 .vscode
