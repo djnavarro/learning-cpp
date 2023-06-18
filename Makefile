@@ -1,4 +1,4 @@
-all: bin/helloworld bin/helloworld-using bin/typecasting docs/index.html docs/chapter-01.html
+all: bin/helloworld bin/helloworld-using bin/typecasting docs/index.html docs/chapter-01.html docs/style.css
 
 bin/helloworld: src/helloworld.cpp
 	mkdir -p ./bin
@@ -11,6 +11,10 @@ bin/helloworld-using: src/helloworld-using.cpp
 bin/typecasting: src/typecasting.cpp
 	mkdir -p ./bin
 	clang++ --std=c++20 src/typecasting.cpp -o bin/typecasting
+
+docs/style.css: pandoc/style.css
+	mkdir -p ./docs
+	cp pandoc/style.css docs/style.css
 
 docs/index.html: notes/index.md pandoc/template.html
 	mkdir -p ./docs
