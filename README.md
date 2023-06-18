@@ -5,4 +5,4 @@ My notes while working through *Professional C++ (5th edition)* by Marc Gregoire
 - Markdown is the `notes` folder
 - HTML output in `docs` folder
 - Pandoc template for HTML output in `pandoc` folder
-- Simple bash script to create output in `build.sh` 
+- `Makefile` handles C++ compilation and builds docs
