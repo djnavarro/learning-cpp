@@ -13,6 +13,13 @@
       <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
       <!-- Styles -->
       <link rel="stylesheet" href="https://ashki23.github.io/styles.css">
+      <style>         
+         h1, h2, h3 {
+           padding-top: 30px;
+           padding-bottom: 10px;
+           font-weight: bold;
+         }
+      </style>
          </head>
    <body>
             <div class="container">
@@ -31,9 +38,11 @@
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">sudo</span> apt install clang</span></code></pre></div>
 <p>Now that I have a compiler, I need to actually compile it. Here’s the command:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="fu">clang</span>++ -std=c++20 helloworld.cpp -o helloworld</span></code></pre></div>
-<p>The <code>-std=c++20</code> flag tells clang what version of C++ I’m using, and the <code>-o</code> flag is used to specify the output file. Since I don’t want to commit any binaries to my git repo, I’ll add <code>helloworld</code> to the <code>.gitignore</code> file. Fantastic.</p>
+<p>Well, more precisely, because I don’t want my binaries in the same folder as my source code:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">clang</span>++ --std=c++20 ./source/01/helloworld.cpp -o ./binaries/01/helloworld</span></code></pre></div>
+<p>The <code>-std=c++20</code> flag tells clang what version of C++ I’m using, and the <code>-o</code> flag is used to specify the output file. Since I don’t want to commit any binaries to my git repo, I’ll add the <code>binaries</code> folder to the <code>.gitignore</code> file. Fantastic.</p>
 <p>From this point, I can invoke the executable at the terminal quite simply:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="ex">./helloworld</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="ex">./helloworld</span></span></code></pre></div>
 <p>And out pops the “Hello cruel message” at the console. Excellent. The basics are working.</p>
 <h2 id="notes-on-the-hello-world-program">Notes on the hello world program</h2>
 <p>Thankfully, I’ve written enough C++ code in the past that nothing about this surprises me. A few very basic syntactic notes in case I ever happen to share this with someone else coming from R.</p>
@@ -48,21 +57,56 @@
 </ul>
 <p>Going a little deeper:</p>
 <ul>
-<li><code>std::cout</code> refers to “standard out”, basically the place where we write output to the console. The metaphor used in the book is to think of it as a “chute” where you toss text.</li>
+<li><code>std::cout</code> refers to “standard out” (stdout), basically the place where we write output to the console. The metaphor used in the book is to think of it as a “chute” where you toss text.</li>
 <li>The <code>&lt;&lt;</code> operator is used to “toss data into the chute”, so <code>std::cout &lt;&lt; "hello"</code> passes the text string <code>"hello"</code> to the standard output. As the helloworld program illustrates, you can concatenate multiple <code>&lt;&lt;</code> operations</li>
 <li><code>std::endl</code> represents the end-of-line.</li>
 </ul>
 <p>If you don’t particularly want to namespace every command, as per <code>std::cout</code>, you can tell the compiler to make the names in a particular namespace available with a <code>using</code> directive (not dissimilar to calling <code>library()</code> in R). So I could have written my helloworld program like this:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="co">// helloworld-using.cpp</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>    cout &lt;&lt; <span class="st">&quot;Hello cruel world&quot;</span> &lt;&lt; endl;</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>; </span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true"></a>}</span></code></pre></div>
-<p>In general though it’s not a good idea because that leads to namespace conflicts pretty quickly.</p>      </div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="co">// helloworld-using.cpp</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>    cout &lt;&lt; <span class="st">&quot;Hello cruel world&quot;</span> &lt;&lt; endl;</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>; </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a>}</span></code></pre></div>
+<p>In general though it’s not a good idea because that leads to namespace conflicts pretty quickly.</p>
+<h2 id="variables-types-and-casting">Variables, types, and casting</h2>
+<p>Yes yes C++ is strongly typed and has many types. This I know. The book gives this as example code. The idea being that you should be able to reason through the steps that the program is following, what cast operations are taking place, and thereby predict what it will print out at the end.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="co">// typecasting.cpp</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>    <span class="co">// variable declarations</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a>    <span class="dt">int</span> someInteger;</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>    <span class="dt">short</span> someShort;</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>    <span class="dt">long</span> someLong;</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>    <span class="dt">float</span> someFloat;</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a>    <span class="dt">double</span> someDouble;</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a>    <span class="co">// some operations that involve casts</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true"></a>    someInteger = <span class="dv">256</span>;</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true"></a>    someInteger++;</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true"></a>    someShort = <span class="kw">static_cast</span>&lt;<span class="dt">short</span>&gt;(someInteger);</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true"></a>    someLong = someShort * <span class="dv">10000</span>;</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true"></a>    someFloat = someLong + <span class="fl">0.785</span><span class="bu">f</span>;</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true"></a>    someDouble = <span class="kw">static_cast</span>&lt;<span class="dt">double</span>&gt;(someFloat) / <span class="dv">100000</span>;</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true"></a>    <span class="co">// print output and return</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; someDouble &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Okay, I’ll give it a go. Stepping through it line by line…</p>
+<ul>
+<li>We start out with a signed 32 bit integer <code>someInteger</code> which has value 256.</li>
+<li>The <code>++</code> operator increments this to 257.</li>
+<li>We then use <code>static_cast()</code> to cast it to a signed 16 bit integer and store this as <code>someShort</code>.</li>
+<li>In the next line we’re multiplying by 10000, which gives us an answer of 2570000. That’s too large a number to store as a 16 bit integer, but there’s an implicit cast happening here (called coercion). The <code>someLong</code> variable is typed as a long integer (also 32 bits) so no explicit cast is needed, and the result is stored as a long integer with value 2570000.</li>
+<li>The next line also involves an implicit cast. We’re adding a float (<code>0.785f</code>) to a long integer and storing the result as a float. So <code>someFloat</code> has value 2570000.785.</li>
+<li>Finally, we explicitly cast <code>someFloat</code> to a double precision floating point number, divide it by 100000, and assign the result to <code>someDouble</code>. That gives us a value of 25.70000785</li>
+</ul>
+<p>We’ve lost a little precision in the printed output, however, because the program prints 25.7 to stdout.</p>      </div>
             <!-- JS, Popper.js, and jQuery -->
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
