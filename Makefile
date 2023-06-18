@@ -26,3 +26,7 @@ docs/chapter-01.html: notes/chapter-01.md pandoc/template.html
 	--template=./pandoc/template.html \
     --output=./docs/chapter-01.html
 
+clean:
+	rm -rf docs
+	rm -rf bin
+
