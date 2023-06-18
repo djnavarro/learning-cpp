@@ -1,6 +1,8 @@
 My notes while working through *Professional C++ (5th edition)* by Marc Gregoire
 
-- Markdown and C++ source code in `source` folder
+- C++ source code in `src` folder
+- Binaries written to `bin` (not included)
+- Markdown is the `notes` folder
 - HTML output in `docs` folder
-- Nice template for HTML output in `template` folder
+- Pandoc template for HTML output in `pandoc` folder
 - Simple bash script to create output in `build.sh` 

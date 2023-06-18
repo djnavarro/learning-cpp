@@ -2,4 +2,4 @@
 title: "Notes On Learning C++"
 ---
 
-- [chapter 1](./01/index.html)
+- [chapter 1](chapter-01.html)
