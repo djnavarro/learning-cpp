@@ -1,5 +1,8 @@
+---
+title: "1: A crash course in C++ and the standard library"
+---
 
-# Chapter 1: A crash course in C++ and the standard library
+[Back to top](../index.html)
 
 ## The hello world program
 
