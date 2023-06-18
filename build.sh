@@ -1,3 +1,11 @@
+mkdir -p ./docs
+pandoc ./source/index.md \
+    --standalone \
+    --template=./template/template.html \
+    --output=./docs/index.html
 
-pandoc --template ./template/template.html --standalone ./source/index.md -o ./output/index.html
-pandoc --template ./template/template.html --standalone ./source/01/index.md -o ./output/01/index.html
+mkdir -p ./docs/01
+pandoc ./source/01/index.md \
+    --standalone \
+    --template=./template/template.html \
+    --output=./docs/01/index.html
