@@ -210,4 +210,58 @@ Benjamin gender: 0
 
 ## Structs
 
-Moving along.
+Moving along. Define the class in the header file:
+
+``` cpp
+// employee.h
+struct Employee {
+    char firstInitial;
+    char lastInitial;
+    int employeeNumber;
+    int salary;
+};
+```
+
+In the book, the code is a little more elaborate because it explicitly defines a module, but since my compiler has incomplete support for C++20 features, I'm keeping it simple. Along the same lines, the book uses the new C++20 `<format>` module to handle printing: rather than mess about with the new hotness I'm going to be old fashioned and use `printf()` to print to stdout. So my program is:
+
+``` cpp
+// employee.cpp
+#include <iostream>
+#include <sstream>
+#include "employee.h"
+
+using namespace std;
+
+int main() {
+    // define the employee record
+    Employee danielle;
+    danielle.firstInitial = 'D';
+    danielle.lastInitial = 'N';
+    danielle.employeeNumber = 69;
+    danielle.salary = 123456;
+
+    // write to stdout
+    std::stringstream ss;
+    ss.str("");
+    ss << "Employee: " << danielle.firstInitial << danielle.lastInitial;
+    std::cout << ss.str() << std::endl;
+    
+    ss.str("");
+    ss << "Employee number: #" << danielle.employeeNumber;
+    std::cout << ss.str() << std::endl;
+
+    ss.str("");
+    ss << "Employee salary: $" << danielle.salary;
+    std::cout << ss.str() << std::endl;
+
+    return 0;
+}
+```
+
+When I run this program I get this as output:
+
+```
+Employee: DN
+Employee number: #69
+Employee salary: $123456
+```

@@ -152,7 +152,50 @@
 <pre><code>Danielle gender: 1
 Benjamin gender: 0</code></pre>
 <h2 id="structs">Structs</h2>
-<p>Moving along.</p></div>
+<p>Moving along. Define the class in the header file:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a><span class="co">// employee.h</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true"></a><span class="kw">struct</span> Employee {</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true"></a>    <span class="dt">char</span> firstInitial;</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true"></a>    <span class="dt">char</span> lastInitial;</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true"></a>    <span class="dt">int</span> employeeNumber;</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true"></a>    <span class="dt">int</span> salary;</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true"></a>};</span></code></pre></div>
+<p>In the book, the code is a little more elaborate because it explicitly defines a module, but since my compiler has incomplete support for C++20 features, I’m keeping it simple. Along the same lines, the book uses the new C++20 <code>&lt;format&gt;</code> module to handle printing: rather than mess about with the new hotness I’m going to be old fashioned and use <code>printf()</code> to print to stdout. So my program is:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="co">// employee.cpp</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;sstream&gt;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&quot;employee.h&quot;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true"></a>    <span class="co">// define the employee record</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true"></a>    Employee danielle;</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true"></a>    danielle.firstInitial = <span class="ch">&#39;D&#39;</span>;</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true"></a>    danielle.lastInitial = <span class="ch">&#39;N&#39;</span>;</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true"></a>    danielle.employeeNumber = <span class="dv">69</span>;</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true"></a>    danielle.salary = <span class="dv">123456</span>;</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true"></a>    <span class="co">// write to stdout</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true"></a>    <span class="bu">std::</span>stringstream ss;</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true"></a>    ss.str(<span class="st">&quot;&quot;</span>);</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true"></a>    ss &lt;&lt; <span class="st">&quot;Employee: &quot;</span> &lt;&lt; danielle.firstInitial &lt;&lt; danielle.lastInitial;</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; ss.str() &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true"></a>    </span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true"></a>    ss.str(<span class="st">&quot;&quot;</span>);</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true"></a>    ss &lt;&lt; <span class="st">&quot;Employee number: #&quot;</span> &lt;&lt; danielle.employeeNumber;</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; ss.str() &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true"></a></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true"></a>    ss.str(<span class="st">&quot;&quot;</span>);</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true"></a>    ss &lt;&lt; <span class="st">&quot;Employee salary: $&quot;</span> &lt;&lt; danielle.salary;</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; ss.str() &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true"></a></span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true"></a>}</span></code></pre></div>
+<p>When I run this program I get this as output:</p>
+<pre><code>Employee: DN
+Employee number: #69
+Employee salary: $123456</code></pre></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
