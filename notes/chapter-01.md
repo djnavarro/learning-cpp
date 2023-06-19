@@ -210,7 +210,9 @@ Benjamin gender: 0
 
 ## Structs
 
-Moving along. Define the class in the header file:
+Moving along. The next kind of objects the book considers are **structs**, which allow you to group one or more existing objects (which may themselves be of different types) into a new type. They are, more or less, the C++ analog of lists in R. 
+
+It's not uncommon for C++ code to define a class within a header file which can be made available to the program by an `#include` directive (or, in C++20, imported as a module). Sticking reasonably closely to what is in the book here, I'll write a header file that defines an `Employee` class:
 
 ``` cpp
 // employee.h
@@ -222,7 +224,23 @@ struct Employee {
 };
 ```
 
-In the book, the code is a little more elaborate because it explicitly defines a module, but since my compiler has incomplete support for C++20 features, I'm keeping it simple. Along the same lines, the book uses the new C++20 `<format>` module to handle printing: rather than mess about with the new hotness or introduce an external dependency, I'll use stringstream objects provided by the `<sstream>` header file. So my program is:
+In the book, the code is a little more elaborate because it explicitly defines a module, but since my compiler has incomplete support for C++20 features, I'm keeping it simple. 
+
+A thing to note here is that C++ doesn't supply a string type out of the box, which is -- I would imagine -- the reason why this class sidesteps that awkwardness and encodes only the `firstInitial` and `lastInitial` as fields in an `Employee` struct. By doing that we can get away with using a char here. There are of course ways to specify strings, but it's a bit tangential to the discussion. 
+
+Anyway, the key thing is that we access the fields of a struct using `.` as the code below illustrates:
+
+``` cpp
+Employee danielle;
+danielle.firstInitial = 'D';
+danielle.lastInitial = 'N';
+danielle.employeeNumber = 69;
+danielle.salary = 123456;
+```
+
+To see it in action we can write a short program. Again we have a bit of an issue because the book uses C++20 features that my compiler doesn't support. Specifically, it uses the new C++20 `<format>` module to handle printing, which I don't have access to. Rather than mess about with compilers to get the new hotness working or introduce an external dependency, I decided to use stringstream objects provided by the `<sstream>` header file. 
+
+So my program looks like this:
 
 ``` cpp
 // employee.cpp
@@ -265,3 +283,6 @@ Employee: DN
 Employee number: #69
 Employee salary: $123456
 ```
+
+That all seems to make sense. What's next?
+
