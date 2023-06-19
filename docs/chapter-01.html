@@ -17,7 +17,8 @@
    <body>
             <div class="container">
          <h1 class="title">1: A crash course in C++ and the standard library</h1>
-         <p><a href="index.html">Back to top</a></p>
+                  <div class="row">
+            <div class="col-xl-10"><p><a href="index.html">Back to top</a></p>
 <h2 id="the-hello-world-program">The hello world program</h2>
 <p>As always, we start with a “hello world” program. Here’s the source:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">// helloworld.cpp</span></span>
@@ -123,7 +124,20 @@
 <li>The next line also involves an implicit cast. We’re adding a float (<code>0.785f</code>) to a long integer and storing the result as a float. So <code>someFloat</code> has value 2570000.785.</li>
 <li>Finally, we explicitly cast <code>someFloat</code> to a double precision floating point number, divide it by 100000, and assign the result to <code>someDouble</code>. That gives us a value of 25.70000785</li>
 </ul>
-<p>We’ve lost a little precision in the printed output, however, because the program prints 25.7 to stdout.</p>      </div>
+<p>We’ve lost a little precision in the printed output, however, because the program prints 25.7 to stdout.</p></div>
+            <div class="d-none d-xl-block col-xl-2 bd-toc">
+               <ul class="section-nav">
+                  <li class="toc-entry"><ul>
+<li><a href="#the-hello-world-program">The hello world program</a></li>
+<li><a href="#compiling-the-hello-world-program">Compiling the hello world program</a></li>
+<li><a href="#notes-on-the-hello-world-program">Notes on the hello world program</a></li>
+<li><a href="#variables-types-and-operators">Variables, types, and operators</a></li>
+<li><a href="#casting-and-coercion">Casting and coercion</a></li>
+</ul></li>
+               </ul>
+            </div>
+         </div>
+               </div>
             <!-- JS, Popper.js, and jQuery -->
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
