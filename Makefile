@@ -4,7 +4,7 @@ cpp_out := $(patsubst src/%.cpp, bin/%, $(cpp_src))
 pandoc_src := $(wildcard notes/*.md)
 pandoc_out := $(patsubst notes/%.md, docs/%.html, $(pandoc_src))
 
-all: dirs $(cpp_out) $(pandoc_out) docs/style.css
+all: dirs $(cpp_out) $(pandoc_out) docs/style.css docs/.nojekyll
 
 dirs:
 	@mkdir -p ./bin
@@ -15,6 +15,9 @@ bin/%: src/%.cpp
 
 docs/style.css: pandoc/style.css
 	cp pandoc/style.css docs/style.css
+
+docs/.nojekyll:
+	touch docs/.nojekyll
 
 docs/%.html: notes/%.md
 	pandoc $< -o $@ --standalone --template=./pandoc/template.html 
