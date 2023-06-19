@@ -18,7 +18,7 @@ int main() {
 }
 ```
 
-## Compiling the hello world program
+## Compiling helloworld.cpp
 
 That's all well and good, but I can't do anything useful with this until I compile it, and for that to happen I need a C++ compiler. As it happens I already have g++ on my system, but -- for no particular reason -- I've decided to use clang. Installing clang on Ubuntu is pretty straightforward:
 
@@ -62,7 +62,7 @@ Hello cruel world
 
 Excellent. The basics are working. 
 
-## Notes on the hello world program
+## Notes on helloworld.cpp
 
 Thankfully, I've written enough C++ code in the past that nothing about this surprises me. A few very basic syntactic notes in case I ever happen to share this with someone else coming from R.
 
@@ -284,7 +284,7 @@ Employee salary: $123456
 
 That all seems to make sense. What's next?
 
-## Digression: Poisson random numbers
+## Digression: Poisson variates
 
 Looking ahead, it seems like the book is about to start discussing conditional branching, functions, loops, and all that good stuff. Fair enough. But conditional branching based on testing some boolean expression is never much fun unless you have a something meaningful to test. Ideally you'd have something where the conditional might evaluate differently. So, since we're all statisticians here (I mean, it's just me here and I'm a statistician), this feels like a good moment to divert from the text and write some code that generates Poisson random numbers. To do this I'll use `<random>`:
 
@@ -321,7 +321,7 @@ poisson sample: 4
 
 You get the idea.
 
-## Conditional statements and expressions
+## Conditionals
 
 Okay, back to the development of ideas in the book. Next up is conditional branching, and the basic syntax is deeply familiar to anyone who has programmed in... pretty much any language I guess. The first example in the book shows a cascading if statement like this:
 

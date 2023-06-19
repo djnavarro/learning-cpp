@@ -28,7 +28,7 @@
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;Hello cruel world&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>; </span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>}</span></code></pre></div>
-<h2 id="compiling-the-hello-world-program">Compiling the hello world program</h2>
+<h2 id="compiling-helloworld.cpp">Compiling helloworld.cpp</h2>
 <p>That’s all well and good, but I can’t do anything useful with this until I compile it, and for that to happen I need a C++ compiler. As it happens I already have g++ on my system, but – for no particular reason – I’ve decided to use clang. Installing clang on Ubuntu is pretty straightforward:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">sudo</span> apt install clang</span></code></pre></div>
 <p>Now that I have a compiler, I need to actually compile it. Here’s the command:</p>
@@ -44,7 +44,7 @@
 <p>And out pops the message at the terminal:</p>
 <pre><code>Hello cruel world</code></pre>
 <p>Excellent. The basics are working.</p>
-<h2 id="notes-on-the-hello-world-program">Notes on the hello world program</h2>
+<h2 id="notes-on-helloworld.cpp">Notes on helloworld.cpp</h2>
 <p>Thankfully, I’ve written enough C++ code in the past that nothing about this surprises me. A few very basic syntactic notes in case I ever happen to share this with someone else coming from R.</p>
 <ul>
 <li>Comments in C++ are specified using <code>//</code></li>
@@ -205,7 +205,7 @@ Benjamin gender: 0</code></pre>
 Employee number: #69
 Employee salary: $123456</code></pre>
 <p>That all seems to make sense. What’s next?</p>
-<h2 id="digression-poisson-random-numbers">Digression: Poisson random numbers</h2>
+<h2 id="digression-poisson-variates">Digression: Poisson variates</h2>
 <p>Looking ahead, it seems like the book is about to start discussing conditional branching, functions, loops, and all that good stuff. Fair enough. But conditional branching based on testing some boolean expression is never much fun unless you have a something meaningful to test. Ideally you’d have something where the conditional might evaluate differently. So, since we’re all statisticians here (I mean, it’s just me here and I’m a statistician), this feels like a good moment to divert from the text and write some code that generates Poisson random numbers. To do this I’ll use <code>&lt;random&gt;</code>:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="co">// poisson-sample.cpp</span></span>
 <span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
@@ -232,7 +232,7 @@ poisson sample: 2
 poisson sample: 4
 poisson sample: 4</code></pre>
 <p>You get the idea.</p>
-<h2 id="conditional-statements-and-expressions">Conditional statements and expressions</h2>
+<h2 id="conditionals">Conditionals</h2>
 <p>Okay, back to the development of ideas in the book. Next up is conditional branching, and the basic syntax is deeply familiar to anyone who has programmed in… pretty much any language I guess. The first example in the book shows a cascading if statement like this:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="cf">if</span> (value &gt; <span class="dv">4</span>) {</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>    <span class="co">// do something</span></span>
@@ -278,14 +278,14 @@ The sampled value of 3 is below the mode.</code></pre>
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
 <li><a href="#the-hello-world-program">The hello world program</a></li>
-<li><a href="#compiling-the-hello-world-program">Compiling the hello world program</a></li>
-<li><a href="#notes-on-the-hello-world-program">Notes on the hello world program</a></li>
+<li><a href="#compiling-helloworld.cpp">Compiling helloworld.cpp</a></li>
+<li><a href="#notes-on-helloworld.cpp">Notes on helloworld.cpp</a></li>
 <li><a href="#variables-types-and-operators">Variables, types, and operators</a></li>
 <li><a href="#casting-and-coercion">Casting and coercion</a></li>
 <li><a href="#enumerated-types">Enumerated types</a></li>
 <li><a href="#structs">Structs</a></li>
-<li><a href="#digression-poisson-random-numbers">Digression: Poisson random numbers</a></li>
-<li><a href="#conditional-statements-and-expressions">Conditional statements and expressions</a></li>
+<li><a href="#digression-poisson-variates">Digression: Poisson variates</a></li>
+<li><a href="#conditionals">Conditionals</a></li>
 </ul></li>
                </ul>
             </div>
