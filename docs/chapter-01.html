@@ -404,7 +404,68 @@ The sampled value of 3 is below the mode.</code></pre>
 a has integer code 97
 n has integer code 110
 i has integer code 105</code></pre>
-<p>(The integers correspond to the ASCII codes for each character).</p></div>
+<p>(The integers correspond to the ASCII codes for each character).</p>
+<h2 id="arrays-with-stdarray">Arrays with <code>std::array</code></h2>
+<h2 id="vectors-with-stdvector">Vectors with <code>std::vector</code></h2>
+<p>To return to my new best friend the <a href="https://cplusplus.com/reference/random/"><code>&lt;random&gt;</code></a> library, let’s write a function that samples from a beta distribution. This is slightly tricky insofar as there isn’t actually a beta distribution function in the random library. Fortunately, I haven’t forgotten my basic variate relations. Specifically, if we let:</p>
+<p><span class="math display">\[
+\begin{array}{rcl}
+x &amp; \sim &amp; \mbox{Gamma}(a, 1) \\
+y &amp; \sim &amp; \mbox{Gamma}(b, 1)
+\end{array}
+\]</span></p>
+<p>and define <span class="math inline">\(z = x/(x + y)\)</span>, then:</p>
+<p><span class="math display">\[ 
+z \sim \mbox{Beta}(a, b)
+\]</span></p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="co">// beta-sample.cpp</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true"></a><span class="dt">void</span> print_message(<span class="dt">double</span> value, <span class="dt">double</span> a, <span class="dt">double</span> b) {</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;beta(&quot;</span> &lt;&lt; a &lt;&lt; <span class="st">&quot;,&quot;</span> &lt;&lt; b &lt;&lt; <span class="st">&quot;) sample: &quot;</span> &lt;&lt; value &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true"></a>}</span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true"></a></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true"></a><span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; draw_betas(<span class="dt">int</span> n, <span class="dt">double</span> a, <span class="dt">double</span> b) {</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true"></a>    <span class="co">// gamma distributions</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true"></a>    <span class="bu">std::</span>gamma_distribution&lt;<span class="dt">double</span>&gt; gamma_a(a, <span class="fl">1.0</span>);</span>
+<span id="cb38-12"><a href="#cb38-12" aria-hidden="true"></a>    <span class="bu">std::</span>gamma_distribution&lt;<span class="dt">double</span>&gt; gamma_b(b, <span class="fl">1.0</span>);</span>
+<span id="cb38-13"><a href="#cb38-13" aria-hidden="true"></a></span>
+<span id="cb38-14"><a href="#cb38-14" aria-hidden="true"></a>    <span class="co">// mersenne twister numbers</span></span>
+<span id="cb38-15"><a href="#cb38-15" aria-hidden="true"></a>    <span class="bu">std::</span>random_device rd;</span>
+<span id="cb38-16"><a href="#cb38-16" aria-hidden="true"></a>    <span class="bu">std::</span>mt19937 mt(rd());</span>
+<span id="cb38-17"><a href="#cb38-17" aria-hidden="true"></a></span>
+<span id="cb38-18"><a href="#cb38-18" aria-hidden="true"></a>    <span class="co">// draw samples and return</span></span>
+<span id="cb38-19"><a href="#cb38-19" aria-hidden="true"></a>    <span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; beta_variates;</span>
+<span id="cb38-20"><a href="#cb38-20" aria-hidden="true"></a>    <span class="dt">double</span> x, y;</span>
+<span id="cb38-21"><a href="#cb38-21" aria-hidden="true"></a>    <span class="cf">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; i++) {</span>
+<span id="cb38-22"><a href="#cb38-22" aria-hidden="true"></a>        x = gamma_a(mt);</span>
+<span id="cb38-23"><a href="#cb38-23" aria-hidden="true"></a>        y = gamma_b(mt);</span>
+<span id="cb38-24"><a href="#cb38-24" aria-hidden="true"></a>        beta_variates[i] = x / (x + y);</span>
+<span id="cb38-25"><a href="#cb38-25" aria-hidden="true"></a>    }</span>
+<span id="cb38-26"><a href="#cb38-26" aria-hidden="true"></a>    <span class="cf">return</span> beta_variates;</span>
+<span id="cb38-27"><a href="#cb38-27" aria-hidden="true"></a>}</span>
+<span id="cb38-28"><a href="#cb38-28" aria-hidden="true"></a></span>
+<span id="cb38-29"><a href="#cb38-29" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb38-30"><a href="#cb38-30" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">double</span> a = <span class="fl">2.0</span>; <span class="co">// shape parameter 1</span></span>
+<span id="cb38-31"><a href="#cb38-31" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">double</span> b = <span class="fl">1.0</span>; <span class="co">// shape parameter 2</span></span>
+<span id="cb38-32"><a href="#cb38-32" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">int</span> n = <span class="dv">5</span>; <span class="co">// length of output vector</span></span>
+<span id="cb38-33"><a href="#cb38-33" aria-hidden="true"></a></span>
+<span id="cb38-34"><a href="#cb38-34" aria-hidden="true"></a>    <span class="co">// draw samples</span></span>
+<span id="cb38-35"><a href="#cb38-35" aria-hidden="true"></a>    <span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; betas = draw_betas(n, a, b);</span>
+<span id="cb38-36"><a href="#cb38-36" aria-hidden="true"></a></span>
+<span id="cb38-37"><a href="#cb38-37" aria-hidden="true"></a>    <span class="co">// print messages and return</span></span>
+<span id="cb38-38"><a href="#cb38-38" aria-hidden="true"></a>    <span class="cf">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; i++) {</span>
+<span id="cb38-39"><a href="#cb38-39" aria-hidden="true"></a>        print_message(betas[i], a, b);</span>
+<span id="cb38-40"><a href="#cb38-40" aria-hidden="true"></a>    }</span>
+<span id="cb38-41"><a href="#cb38-41" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb38-42"><a href="#cb38-42" aria-hidden="true"></a>}</span></code></pre></div>
+<p>When we run this:</p>
+<pre><code>beta(2,1) sample: 0.80872
+beta(2,1) sample: 0.952428
+beta(2,1) sample: 0.964178
+beta(2,1) sample: 0.685391
+beta(2,1) sample: 0.969854</code></pre></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -419,6 +480,8 @@ i has integer code 105</code></pre>
 <li><a href="#conditionals">Conditionals</a></li>
 <li><a href="#logical-expressions">Logical expressions</a></li>
 <li><a href="#functions">Functions</a></li>
+<li><a href="#arrays-with-stdarray">Arrays with <code>std::array</code></a></li>
+<li><a href="#vectors-with-stdvector">Vectors with <code>std::vector</code></a></li>
 </ul></li>
                </ul>
             </div>
