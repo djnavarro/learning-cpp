@@ -508,3 +508,66 @@ std::cout << ((p_value < .05) ? "reject null" : "retain null");
 ```
 
 Cool Continuing on.
+
+## Logical expressions
+
+There's not much to say here. C++ operators are mostly the same as anywhere else:
+
+- Inequality operators: `>`, `>=`, `<`, `<=`
+- Equality operator: `==`
+- Not-equal operator: `!=`
+- Not operator: `!`
+- And operator: `&&`
+- Or operator: `||`
+
+Absolutely riveting content, honestly. I'm on the edge of my seat. About the only thing worth mentioning is that C++ uses **short circuit** rules to evaluate logical expressions. A logical expression is evaluated only until the result is guaranteed. Later steps are not evaluated. For instance:
+
+``` cpp
+bool result { boolean_eval_to_false || true || boolean_is_irrelevant }
+```
+
+In this case `boolean_eval_to_false` is evaluated (returning `false`). That doesn't guarantee the final result though, because the expressions are joined by `||`. However, the next expression is `true`, which means that `result` must equal `true`. Consequently the expression as a whole short-circuits, and `boolean_is_irrelevant` is never evaluated. This trick is used a lot for efficiency: if you put the computationally cheap tests first and the computationally expensive tests last, you may be able to avoid ever having to perform the expensive tests.
+
+## Functions
+
+So far all the programs I've looked at have included a `main()` function and nothing else. Every time I've declared my `main()` function the code has looked like this:
+
+``` cpp
+int main() {
+    // meaningful content here
+    // return to user
+    return 0;
+}
+```
+
+By writing the declaration in this way we are asserting the `main()` function always returns an `int` value, and indeed when we look at the `return` statement at the end, it always does. Admittedly, I've never used this return value for anything, but it's a requirement in C++ that the `main()` function return an integer. 
+
+Other functions aren't constrained in the same way, and in fact C++ functions don't have to return anything if the only reason to call the function is for its side effects. To do that we set the output type to `void`. Here's an example: 
+
+
+``` cpp
+// char-code.cpp
+#include <iostream>
+
+void print_ascii_code(char c) {
+    std::cout << c << " has integer code " << static_cast<int>(c) << std::endl;
+}
+
+int main() {
+    print_ascii_code('d');
+    print_ascii_code('a');
+    print_ascii_code('n');
+    print_ascii_code('i');
+}
+```
+
+When I run this program I get this:
+
+```
+d has integer code 100
+a has integer code 97
+n has integer code 110
+i has integer code 105
+```
+
+(The integers correspond to the ASCII codes for each character).

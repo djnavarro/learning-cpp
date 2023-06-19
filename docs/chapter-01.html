@@ -363,7 +363,48 @@ The sampled value of 3 is below the mode.</code></pre>
 <div class="sourceCode" id="cb32"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true"></a>&lt;condition&gt; ? &lt;value_if_condition_true&gt; : &lt;value_if_condition_false&gt;;</span></code></pre></div>
 <p>Here’s a simple example:</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true"></a><span class="bu">std::</span>cout &lt;&lt; ((p_value &lt; <span class="fl">.05</span>) ? <span class="st">&quot;reject null&quot;</span> : <span class="st">&quot;retain null&quot;</span>);</span></code></pre></div>
-<p>Cool Continuing on.</p></div>
+<p>Cool Continuing on.</p>
+<h2 id="logical-expressions">Logical expressions</h2>
+<p>There’s not much to say here. C++ operators are mostly the same as anywhere else:</p>
+<ul>
+<li>Inequality operators: <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code></li>
+<li>Equality operator: <code>==</code></li>
+<li>Not-equal operator: <code>!=</code></li>
+<li>Not operator: <code>!</code></li>
+<li>And operator: <code>&amp;&amp;</code></li>
+<li>Or operator: <code>||</code></li>
+</ul>
+<p>Absolutely riveting content, honestly. I’m on the edge of my seat. About the only thing worth mentioning is that C++ uses <strong>short circuit</strong> rules to evaluate logical expressions. A logical expression is evaluated only until the result is guaranteed. Later steps are not evaluated. For instance:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true"></a><span class="dt">bool</span> result { boolean_eval_to_false || <span class="kw">true</span> || boolean_is_irrelevant }</span></code></pre></div>
+<p>In this case <code>boolean_eval_to_false</code> is evaluated (returning <code>false</code>). That doesn’t guarantee the final result though, because the expressions are joined by <code>||</code>. However, the next expression is <code>true</code>, which means that <code>result</code> must equal <code>true</code>. Consequently the expression as a whole short-circuits, and <code>boolean_is_irrelevant</code> is never evaluated. This trick is used a lot for efficiency: if you put the computationally cheap tests first and the computationally expensive tests last, you may be able to avoid ever having to perform the expensive tests.</p>
+<h2 id="functions">Functions</h2>
+<p>So far all the programs I’ve looked at have included a <code>main()</code> function and nothing else. Every time I’ve declared my <code>main()</code> function the code has looked like this:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true"></a>    <span class="co">// meaningful content here</span></span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true"></a>    <span class="co">// return to user</span></span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true"></a>}</span></code></pre></div>
+<p>By writing the declaration in this way we are asserting the <code>main()</code> function always returns an <code>int</code> value, and indeed when we look at the <code>return</code> statement at the end, it always does. Admittedly, I’ve never used this return value for anything, but it’s a requirement in C++ that the <code>main()</code> function return an integer.</p>
+<p>Other functions aren’t constrained in the same way, and in fact C++ functions don’t have to return anything if the only reason to call the function is for its side effects. To do that we set the output type to <code>void</code>. Here’s an example:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true"></a><span class="co">// char-code.cpp</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true"></a></span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true"></a><span class="dt">void</span> print_ascii_code(<span class="dt">char</span> c) {</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; c &lt;&lt; <span class="st">&quot; has integer code &quot;</span> &lt;&lt; <span class="kw">static_cast</span>&lt;<span class="dt">int</span>&gt;(c) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true"></a>}</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true"></a>    print_ascii_code(<span class="ch">&#39;d&#39;</span>);</span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true"></a>    print_ascii_code(<span class="ch">&#39;a&#39;</span>);</span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true"></a>    print_ascii_code(<span class="ch">&#39;n&#39;</span>);</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true"></a>    print_ascii_code(<span class="ch">&#39;i&#39;</span>);</span>
+<span id="cb36-13"><a href="#cb36-13" aria-hidden="true"></a>}</span></code></pre></div>
+<p>When I run this program I get this:</p>
+<pre><code>d has integer code 100
+a has integer code 97
+n has integer code 110
+i has integer code 105</code></pre>
+<p>(The integers correspond to the ASCII codes for each character).</p></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -376,6 +417,8 @@ The sampled value of 3 is below the mode.</code></pre>
 <li><a href="#structs">Structs</a></li>
 <li><a href="#digression-poisson-variates">Digression: Poisson variates</a></li>
 <li><a href="#conditionals">Conditionals</a></li>
+<li><a href="#logical-expressions">Logical expressions</a></li>
+<li><a href="#functions">Functions</a></li>
 </ul></li>
                </ul>
             </div>
