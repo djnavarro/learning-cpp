@@ -176,37 +176,104 @@ Benjamin gender: 0</code></pre>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;sstream&gt;</span></span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&quot;employee.h&quot;</span></span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a></span>
-<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a></span>
-<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
-<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a>    <span class="co">// define the employee record</span></span>
-<span id="cb18-10"><a href="#cb18-10" aria-hidden="true"></a>    Employee danielle;</span>
-<span id="cb18-11"><a href="#cb18-11" aria-hidden="true"></a>    danielle.firstInitial = <span class="ch">&#39;D&#39;</span>;</span>
-<span id="cb18-12"><a href="#cb18-12" aria-hidden="true"></a>    danielle.lastInitial = <span class="ch">&#39;N&#39;</span>;</span>
-<span id="cb18-13"><a href="#cb18-13" aria-hidden="true"></a>    danielle.employeeNumber = <span class="dv">69</span>;</span>
-<span id="cb18-14"><a href="#cb18-14" aria-hidden="true"></a>    danielle.salary = <span class="dv">123456</span>;</span>
-<span id="cb18-15"><a href="#cb18-15" aria-hidden="true"></a></span>
-<span id="cb18-16"><a href="#cb18-16" aria-hidden="true"></a>    <span class="co">// write to stdout</span></span>
-<span id="cb18-17"><a href="#cb18-17" aria-hidden="true"></a>    <span class="bu">std::</span>stringstream ss;</span>
-<span id="cb18-18"><a href="#cb18-18" aria-hidden="true"></a>    ss.str(<span class="st">&quot;&quot;</span>);</span>
-<span id="cb18-19"><a href="#cb18-19" aria-hidden="true"></a>    ss &lt;&lt; <span class="st">&quot;Employee: &quot;</span> &lt;&lt; danielle.firstInitial &lt;&lt; danielle.lastInitial;</span>
-<span id="cb18-20"><a href="#cb18-20" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; ss.str() &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb18-21"><a href="#cb18-21" aria-hidden="true"></a>    </span>
-<span id="cb18-22"><a href="#cb18-22" aria-hidden="true"></a>    ss.str(<span class="st">&quot;&quot;</span>);</span>
-<span id="cb18-23"><a href="#cb18-23" aria-hidden="true"></a>    ss &lt;&lt; <span class="st">&quot;Employee number: #&quot;</span> &lt;&lt; danielle.employeeNumber;</span>
-<span id="cb18-24"><a href="#cb18-24" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; ss.str() &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb18-25"><a href="#cb18-25" aria-hidden="true"></a></span>
-<span id="cb18-26"><a href="#cb18-26" aria-hidden="true"></a>    ss.str(<span class="st">&quot;&quot;</span>);</span>
-<span id="cb18-27"><a href="#cb18-27" aria-hidden="true"></a>    ss &lt;&lt; <span class="st">&quot;Employee salary: $&quot;</span> &lt;&lt; danielle.salary;</span>
-<span id="cb18-28"><a href="#cb18-28" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; ss.str() &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb18-29"><a href="#cb18-29" aria-hidden="true"></a></span>
-<span id="cb18-30"><a href="#cb18-30" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
-<span id="cb18-31"><a href="#cb18-31" aria-hidden="true"></a>}</span></code></pre></div>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a>    <span class="co">// define the employee record</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a>    Employee danielle;</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a>    danielle.firstInitial = <span class="ch">&#39;D&#39;</span>;</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true"></a>    danielle.lastInitial = <span class="ch">&#39;N&#39;</span>;</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true"></a>    danielle.employeeNumber = <span class="dv">69</span>;</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true"></a>    danielle.salary = <span class="dv">123456</span>;</span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true"></a></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true"></a>    <span class="co">// write to stdout</span></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true"></a>    <span class="bu">std::</span>stringstream ss;</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true"></a>    ss.str(<span class="st">&quot;&quot;</span>);</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true"></a>    ss &lt;&lt; <span class="st">&quot;Employee: &quot;</span> &lt;&lt; danielle.firstInitial &lt;&lt; danielle.lastInitial;</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; ss.str() &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true"></a></span>
+<span id="cb18-20"><a href="#cb18-20" aria-hidden="true"></a>    ss.str(<span class="st">&quot;&quot;</span>);</span>
+<span id="cb18-21"><a href="#cb18-21" aria-hidden="true"></a>    ss &lt;&lt; <span class="st">&quot;Employee number: #&quot;</span> &lt;&lt; danielle.employeeNumber;</span>
+<span id="cb18-22"><a href="#cb18-22" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; ss.str() &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb18-23"><a href="#cb18-23" aria-hidden="true"></a></span>
+<span id="cb18-24"><a href="#cb18-24" aria-hidden="true"></a>    ss.str(<span class="st">&quot;&quot;</span>);</span>
+<span id="cb18-25"><a href="#cb18-25" aria-hidden="true"></a>    ss &lt;&lt; <span class="st">&quot;Employee salary: $&quot;</span> &lt;&lt; danielle.salary;</span>
+<span id="cb18-26"><a href="#cb18-26" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; ss.str() &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb18-27"><a href="#cb18-27" aria-hidden="true"></a></span>
+<span id="cb18-28"><a href="#cb18-28" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb18-29"><a href="#cb18-29" aria-hidden="true"></a>}</span></code></pre></div>
 <p>When I run this program I get this as output:</p>
 <pre><code>Employee: DN
 Employee number: #69
 Employee salary: $123456</code></pre>
-<p>That all seems to make sense. What’s next?</p></div>
+<p>That all seems to make sense. What’s next?</p>
+<h2 id="digression-poisson-random-numbers">Digression: Poisson random numbers</h2>
+<p>Looking ahead, it seems like the book is about to start discussing conditional branching, functions, loops, and all that good stuff. Fair enough. But conditional branching based on testing some boolean expression is never much fun unless you have a something meaningful to test. Ideally you’d have something where the conditional might evaluate differently. So, since we’re all statisticians here (I mean, it’s just me here and I’m a statistician), this feels like a good moment to divert from the text and write some code that generates Poisson random numbers. To do this I’ll use <code>&lt;random&gt;</code>:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a><span class="co">// poisson-sample.cpp</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true"></a></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true"></a>    <span class="co">// set seed using time, define PRNG with Mersenne Twister</span></span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true"></a>    <span class="dt">long</span> <span class="dt">unsigned</span> <span class="dt">int</span> seed = <span class="kw">static_cast</span>&lt;<span class="dt">long</span> <span class="dt">unsigned</span> <span class="dt">int</span>&gt;(time(<span class="dv">0</span>));</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true"></a>    <span class="bu">std::</span>mt19937_64 mersenne {seed};</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true"></a></span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true"></a>    <span class="co">// sample_poisson() draws from Poisson(4.1) and returns an integer.</span></span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true"></a>    <span class="bu">std::</span>poisson_distribution&lt;<span class="dt">int</span>&gt; sample_poisson(<span class="fl">4.1</span>);</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true"></a></span>
+<span id="cb20-13"><a href="#cb20-13" aria-hidden="true"></a>    <span class="co">// draw poisson sample (passing the PRNG as argument) and write to stdout</span></span>
+<span id="cb20-14"><a href="#cb20-14" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;poisson sample: &quot;</span> &lt;&lt; sample_poisson(mersenne) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb20-15"><a href="#cb20-15" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb20-16"><a href="#cb20-16" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Here’s what happens when I repeatedly invoke the <code>sample-poisson</code> program at the terminal:</p>
+<pre><code>poisson sample: 2
+poisson sample: 6
+poisson sample: 2
+poisson sample: 5
+poisson sample: 2
+poisson sample: 4
+poisson sample: 4</code></pre>
+<p>You get the idea.</p>
+<h2 id="conditional-statements-and-expressions">Conditional statements and expressions</h2>
+<p>Okay, back to the development of ideas in the book. Next up is conditional branching, and the basic syntax is deeply familiar to anyone who has programmed in… pretty much any language I guess. The first example in the book shows a cascading if statement like this:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="cf">if</span> (value &gt; <span class="dv">4</span>) {</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>    <span class="co">// do something</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a>} <span class="cf">else</span> <span class="cf">if</span> (value &gt; <span class="dv">2</span>) {</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a>    <span class="co">// do something else</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a>} <span class="cf">else</span> {</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a>    <span class="co">// do something else</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true"></a>}</span></code></pre></div>
+<p>However, the nice thing about having some code to sample random numbers is that I can write something a little less boring here. Here’s a small program that samples a Poisson random variate, and prints a message to the terminal that adds a little comment about where the sample falls relative to the distribution mode:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true"></a><span class="co">// poisson-conditional.cpp</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true"></a>    <span class="co">// sample an integer value from a poisson distribution</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true"></a>    <span class="dt">long</span> <span class="dt">unsigned</span> <span class="dt">int</span> seed = <span class="kw">static_cast</span>&lt;<span class="dt">long</span> <span class="dt">unsigned</span> <span class="dt">int</span>&gt;(time(<span class="dv">0</span>));</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true"></a>    <span class="bu">std::</span>mt19937_64 mersenne {seed};</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true"></a>    <span class="bu">std::</span>poisson_distribution&lt;<span class="dt">int</span>&gt; sample_poisson(<span class="fl">4.1</span>);</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true"></a></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true"></a>    <span class="co">// sample a value and write first part of message</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true"></a>    <span class="dt">int</span> value = sample_poisson(mersenne);</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;The sampled value of &quot;</span> &lt;&lt; value;</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true"></a></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true"></a>    <span class="co">// remainder of message depends on the value</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true"></a>    <span class="cf">if</span> (value == <span class="dv">4</span>) {</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true"></a>        <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot; is the modal value.&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true"></a>    } <span class="cf">else</span> <span class="cf">if</span> (value &lt; <span class="dv">4</span>) {</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true"></a>        <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot; is below the mode.&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true"></a>    } <span class="cf">else</span> {</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true"></a>        <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot; is above the mode.&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true"></a>    }</span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Again, here’s some output I get when I repeatedly invoke the <code>poisson-conditional</code> function:</p>
+<pre><code>The sampled value of 11 is above the mode.
+The sampled value of 4 is the modal value.
+The sampled value of 6 is above the mode.
+The sampled value of 5 is above the mode.
+The sampled value of 4 is the modal value.
+The sampled value of 3 is below the mode.</code></pre>
+<p>Exciting times in the life of Danielle.</p></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -217,6 +284,8 @@ Employee salary: $123456</code></pre>
 <li><a href="#casting-and-coercion">Casting and coercion</a></li>
 <li><a href="#enumerated-types">Enumerated types</a></li>
 <li><a href="#structs">Structs</a></li>
+<li><a href="#digression-poisson-random-numbers">Digression: Poisson random numbers</a></li>
+<li><a href="#conditional-statements-and-expressions">Conditional statements and expressions</a></li>
 </ul></li>
                </ul>
             </div>

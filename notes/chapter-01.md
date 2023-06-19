@@ -248,8 +248,6 @@ So my program looks like this:
 #include <sstream>
 #include "employee.h"
 
-using namespace std;
-
 int main() {
     // define the employee record
     Employee danielle;
@@ -263,7 +261,7 @@ int main() {
     ss.str("");
     ss << "Employee: " << danielle.firstInitial << danielle.lastInitial;
     std::cout << ss.str() << std::endl;
-    
+
     ss.str("");
     ss << "Employee number: #" << danielle.employeeNumber;
     std::cout << ss.str() << std::endl;
@@ -286,3 +284,95 @@ Employee salary: $123456
 
 That all seems to make sense. What's next?
 
+## Digression: Poisson random numbers
+
+Looking ahead, it seems like the book is about to start discussing conditional branching, functions, loops, and all that good stuff. Fair enough. But conditional branching based on testing some boolean expression is never much fun unless you have a something meaningful to test. Ideally you'd have something where the conditional might evaluate differently. So, since we're all statisticians here (I mean, it's just me here and I'm a statistician), this feels like a good moment to divert from the text and write some code that generates Poisson random numbers. To do this I'll use `<random>`:
+
+``` cpp
+// poisson-sample.cpp
+#include <iostream>
+#include <random>
+
+int main() {
+    // set seed using time, define PRNG with Mersenne Twister
+    long unsigned int seed = static_cast<long unsigned int>(time(0));
+    std::mt19937_64 mersenne {seed};
+
+    // sample_poisson() draws from Poisson(4.1) and returns an integer.
+    std::poisson_distribution<int> sample_poisson(4.1);
+
+    // draw poisson sample (passing the PRNG as argument) and write to stdout
+    std::cout << "poisson sample: " << sample_poisson(mersenne) << std::endl;
+    return 0;
+}
+```
+
+Here's what happens when I repeatedly invoke the `sample-poisson` program at the terminal:
+
+```
+poisson sample: 2
+poisson sample: 6
+poisson sample: 2
+poisson sample: 5
+poisson sample: 2
+poisson sample: 4
+poisson sample: 4
+```
+
+You get the idea.
+
+## Conditional statements and expressions
+
+Okay, back to the development of ideas in the book. Next up is conditional branching, and the basic syntax is deeply familiar to anyone who has programmed in... pretty much any language I guess. The first example in the book shows a cascading if statement like this:
+
+``` cpp
+if (value > 4) {
+    // do something
+} else if (value > 2) {
+    // do something else
+} else {
+    // do something else
+}
+```
+
+However, the nice thing about having some code to sample random numbers is that I can write something a little less boring here. Here's a small program that samples a Poisson random variate, and prints a message to the terminal that adds a little comment about where the sample falls relative to the distribution mode:
+
+``` cpp
+// poisson-conditional.cpp
+#include <iostream>
+#include <random>
+
+int main() {
+    // sample an integer value from a poisson distribution
+    long unsigned int seed = static_cast<long unsigned int>(time(0));
+    std::mt19937_64 mersenne {seed};
+    std::poisson_distribution<int> sample_poisson(4.1);
+
+    // sample a value and write first part of message
+    int value = sample_poisson(mersenne);
+    std::cout << "The sampled value of " << value;
+
+    // remainder of message depends on the value
+    if (value == 4) {
+        std::cout << " is the modal value." << std::endl;
+    } else if (value < 4) {
+        std::cout << " is below the mode." << std::endl;
+    } else {
+        std::cout << " is above the mode." << std::endl;
+    }
+    return 0;
+}
+```
+
+Again, here's some output I get when I repeatedly invoke the `poisson-conditional` function:
+
+```
+The sampled value of 11 is above the mode.
+The sampled value of 4 is the modal value.
+The sampled value of 6 is above the mode.
+The sampled value of 5 is above the mode.
+The sampled value of 4 is the modal value.
+The sampled value of 3 is below the mode.
+```
+
+Exciting times in the life of Danielle. 
