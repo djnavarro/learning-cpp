@@ -20,7 +20,7 @@ docs/.nojekyll:
 	touch docs/.nojekyll
 
 docs/CNAME:
-	echo "learning_cpp.djnavarro.net" > docs/CNAME
+	echo "learning-cpp.djnavarro.net" > docs/CNAME
 
 docs/%.html: notes/%.md
 	pandoc $< -o $@ --standalone --template=./pandoc/template.html 
