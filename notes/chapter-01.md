@@ -29,10 +29,10 @@ sudo apt install clang
 Now that I have a compiler, I need to actually compile it. Here's the command:
 
 ``` bash
-clang++ -std=c++20 helloworld.cpp -o helloworld
+clang++ --std=c++20 helloworld.cpp -o helloworld
 ```
 
-The `-std=c++20` flag tells clang what version of C++ I'm using, and the `-o` flag is used to specify the output file. 
+The `--std=c++20` flag tells clang what version of C++ I'm using, and the `-o` flag is used to specify the output file. 
 
 In practice, this isn't the commmand I actually use. I don't want my binaries to build into in the same folder as my source code, so I keep all the source code in `src` and the binaries in `bin`. So the command would actually look like this:
 
