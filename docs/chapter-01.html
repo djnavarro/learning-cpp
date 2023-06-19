@@ -69,31 +69,51 @@
 <span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>; </span>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>}</span></code></pre></div>
 <p>In general though it’s not a good idea because that leads to namespace conflicts pretty quickly.</p>
-<h2 id="variables-types-and-casting">Variables, types, and casting</h2>
-<p>Yes yes C++ is strongly typed and has many types. This I know. The book gives this as example code. The idea being that you should be able to reason through the steps that the program is following, what cast operations are taking place, and thereby predict what it will print out at the end.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="co">// typecasting.cpp</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a>    <span class="co">// variable declarations</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a>    <span class="dt">int</span> someInteger;</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a>    <span class="dt">short</span> someShort;</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true"></a>    <span class="dt">long</span> someLong;</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true"></a>    <span class="dt">float</span> someFloat;</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true"></a>    <span class="dt">double</span> someDouble;</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true"></a></span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true"></a>    <span class="co">// some operations that involve casts</span></span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true"></a>    someInteger = <span class="dv">256</span>;</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true"></a>    someInteger++;</span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true"></a>    someShort = <span class="kw">static_cast</span>&lt;<span class="dt">short</span>&gt;(someInteger);</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true"></a>    someLong = someShort * <span class="dv">10000</span>;</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true"></a>    someFloat = someLong + <span class="fl">0.785</span><span class="bu">f</span>;</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true"></a>    someDouble = <span class="kw">static_cast</span>&lt;<span class="dt">double</span>&gt;(someFloat) / <span class="dv">100000</span>;</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true"></a></span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true"></a>    <span class="co">// print output and return</span></span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; someDouble &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true"></a>}</span></code></pre></div>
+<h2 id="variables-types-and-operators">Variables, types, and operators</h2>
+<p>The next part of the chapter walks you through variables, operators, types, and so on. Most of this feels very familiar and standard. Yes, C++ is strongly typed and requires variable declaration. This I know. I’ve gotten quite used to writing C++ code like this:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a><span class="co">// declares variables but does not initalise</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="dt">int</span> a;</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a><span class="dt">double</span> b;</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a><span class="dt">bool</span> c;</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true"></a></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true"></a><span class="co">// declares and initialises variables</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true"></a><span class="co">// (this uses &quot;uniform initialisation&quot; syntax)</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true"></a><span class="dt">int</span> x = <span class="dv">2</span>;</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true"></a><span class="dt">double</span> y = <span class="fl">2.54</span>; </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true"></a><span class="dt">bool</span> z = <span class="kw">true</span>;</span></code></pre></div>
+<p>Operators generally feel familiar from other languages. One thing I’ve missed while working in R is the increment and decrement operators, <code>++</code> and <code>--</code>. I have to admit I love these:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="co">// increment and decrement with + and -</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>x = x + <span class="dv">1</span>;</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a>y = y - <span class="dv">1</span>;</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a><span class="co">// this is the same</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>x++</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>y--</span></code></pre></div>
+<h2 id="casting-and-coercion">Casting and coercion</h2>
+<p>The book gives this as example code. The idea being that you should be able to reason through the steps that the program is following, what cast operations are taking place, and thereby predict what it will print out at the end.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="co">// typecasting.cpp</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>    <span class="co">// variable declarations</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a>    <span class="dt">int</span> someInteger;</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a>    <span class="dt">short</span> someShort;</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a>    <span class="dt">long</span> someLong;</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a>    <span class="dt">float</span> someFloat;</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true"></a>    <span class="dt">double</span> someDouble;</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true"></a></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true"></a>    <span class="co">// some operations that involve casts</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true"></a>    someInteger = <span class="dv">256</span>;</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true"></a>    someInteger++;</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true"></a>    someShort = <span class="kw">static_cast</span>&lt;<span class="dt">short</span>&gt;(someInteger);</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true"></a>    someLong = someShort * <span class="dv">10000</span>;</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true"></a>    someFloat = someLong + <span class="fl">0.785</span><span class="bu">f</span>;</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true"></a>    someDouble = <span class="kw">static_cast</span>&lt;<span class="dt">double</span>&gt;(someFloat) / <span class="dv">100000</span>;</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true"></a>    <span class="co">// print output and return</span></span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; someDouble &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true"></a>}</span></code></pre></div>
 <p>Okay, I’ll give it a go. Stepping through it line by line…</p>
 <ul>
 <li>We start out with a signed 32 bit integer <code>someInteger</code> which has value 256.</li>

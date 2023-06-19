@@ -90,9 +90,38 @@ int main() {
 
 In general though it's not a good idea because that leads to namespace conflicts pretty quickly.
 
-## Variables, types, and casting
+## Variables, types, and operators
 
-Yes yes C++ is strongly typed and has many types. This I know. The book gives this as example code. The idea being that you should be able to reason through the steps that the program is following, what cast operations are taking place, and thereby predict what it will print out at the end.
+The next part of the chapter walks you through variables, operators, types, and so on. Most of this feels very familiar and standard. Yes, C++ is strongly typed and requires variable declaration. This I know. I've gotten quite used to writing C++ code like this:
+
+``` cpp
+// declares variables but does not initalise
+int a;
+double b;
+bool c;
+
+// declares and initialises variables
+// (this uses "uniform initialisation" syntax)
+int x = 2;
+double y = 2.54; 
+bool z = true;
+```
+
+Operators generally feel familiar from other languages. One thing I've missed while working in R is the increment and decrement operators, `++` and `--`. I have to admit I love these:
+
+``` cpp
+// increment and decrement with + and -
+x = x + 1;
+y = y - 1;
+
+// this is the same
+x++
+y--
+```
+
+## Casting and coercion
+
+The book gives this as example code. The idea being that you should be able to reason through the steps that the program is following, what cast operations are taking place, and thereby predict what it will print out at the end.
 
 ``` cpp
 // typecasting.cpp
