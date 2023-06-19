@@ -53,7 +53,7 @@
 <li>Unlike R, C++ is strongly typed, so when you define a function you must specify the output type: so in this case I write <code>int main() { // blah }</code> to specify that the output is an integer</li>
 <li>C++ uses namespaces. In R you often see namespaces as package names (e.g., <code>dplyr::filter</code>), and <code>::</code> functions similarly here. When I write <code>std::cout</code>, I’m roughly saying “cout, which lives in the std namespace”.</li>
 <li>The <code>#include</code> line is a “preprocessor directive”, used to specify meta-information about the program. In this case, it’s telling the preprocessor to take everything in the <code>&lt;iostream&gt;</code> header file and make it available to the program. Without it, I can’t do any input/output</li>
-<li>In theory, since this is C++20, I could have written <code>import &lt;iostream&gt;;</code> instead of using the <code>#include</code> preprocessor directive. This is because C++20 supports for modules. I’m being a bit old-fashioned here.</li>
+<li>In theory, since I’m notionally using C++20 in these notes, I could have written <code>import &lt;iostream&gt;;</code> instead of using the <code>#include</code> preprocessor directive. This is because C++20 introduced support for modules. I’m being a bit old-fashioned here, but for a good reason. When I installed clang with the command shown earlier, what I actually got on my system is clang version 14, and the support for modules in clang 14 is limited. I kind of don’t want to get bogged down with those details here, so I’m going to use <code>#include</code> directives instead of trying to get modules working.</li>
 </ul>
 <p>Going a little deeper:</p>
 <ul>
