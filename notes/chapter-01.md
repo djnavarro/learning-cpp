@@ -18,6 +18,8 @@ int main() {
 }
 ```
 
+## Compiling the hello world program
+
 That's all well and good, but I can't do anything useful with this until I compile it, and for that to happen I need a C++ compiler. As it happens I already have g++ on my system, but -- for no particular reason -- I've decided to use clang. Installing clang on Ubuntu is pretty straightforward:
 
 ``` bash
@@ -30,18 +32,26 @@ Now that I have a compiler, I need to actually compile it. Here's the command:
 clang++ -std=c++20 helloworld.cpp -o helloworld
 ```
 
-Well, more precisely, because I don't want my binaries in the same folder as my source code:
+The `-std=c++20` flag tells clang what version of C++ I'm using, and the `-o` flag is used to specify the output file. 
+
+In practice, this isn't the commmand I actually use. I don't want my binaries to build into in the same folder as my source code, so I keep all the source code in `src` and the binaries in `bin`. So the command would actually look like this:
 
 ```bash
-clang++ --std=c++20 ./source/01/helloworld.cpp -o ./binaries/01/helloworld
+clang++ --std=c++20 ./src/helloworld.cpp -o ./bin/helloworld
 ```
 
-The `-std=c++20` flag tells clang what version of C++ I'm using, and the `-o` flag is used to specify the output file. Since I don't want to commit any binaries to my git repo, I'll add the `binaries` folder to the `.gitignore` file. Fantastic. 
+As a side benefit, structuring the project this way makes it much easier to avoid accidentally commiting binary files to the git repository. All I have to do is add the `bin` folder to my `.gitignore` file. Fantastic. 
 
-From this point, I can invoke the executable at the terminal quite simply:
+That being said, I don't actually want to type this command for every source file. Instead, because I'm a fundamentally lazy person, I've written a `Makefile` that takes care of that for me, and also renders the markdown files to html. So really the only command I ever use is simply:
+
+```bash
+make
+```
+
+Anyway, once the source has been compiled, I can invoke the executable at the terminal like so:
 
 ``` bash
-./helloworld
+./bin/helloworld
 ```
 
 And out pops the "Hello cruel message" at the console. Excellent. The basics are working. 
