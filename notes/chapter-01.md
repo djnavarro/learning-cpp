@@ -492,3 +492,19 @@ The output here is:
 ```
 Gender unspecified
 ```
+
+### Conditional operator
+
+You can also use `?` and `:` to create a conditional expression. The general syntax is
+
+``` cpp
+<condition> ? <value_if_condition_true> : <value_if_condition_false>;
+```
+
+Here's a simple example:
+
+``` cpp
+std::cout << ((p_value < .05) ? "reject null" : "retain null");
+```
+
+Cool Continuing on.
