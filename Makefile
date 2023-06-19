@@ -23,7 +23,8 @@ docs/CNAME:
 	echo "learning-cpp.djnavarro.net" > docs/CNAME
 
 docs/%.html: notes/%.md
-	pandoc $< -o $@ --standalone --template=./pandoc/template.html --mathjax --toc --toc-depth 2
+	pandoc $< -o $@ --template=./pandoc/template.html \
+		--standalone --mathjax --toc --toc-depth 2
 
 clean:
 	rm -rf docs
