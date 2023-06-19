@@ -6,7 +6,7 @@ title: "1: A crash course in C++ and the standard library"
 
 ## The hello world program
 
-As always, we start with a "hello world" program. Here's the source:
+As is tradition in every computer science text, the book starts with a "hello world" program designed to highlight core behaviour of the language. Here's the source, modified -- per my own tradition -- to print a slightly modified message:
 
 ``` cpp
 // helloworld.cpp
@@ -48,13 +48,19 @@ That being said, I don't actually want to type this command for every source fil
 make
 ```
 
-Anyway, once the source has been compiled, I can invoke the executable at the terminal like so:
+Anyway, once the source has been compiled, I can invoke the executable like so:
 
 ``` bash
 ./bin/helloworld
 ```
 
-And out pops the "Hello cruel message" at the console. Excellent. The basics are working. 
+And out pops the message at the terminal:
+
+```
+Hello cruel world
+```
+
+Excellent. The basics are working. 
 
 ## Notes on the hello world program
 
@@ -174,8 +180,8 @@ To declare and initialise some gender variables I would do this:
 
 ``` cpp
 enum class Gender { male, female, nonbinary, other, unspecified };
-Gender danielle_gender { Gender::female};
-Gender benjamin_gender { Gender::male};
+Gender danielle_gender { Gender::female };
+Gender benjamin_gender { Gender::male };
 ```
 
 The internal coding is revealed by this program:
@@ -201,3 +207,7 @@ When we run this one, the output looks like this:
 Danielle gender: 1
 Benjamin gender: 0
 ```
+
+## Structs
+
+Moving along.
