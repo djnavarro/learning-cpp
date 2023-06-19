@@ -160,7 +160,7 @@ Benjamin gender: 0</code></pre>
 <span id="cb16-5"><a href="#cb16-5" aria-hidden="true"></a>    <span class="dt">int</span> employeeNumber;</span>
 <span id="cb16-6"><a href="#cb16-6" aria-hidden="true"></a>    <span class="dt">int</span> salary;</span>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true"></a>};</span></code></pre></div>
-<p>In the book, the code is a little more elaborate because it explicitly defines a module, but since my compiler has incomplete support for C++20 features, I’m keeping it simple. Along the same lines, the book uses the new C++20 <code>&lt;format&gt;</code> module to handle printing: rather than mess about with the new hotness I’m going to be old fashioned and use <code>printf()</code> to print to stdout. So my program is:</p>
+<p>In the book, the code is a little more elaborate because it explicitly defines a module, but since my compiler has incomplete support for C++20 features, I’m keeping it simple. Along the same lines, the book uses the new C++20 <code>&lt;format&gt;</code> module to handle printing: rather than mess about with the new hotness or introduce an external dependency, I’ll use stringstream objects provided by the <code>&lt;sstream&gt;</code> header file. So my program is:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="co">// employee.cpp</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;sstream&gt;</span></span>

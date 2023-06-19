@@ -222,7 +222,7 @@ struct Employee {
 };
 ```
 
-In the book, the code is a little more elaborate because it explicitly defines a module, but since my compiler has incomplete support for C++20 features, I'm keeping it simple. Along the same lines, the book uses the new C++20 `<format>` module to handle printing: rather than mess about with the new hotness I'm going to be old fashioned and use `printf()` to print to stdout. So my program is:
+In the book, the code is a little more elaborate because it explicitly defines a module, but since my compiler has incomplete support for C++20 features, I'm keeping it simple. Along the same lines, the book uses the new C++20 `<format>` module to handle printing: rather than mess about with the new hotness or introduce an external dependency, I'll use stringstream objects provided by the `<sstream>` header file. So my program is:
 
 ``` cpp
 // employee.cpp
