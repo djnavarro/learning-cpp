@@ -161,3 +161,43 @@ Okay, I'll give it a go. Stepping through it line by line...
 - Finally, we explicitly cast `someFloat` to a double precision floating point number, divide it by 100000, and assign the result to `someDouble`. That gives us a value of 25.70000785
 
 We've lost a little precision in the printed output, however, because the program prints 25.7 to stdout.
+
+## Enumerated types
+
+Next up: "strongly typed enumerated types". **Enumerated types** are essentially the C++ version of R factors, or Python dictionaries I guess. The key idea is to have a discrete set of labelled values. Internally the objects are encoded as integer values, but those numbers are masked so you can't do silly things with them. So, for example I could encode gender (somewhat crudely) with an enumerated type as follows:
+
+``` cpp
+enum class Gender { male, female, nonbinary, other, unspecified };
+```
+
+To declare and initialise some gender variables I would do this:
+
+``` cpp
+enum class Gender { male, female, nonbinary, other, unspecified };
+Gender danielle_gender { Gender::female};
+Gender benjamin_gender { Gender::male};
+```
+
+The internal coding is revealed by this program:
+
+``` cpp
+// enumerated-types.cpp
+#include <iostream>
+
+int main() {
+    enum class Gender { male, female, nonbinary, other, unspecified };
+    Gender danielle_gender { Gender::female };
+    Gender benjamin_gender { Gender::male };
+
+    std::cout << "Danielle gender: " << static_cast<int>(danielle_gender) << std::endl;
+    std::cout << "Benjamin gender: " << static_cast<int>(benjamin_gender) << std::endl;
+    return 0; 
+}
+```
+
+When we run this one, the output looks like this:
+
+```
+Danielle gender: 1
+Benjamin gender: 0
+```

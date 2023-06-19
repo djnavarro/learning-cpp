@@ -125,7 +125,30 @@
 <li>The next line also involves coercion rather than an explicit cast. We’re adding a float (<code>0.785f</code>) to a long integer and storing the result as a float. So the output <code>someFloat</code> has value 2570000.785.</li>
 <li>Finally, we explicitly cast <code>someFloat</code> to a double precision floating point number, divide it by 100000, and assign the result to <code>someDouble</code>. That gives us a value of 25.70000785</li>
 </ul>
-<p>We’ve lost a little precision in the printed output, however, because the program prints 25.7 to stdout.</p></div>
+<p>We’ve lost a little precision in the printed output, however, because the program prints 25.7 to stdout.</p>
+<h2 id="enumerated-types">Enumerated types</h2>
+<p>Next up: “strongly typed enumerated types”. <strong>Enumerated types</strong> are essentially the C++ version of R factors, or Python dictionaries I guess. The key idea is to have a discrete set of labelled values. Internally the objects are encoded as integer values, but those numbers are masked so you can’t do silly things with them. So, for example I could encode gender (somewhat crudely) with an enumerated type as follows:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="kw">enum</span> <span class="kw">class</span> Gender { male, female, nonbinary, other, unspecified };</span></code></pre></div>
+<p>To declare and initialise some gender variables I would do this:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="kw">enum</span> <span class="kw">class</span> Gender { male, female, nonbinary, other, unspecified };</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>Gender danielle_gender { Gender::female};</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>Gender benjamin_gender { Gender::male};</span></code></pre></div>
+<p>The internal coding is revealed by this program:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="co">// enumerated-types.cpp</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a>    <span class="kw">enum</span> <span class="kw">class</span> Gender { male, female, nonbinary, other, unspecified };</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a>    Gender danielle_gender { Gender::female };</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a>    Gender benjamin_gender { Gender::male };</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;Danielle gender: &quot;</span> &lt;&lt; <span class="kw">static_cast</span>&lt;<span class="dt">int</span>&gt;(danielle_gender) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;Benjamin gender: &quot;</span> &lt;&lt; <span class="kw">static_cast</span>&lt;<span class="dt">int</span>&gt;(benjamin_gender) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>; </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true"></a>}</span></code></pre></div>
+<p>When we run this one, the output looks like this:</p>
+<pre><code>Danielle gender: 1
+Benjamin gender: 0</code></pre></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -134,6 +157,7 @@
 <li><a href="#notes-on-the-hello-world-program">Notes on the hello world program</a></li>
 <li><a href="#variables-types-and-operators">Variables, types, and operators</a></li>
 <li><a href="#casting-and-coercion">Casting and coercion</a></li>
+<li><a href="#enumerated-types">Enumerated types</a></li>
 </ul></li>
                </ul>
             </div>
