@@ -91,6 +91,7 @@
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>x++</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>y--</span></code></pre></div>
 <h2 id="casting-and-coercion">Casting and coercion</h2>
+<p>The nomenclature used in C++ when talking about changing variable types is a little more precise than it usually is in R. A <strong>cast</strong> is when you explicitly convert from one type to another. In contrast, the term <strong>coercion</strong> is used to describe an implicit cast.</p>
 <p>The book gives this as example code. The idea being that you should be able to reason through the steps that the program is following, what cast operations are taking place, and thereby predict what it will print out at the end.</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="co">// typecasting.cpp</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
@@ -119,9 +120,9 @@
 <ul>
 <li>We start out with a signed 32 bit integer <code>someInteger</code> which has value 256.</li>
 <li>The <code>++</code> operator increments this to 257.</li>
-<li>We then use <code>static_cast()</code> to cast it to a signed 16 bit integer and store this as <code>someShort</code>.</li>
-<li>In the next line we’re multiplying by 10000, which gives us an answer of 2570000. That’s too large a number to store as a 16 bit integer, but there’s an implicit cast happening here (called coercion). The <code>someLong</code> variable is typed as a long integer (also 32 bits) so no explicit cast is needed, and the result is stored as a long integer with value 2570000.</li>
-<li>The next line also involves an implicit cast. We’re adding a float (<code>0.785f</code>) to a long integer and storing the result as a float. So <code>someFloat</code> has value 2570000.785.</li>
+<li>We then use <code>static_cast()</code> to explicitly cast it to a signed 16 bit integer and store this as <code>someShort</code>.</li>
+<li>In the next line we’re multiplying by 10000, which gives us an answer of 2570000. That’s too large a number to store as a 16 bit integer, but because the output variable <code>someLong</code> is typed as a long integer (also 32 bit), coercion takes place. The output is cast implicitly to long there’s an implicit cast happening here (called coercion), and the result is stored as a long integer with value 2570000.</li>
+<li>The next line also involves coercion rather than an explicit cast. We’re adding a float (<code>0.785f</code>) to a long integer and storing the result as a float. So the output <code>someFloat</code> has value 2570000.785.</li>
 <li>Finally, we explicitly cast <code>someFloat</code> to a double precision floating point number, divide it by 100000, and assign the result to <code>someDouble</code>. That gives us a value of 25.70000785</li>
 </ul>
 <p>We’ve lost a little precision in the printed output, however, because the program prints 25.7 to stdout.</p></div>

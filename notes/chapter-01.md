@@ -121,6 +121,8 @@ y--
 
 ## Casting and coercion
 
+The nomenclature used in C++ when talking about changing variable types is a little more precise than it usually is in R. A **cast** is when you explicitly convert from one type to another. In contrast, the term **coercion** is used to describe an implicit cast. 
+
 The book gives this as example code. The idea being that you should be able to reason through the steps that the program is following, what cast operations are taking place, and thereby predict what it will print out at the end.
 
 ``` cpp
@@ -153,9 +155,9 @@ Okay, I'll give it a go. Stepping through it line by line...
 
 - We start out with a signed 32 bit integer `someInteger` which has value 256. 
 - The `++` operator increments this to 257. 
-- We then use `static_cast()` to cast it to a signed 16 bit integer and store this as `someShort`. 
-- In the next line we're multiplying by 10000, which gives us an answer of 2570000. That's too large a number to store as a 16 bit integer, but there's an implicit cast happening here (called coercion). The `someLong` variable is typed as a long integer (also 32 bits) so no explicit cast is needed, and the result is stored as a long integer with value 2570000.
-- The next line also involves an implicit cast. We're adding a float (`0.785f`) to a long integer and storing the result as a float. So `someFloat` has value 2570000.785.
+- We then use `static_cast()` to explicitly cast it to a signed 16 bit integer and store this as `someShort`. 
+- In the next line we're multiplying by 10000, which gives us an answer of 2570000. That's too large a number to store as a 16 bit integer, but because the output variable `someLong` is typed as a long integer (also 32 bit), coercion takes place. The output is cast implicitly to long there's an implicit cast happening here (called coercion), and the result is stored as a long integer with value 2570000.
+- The next line also involves coercion rather than an explicit cast. We're adding a float (`0.785f`) to a long integer and storing the result as a float. So the output `someFloat` has value 2570000.785.
 - Finally, we explicitly cast `someFloat` to a double precision floating point number, divide it by 100000, and assign the result to `someDouble`. That gives us a value of 25.70000785
 
 We've lost a little precision in the printed output, however, because the program prints 25.7 to stdout.
