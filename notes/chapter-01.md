@@ -428,3 +428,67 @@ In this code, the variable `x` exists only within the scope of the if/else state
 3 is below the mode.
 8 is above the mode.
 ```
+
+### `switch/case` statements
+
+``` cpp
+// gender-switch.cpp
+#include <iostream>
+
+int main() {
+    enum class Gender { male, female, nonbinary, other, unspecified };
+    Gender danielle_gender { Gender::female };
+
+    std::cout << "Danielle's gender is ";
+    switch (danielle_gender) {
+        case Gender::female:
+        case Gender::male:
+            std::cout << "within the gender binary" << std::endl;
+            break;
+        case Gender::nonbinary:
+        case Gender::other:
+            std::cout << "outside the gender binary" << std::endl;
+            break;
+        default:
+            std::cout << "unspecified" << std::endl;
+    }
+}
+```
+
+When this code is executed, we get this:
+
+```
+Danielle's gender is within the gender binary
+```
+
+The reason this happens is due to **fallthrough** behaviour. When a `case` expression that matches the `switch` expression is reached, all subsequent statements are executed until a `break` statement is reached. So even though there's nothing to execute immediately following the `Gender::female` case expression, there's no `break` there either, so the flow "falls through" to the next case. In other words, inthis code male and female genders will both produce "within the gender binary" as the printed message, whereas nonbinary and other genders will produce "outside the gender binary" as the message. If the gender is unspecified, none of the case expressions will match against the switch expression, so the default message at the end is printed. 
+
+Just like with `if/else` blocks, `switch` blocks can use initialisers:
+
+``` cpp
+// gender-switch-2.cpp
+#include <iostream>
+
+int main() {
+    enum class Gender { male, female, nonbinary, other, unspecified };
+
+    switch (Gender x { Gender::unspecified }; x) {
+        case Gender::female:
+        case Gender::male:
+            std::cout << "Within the gender binary" << std::endl;
+            break;
+        case Gender::nonbinary:
+        case Gender::other:
+            std::cout << "Outside the gender binary" << std::endl;
+            break;
+        case Gender::unspecified:
+            std::cout << "Gender unspecified" << std::endl;
+    }
+}
+```
+
+The output here is:
+
+```
+Gender unspecified
+```

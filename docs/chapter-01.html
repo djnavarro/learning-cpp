@@ -310,7 +310,54 @@ The sampled value of 3 is below the mode.</code></pre>
 <pre><code>7 is above the mode.
 4 is the modal value.
 3 is below the mode.
-8 is above the mode.</code></pre></div>
+8 is above the mode.</code></pre>
+<h3 id="switchcase-statements"><code>switch/case</code> statements</h3>
+<div class="sourceCode" id="cb28"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="co">// gender-switch.cpp</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true"></a>    <span class="kw">enum</span> <span class="kw">class</span> Gender { male, female, nonbinary, other, unspecified };</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true"></a>    Gender danielle_gender { Gender::female };</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true"></a></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;Danielle&#39;s gender is &quot;</span>;</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true"></a>    <span class="cf">switch</span> (danielle_gender) {</span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true"></a>        <span class="cf">case</span> Gender::female:</span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true"></a>        <span class="cf">case</span> Gender::male:</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true"></a>            <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;within the gender binary&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true"></a>            <span class="cf">break</span>;</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true"></a>        <span class="cf">case</span> Gender::nonbinary:</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true"></a>        <span class="cf">case</span> Gender::other:</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true"></a>            <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;outside the gender binary&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb28-17"><a href="#cb28-17" aria-hidden="true"></a>            <span class="cf">break</span>;</span>
+<span id="cb28-18"><a href="#cb28-18" aria-hidden="true"></a>        <span class="cf">default</span>:</span>
+<span id="cb28-19"><a href="#cb28-19" aria-hidden="true"></a>            <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;unspecified&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb28-20"><a href="#cb28-20" aria-hidden="true"></a>    }</span>
+<span id="cb28-21"><a href="#cb28-21" aria-hidden="true"></a>}</span></code></pre></div>
+<p>When this code is executed, we get this:</p>
+<pre><code>Danielle&#39;s gender is within the gender binary</code></pre>
+<p>The reason this happens is due to <strong>fallthrough</strong> behaviour. When a <code>case</code> expression that matches the <code>switch</code> expression is reached, all subsequent statements are executed until a <code>break</code> statement is reached. So even though there’s nothing to execute immediately following the <code>Gender::female</code> case expression, there’s no <code>break</code> there either, so the flow “falls through” to the next case. In other words, inthis code male and female genders will both produce “within the gender binary” as the printed message, whereas nonbinary and other genders will produce “outside the gender binary” as the message. If the gender is unspecified, none of the case expressions will match against the switch expression, so the default message at the end is printed.</p>
+<p>Just like with <code>if/else</code> blocks, <code>switch</code> blocks can use initialisers:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true"></a><span class="co">// gender-switch-2.cpp</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true"></a>    <span class="kw">enum</span> <span class="kw">class</span> Gender { male, female, nonbinary, other, unspecified };</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true"></a></span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true"></a>    <span class="cf">switch</span> (Gender x { Gender::unspecified }; x) {</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true"></a>        <span class="cf">case</span> Gender::female:</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true"></a>        <span class="cf">case</span> Gender::male:</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true"></a>            <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;Within the gender binary&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true"></a>            <span class="cf">break</span>;</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true"></a>        <span class="cf">case</span> Gender::nonbinary:</span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true"></a>        <span class="cf">case</span> Gender::other:</span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true"></a>            <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;Outside the gender binary&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb30-15"><a href="#cb30-15" aria-hidden="true"></a>            <span class="cf">break</span>;</span>
+<span id="cb30-16"><a href="#cb30-16" aria-hidden="true"></a>        <span class="cf">case</span> Gender::unspecified:</span>
+<span id="cb30-17"><a href="#cb30-17" aria-hidden="true"></a>            <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;Gender unspecified&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb30-18"><a href="#cb30-18" aria-hidden="true"></a>    }</span>
+<span id="cb30-19"><a href="#cb30-19" aria-hidden="true"></a>}</span></code></pre></div>
+<p>The output here is:</p>
+<pre><code>Gender unspecified</code></pre></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
