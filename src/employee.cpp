@@ -3,8 +3,6 @@
 #include <sstream>
 #include "employee.h"
 
-using namespace std;
-
 int main() {
     // define the employee record
     Employee danielle;
