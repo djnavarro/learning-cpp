@@ -323,7 +323,11 @@ You get the idea.
 
 ## Conditionals
 
-Okay, back to the development of ideas in the book. Next up is conditional branching, and the basic syntax is deeply familiar to anyone who has programmed in... pretty much any language I guess. The first example in the book shows a cascading if statement like this:
+Okay, back to the development of ideas in the book. Next up is conditional branching, which comes in a few different forms. 
+
+### `if/else` statements
+
+the basic syntax is deeply familiar to anyone who has programmed in... pretty much any language I guess. The first example in the book shows a cascading if statement like this:
 
 ``` cpp
 if (value > 4) {
@@ -343,7 +347,7 @@ However, the nice thing about having some code to sample random numbers is that 
 #include <random>
 
 int main() {
-    // sample an integer value from a poisson distribution
+    // define a poisson distribution
     long unsigned int seed = static_cast<long unsigned int>(time(0));
     std::mt19937_64 mersenne {seed};
     std::poisson_distribution<int> sample_poisson(4.1);
@@ -376,3 +380,51 @@ The sampled value of 3 is below the mode.
 ```
 
 Exciting times in the life of Danielle. 
+
+### `if-else` statements with initialisers 
+
+At this point the book introduces a concept I wasn't familiar with. You can include an initialiser within an if/else block, where you can define variables that exist only within the scope of that block. The basic syntax looks like this:
+
+``` cpp
+if (<initialiser>; <conditional_expression>) {
+    <if_body>
+} else if (<else_if_expression>) {
+    <else_if_body>
+} else {
+    <else_body>
+}
+```
+
+The book doesn't give an example of this at this early stage because, rather sensibly, the author hasn't gone down the weird little digression into Poisson variates that I did. But, having done so, it's easy to write a variant of the previous program that creates the random value within the initialiser:
+
+``` cpp
+// poisson-initialised-conditional.cpp
+#include <iostream>
+#include <random>
+
+int main() {
+    // define a poisson distribution
+    long unsigned int seed = static_cast<long unsigned int>(time(0));
+    std::mt19937_64 mersenne {seed};
+    std::poisson_distribution<int> sample_poisson(4.1);
+
+    // conditional statement with an initialiser
+    if (int x = sample_poisson(mersenne); x == 4) {
+        std::cout << x << " is the modal value." << std::endl;
+    } else if (x < 4) {
+        std::cout << x << " is below the mode." << std::endl;
+    } else {
+        std::cout << x << " is above the mode." << std::endl;
+    }
+    return 0;
+}
+```
+
+In this code, the variable `x` exists only within the scope of the if/else statement. Here's a few results from running this program several times:
+
+```
+7 is above the mode.
+4 is the modal value.
+3 is below the mode.
+8 is above the mode.
+```

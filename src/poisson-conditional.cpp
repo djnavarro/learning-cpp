@@ -3,7 +3,7 @@
 #include <random>
 
 int main() {
-    // sample an integer value from a poisson distribution
+    // define a poisson distribution
     long unsigned int seed = static_cast<long unsigned int>(time(0));
     std::mt19937_64 mersenne {seed};
     std::poisson_distribution<int> sample_poisson(4.1);

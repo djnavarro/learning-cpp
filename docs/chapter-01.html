@@ -233,7 +233,9 @@ poisson sample: 4
 poisson sample: 4</code></pre>
 <p>You get the idea.</p>
 <h2 id="conditionals">Conditionals</h2>
-<p>Okay, back to the development of ideas in the book. Next up is conditional branching, and the basic syntax is deeply familiar to anyone who has programmed in… pretty much any language I guess. The first example in the book shows a cascading if statement like this:</p>
+<p>Okay, back to the development of ideas in the book. Next up is conditional branching, which comes in a few different forms.</p>
+<h3 id="ifelse-statements"><code>if/else</code> statements</h3>
+<p>the basic syntax is deeply familiar to anyone who has programmed in… pretty much any language I guess. The first example in the book shows a cascading if statement like this:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="cf">if</span> (value &gt; <span class="dv">4</span>) {</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a>    <span class="co">// do something</span></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a>} <span class="cf">else</span> <span class="cf">if</span> (value &gt; <span class="dv">2</span>) {</span>
@@ -247,7 +249,7 @@ poisson sample: 4</code></pre>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
 <span id="cb23-4"><a href="#cb23-4" aria-hidden="true"></a></span>
 <span id="cb23-5"><a href="#cb23-5" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true"></a>    <span class="co">// sample an integer value from a poisson distribution</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true"></a>    <span class="co">// define a poisson distribution</span></span>
 <span id="cb23-7"><a href="#cb23-7" aria-hidden="true"></a>    <span class="dt">long</span> <span class="dt">unsigned</span> <span class="dt">int</span> seed = <span class="kw">static_cast</span>&lt;<span class="dt">long</span> <span class="dt">unsigned</span> <span class="dt">int</span>&gt;(time(<span class="dv">0</span>));</span>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true"></a>    <span class="bu">std::</span>mt19937_64 mersenne {seed};</span>
 <span id="cb23-9"><a href="#cb23-9" aria-hidden="true"></a>    <span class="bu">std::</span>poisson_distribution&lt;<span class="dt">int</span>&gt; sample_poisson(<span class="fl">4.1</span>);</span>
@@ -273,7 +275,42 @@ The sampled value of 6 is above the mode.
 The sampled value of 5 is above the mode.
 The sampled value of 4 is the modal value.
 The sampled value of 3 is below the mode.</code></pre>
-<p>Exciting times in the life of Danielle.</p></div>
+<p>Exciting times in the life of Danielle.</p>
+<h3 id="if-else-statements-with-initialisers"><code>if-else</code> statements with initialisers</h3>
+<p>At this point the book introduces a concept I wasn’t familiar with. You can include an initialiser within an if/else block, where you can define variables that exist only within the scope of that block. The basic syntax looks like this:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true"></a><span class="cf">if</span> (&lt;initialiser&gt;; &lt;conditional_expression&gt;) {</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true"></a>    &lt;if_body&gt;</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true"></a>} <span class="cf">else</span> <span class="cf">if</span> (&lt;else_if_expression&gt;) {</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true"></a>    &lt;else_if_body&gt;</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true"></a>} <span class="cf">else</span> {</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true"></a>    &lt;else_body&gt;</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true"></a>}</span></code></pre></div>
+<p>The book doesn’t give an example of this at this early stage because, rather sensibly, the author hasn’t gone down the weird little digression into Poisson variates that I did. But, having done so, it’s easy to write a variant of the previous program that creates the random value within the initialiser:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="co">// poisson-initialised-conditional.cpp</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true"></a>    <span class="co">// define a poisson distribution</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true"></a>    <span class="dt">long</span> <span class="dt">unsigned</span> <span class="dt">int</span> seed = <span class="kw">static_cast</span>&lt;<span class="dt">long</span> <span class="dt">unsigned</span> <span class="dt">int</span>&gt;(time(<span class="dv">0</span>));</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true"></a>    <span class="bu">std::</span>mt19937_64 mersenne {seed};</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true"></a>    <span class="bu">std::</span>poisson_distribution&lt;<span class="dt">int</span>&gt; sample_poisson(<span class="fl">4.1</span>);</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true"></a></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true"></a>    <span class="co">// conditional statement with an initialiser</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true"></a>    <span class="cf">if</span> (<span class="dt">int</span> x = sample_poisson(mersenne); x == <span class="dv">4</span>) {</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true"></a>        <span class="bu">std::</span>cout &lt;&lt; x &lt;&lt; <span class="st">&quot; is the modal value.&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true"></a>    } <span class="cf">else</span> <span class="cf">if</span> (x &lt; <span class="dv">4</span>) {</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true"></a>        <span class="bu">std::</span>cout &lt;&lt; x &lt;&lt; <span class="st">&quot; is below the mode.&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true"></a>    } <span class="cf">else</span> {</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true"></a>        <span class="bu">std::</span>cout &lt;&lt; x &lt;&lt; <span class="st">&quot; is above the mode.&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true"></a>    }</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true"></a>}</span></code></pre></div>
+<p>In this code, the variable <code>x</code> exists only within the scope of the if/else statement. Here’s a few results from running this program several times:</p>
+<pre><code>7 is above the mode.
+4 is the modal value.
+3 is below the mode.
+8 is above the mode.</code></pre></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
