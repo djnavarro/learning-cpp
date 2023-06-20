@@ -805,3 +805,47 @@ At this point the book discusses a couple of topics that I'm not going to bother
 - C++ provides a `std::pair` class via the `<utility>` library. It's used to group two values that can be of different types. It has methods `.first()` and `.second()` to extract individual elements. I can imagine this is useful as a tool for representing name-value pairs, for instance. 
 
 - There is an `std::optional` class provided by `<optional>` and can either hold a value of a specific type, or nothing. There's a method `.has_value()` that returns a boolean specifying whether a value has een stored, and a `.value()` method that returns the stored value. Apparently you can also use the dereferencing operator to do the same thing, so if we have an optional object called `maybe` then `maybe.value()` and `*maybe` do the same thing. There's also a `.value_or()` method that returns the stored value if one exists, or else returns whatever is passed to `.value_or()`. The obvious application that comes to mind for me is that optional objects could be used to handle missing values in statistical contexts.
+
+## Structured bindings
+
+Structured bindings were introduced in C++17 and allow you to declare and assign multiple variables at once, using values taken from an appropriate object: arrays, structs, pairs, and tuples all work for this. The main use case I can see for this that it provides a clean way to allow function to return multiple values. On the function side, you wrap the outputs into an appropriate structure (the example below uses a tuple). Then when the function is called elsewhere, use the structured bindings syntax to assign the elements of the wrapping structure (e.g., the tuple) directly into their own variables. for example, let's suppose I've written `some_function()` that returns a 3-tuple. I can assign the elements of that tuple to variables `x`, `y` and `z` like so:
+
+``` cpp
+auto [x, y, z] = some_function();
+```
+
+Back in my MATLAB days I used to do this all the time. In R it's slightly trickier to do that unless you're using specialised packages that provide multiple assignment functionality. Anyway, here's a contrived example:
+
+``` cpp
+// structured-binding-asl.cpp
+#include <iostream>
+#include <tuple>
+#include <string>
+
+// somewhat absurd function used to illustrate the point
+std::tuple<int, char, std::string> asl() {
+    return {45, 'F', "Sydney"};
+}
+
+int main() {
+    // use structured bindings to declare and assign multiple 
+    // variables from the output returned by the function call
+    auto [age, sex, location] = asl();
+
+    // messages
+    std::cout << "age: " << age << std::endl;
+    std::cout << "sex: " << sex << std::endl;
+    std::cout << "location: " << location << std::endl;
+    return 0;
+}
+```
+
+For the sake of keeping these notes family-friendly I have restricted myself to "a/s/l", even though the term "structured bindings" itself suggests the possibility of a rather more... expansive... query that might be adopted here. 
+
+Aaaaaaanyway... the results:
+
+```
+age: 45
+sex: F
+location: Sydney
+```
