@@ -944,6 +944,52 @@ Suffice it to say, although the idea of using `do/while` loops to implement vali
 
 ### The `for` loop
 
+One of the earlier examples gave an example of a `for` loop that was semi-serious, so I feel justified in being absurd again:
+
+``` cpp
+// na-na-hey-hey.cpp
+#include <iostream>
+
+int main() {
+    for(int i = 0; i < 8; i++) { std::cout << "na "; }
+    for(int i = 0; i < 3; i++) { std::cout << "hey "; }
+    std::cout << "goodbye" << std::endl;
+    return 0;
+}
+```
+
+```
+na na na na na na na na hey hey hey goodbye
+```
+
 ### The range-based `for` loop
+
+The range-based `for` loop iterates directly over the elements of a container. It works for a fairly wide range of possible containers: anything that has `.begin()` and `.end()` methods that return iterators will work. Example:
+
+``` cpp
+// array-iterator.cpp
+#include <iostream>
+#include <array>
+
+int main() {
+    std::array<int, 6> fib = { 1, 1, 2, 3, 5, 8 };
+    for(int f : fib) { std::cout << f << std::endl; }
+    return 0;
+}
+```
+
+```
+1
+1
+2
+3
+5
+8
+```
+
+Note that in this code, at each step of the iteration the variable `f` stores a copy of the relevant element of `fib`. However, it's possible to do range-based `for` loops without making copies by using a reference variable. The book promises to discuss this later in the chapter.
+
+## Initialiser lists
+
 
 

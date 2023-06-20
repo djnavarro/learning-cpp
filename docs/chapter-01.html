@@ -678,7 +678,35 @@ attempts = 1</code></pre>
 attempts = 200744719</code></pre>
 <p>Suffice it to say, although the idea of using <code>do/while</code> loops to implement validation checks makes sense, this is… um… an unhinged example. But I found it funny so I ran with it.</p>
 <h3 id="the-for-loop">The <code>for</code> loop</h3>
-<h3 id="the-range-based-for-loop">The range-based <code>for</code> loop</h3></div>
+<p>One of the earlier examples gave an example of a <code>for</code> loop that was semi-serious, so I feel justified in being absurd again:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true"></a><span class="co">// na-na-hey-hey.cpp</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true"></a></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true"></a>    <span class="cf">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; <span class="dv">8</span>; i++) { <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;na &quot;</span>; }</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true"></a>    <span class="cf">for</span>(<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; <span class="dv">3</span>; i++) { <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;hey &quot;</span>; }</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;goodbye&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>na na na na na na na na hey hey hey goodbye</code></pre>
+<h3 id="the-range-based-for-loop">The range-based <code>for</code> loop</h3>
+<p>The range-based <code>for</code> loop iterates directly over the elements of a container. It works for a fairly wide range of possible containers: anything that has <code>.begin()</code> and <code>.end()</code> methods that return iterators will work. Example:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true"></a><span class="co">// array-iterator.cpp</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;array&gt;</span></span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true"></a></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true"></a>    <span class="bu">std::</span>array&lt;<span class="dt">int</span>, <span class="dv">6</span>&gt; fib = { <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">8</span> };</span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true"></a>    <span class="cf">for</span>(<span class="dt">int</span> f : fib) { <span class="bu">std::</span>cout &lt;&lt; f &lt;&lt; <span class="bu">std::</span>endl; }</span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>1
+1
+2
+3
+5
+8</code></pre>
+<p>Note that in this code, at each step of the iteration the variable <code>f</code> stores a copy of the relevant element of <code>fib</code>. However, it’s possible to do range-based <code>for</code> loops without making copies by using a reference variable. The book promises to discuss this later in the chapter.</p></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
