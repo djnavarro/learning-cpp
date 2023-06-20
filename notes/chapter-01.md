@@ -770,7 +770,9 @@ int main() {
 }
 ```
 
-Sometimes this code creates a `betas` vector containing four values:
+Technically I'm getting slightly ahead of the book here because it hasn't talked about loops yet, but whatever. A `for` loop is more or less the same thing everywhere. 
+
+Anyway, let's take a quick look at some output. Sometimes this code creates a `betas` vector containing four values:
 
 ```
 collected 4 samples
@@ -795,3 +797,11 @@ beta(2,1) sample: 0.414129
 ```
 
 And so on.
+
+## Pairs and optionals
+
+At this point the book discusses a couple of topics that I'm not going to bother writing my own code for:
+
+- C++ provides a `std::pair` class via the `<utility>` library. It's used to group two values that can be of different types. It has methods `.first()` and `.second()` to extract individual elements. I can imagine this is useful as a tool for representing name-value pairs, for instance. 
+
+- There is an `std::optional` class provided by `<optional>` and can either hold a value of a specific type, or nothing. There's a method `.has_value()` that returns a boolean specifying whether a value has een stored, and a `.value()` method that returns the stored value. Apparently you can also use the dereferencing operator to do the same thing, so if we have an optional object called `maybe` then `maybe.value()` and `*maybe` do the same thing. There's also a `.value_or()` method that returns the stored value if one exists, or else returns whatever is passed to `.value_or()`. The obvious application that comes to mind for me is that optional objects could be used to handle missing values in statistical contexts.

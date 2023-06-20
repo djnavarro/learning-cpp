@@ -564,7 +564,8 @@ y &amp; \sim &amp; \mbox{Gamma}(b, 1)
 <span id="cb45-46"><a href="#cb45-46" aria-hidden="true"></a>    }</span>
 <span id="cb45-47"><a href="#cb45-47" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
 <span id="cb45-48"><a href="#cb45-48" aria-hidden="true"></a>}</span></code></pre></div>
-<p>Sometimes this code creates a <code>betas</code> vector containing four values:</p>
+<p>Technically I’m getting slightly ahead of the book here because it hasn’t talked about loops yet, but whatever. A <code>for</code> loop is more or less the same thing everywhere.</p>
+<p>Anyway, let’s take a quick look at some output. Sometimes this code creates a <code>betas</code> vector containing four values:</p>
 <pre><code>collected 4 samples
 beta(2,1) sample: 0.293596
 beta(2,1) sample: 0.920161
@@ -576,7 +577,13 @@ beta(2,1) sample: 0.502786</code></pre>
 <pre><code>collected 2 samples
 beta(2,1) sample: 0.729145
 beta(2,1) sample: 0.414129</code></pre>
-<p>And so on.</p></div>
+<p>And so on.</p>
+<h2 id="pairs-and-optionals">Pairs and optionals</h2>
+<p>At this point the book discusses a couple of topics that I’m not going to bother writing my own code for:</p>
+<ul>
+<li><p>C++ provides a <code>std::pair</code> class via the <code>&lt;utility&gt;</code> library. It’s used to group two values that can be of different types. It has methods <code>.first()</code> and <code>.second()</code> to extract individual elements. I can imagine this is useful as a tool for representing name-value pairs, for instance.</p></li>
+<li><p>There is an <code>std::optional</code> class provided by <code>&lt;optional&gt;</code> and can either hold a value of a specific type, or nothing. There’s a method <code>.has_value()</code> that returns a boolean specifying whether a value has een stored, and a <code>.value()</code> method that returns the stored value. Apparently you can also use the dereferencing operator to do the same thing, so if we have an optional object called <code>maybe</code> then <code>maybe.value()</code> and <code>*maybe</code> do the same thing. There’s also a <code>.value_or()</code> method that returns the stored value if one exists, or else returns whatever is passed to <code>.value_or()</code>. The obvious application that comes to mind for me is that optional objects could be used to handle missing values in statistical contexts.</p></li>
+</ul></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -593,6 +600,7 @@ beta(2,1) sample: 0.414129</code></pre>
 <li><a href="#functions">Functions</a></li>
 <li><a href="#arrays">Arrays</a></li>
 <li><a href="#vectors">Vectors</a></li>
+<li><a href="#pairs-and-optionals">Pairs and optionals</a></li>
 </ul></li>
                </ul>
             </div>
