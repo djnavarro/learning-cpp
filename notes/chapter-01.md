@@ -572,7 +572,99 @@ i has integer code 105
 
 (The integers correspond to the ASCII codes for each character).
 
+### Useful tidbits about functions
 
+1. It's possible to use the `auto` keyword to ask the compiler to figure out the output type for you. So, for instance, this works and returns an integer:
+
+``` cpp
+auto add_numbers(int x, int y) {
+    return x + y;
+}
+```
+
+2. Every function has a local variable `__func__` that contains the function name. As noted in the book, this can be helpful for logging purposes. Here's a slightly expanded version of the example used in the book:
+
+``` cpp
+// add-with-logging.cpp
+#include <iostream>
+
+int add_numbers(int x, int y) {
+    std::cout << __func__ << "(" << x << ", " << y << ")" << std::endl;
+    return x + y;
+}
+
+int main() {
+    int a = 1;
+    int b = 2;
+    int c = 3;
+    int sum1 = add_numbers(a, b);
+    int sum2 = add_numbers(sum1, c);
+    std::cout << "result: " << sum2 << std::endl;
+    return 0;
+}
+```
+
+When this executes, we see the following written to stdout:
+
+```
+add_numbers(1, 2)
+add_numbers(3, 3)
+result: 6
+```
+
+3. Function overloading is permitted: you can write multiple functions that have the same name but have different signatures. Note that in this case that means the function arguments must be different. It's not sufficient merely to declare a different output type. As an example, we could use this to define addition functions that accept both integers and doubles, returning integers only if both arguments are integers:
+
+``` cpp
+// add-with-overloading.cpp
+#include <iostream>
+
+int add_numbers(int x, int y) {
+    std::cout << __func__ << "(" << x << ", " << y << ")" << std::endl;
+    return x + y;
+}
+
+double add_numbers(double x, double y) {
+    std::cout << __func__ << "(" << x << ", " << y << ")" << std::endl;
+    return x + y;
+}
+
+double add_numbers(int x, double y) {
+    std::cout << __func__ << "(" << x << ", " << y << ")" << std::endl;
+    return static_cast<double>(x) + y;
+}
+
+double add_numbers(double x, int y) {
+    std::cout << __func__ << "(" << x << ", " << y << ")" << std::endl;
+    return x + static_cast<double>(y);
+}
+
+
+int main() {
+    int int_a = 1;
+    int int_b = 2;
+    double dbl_c = 3.45;
+    double dbl_d = 6.78;
+
+    int int_ab = add_numbers(int_a, int_b);
+    double dbl_cd = add_numbers(dbl_c, dbl_d);
+    double dbl_abcd = add_numbers(int_ab, dbl_cd);
+    std::cout << "result: " << dbl_abcd << std::endl;
+    return 0;
+}
+```
+
+Running this code produces the following output:
+
+```
+add_numbers(1, 2)
+add_numbers(3.45, 6.78)
+add_numbers(3, 10.23)
+result: 13.23
+```
+
+It works, but it can be a bit risky to abandon type stability. In this case it's quite easy to reason about the output type of a call to `add_numbers()` simply by inspecting the input types, but in my experience things go bad quite quickly when you don't take type stability seriously.
+
+4. You can specify attributes like `[[maybe_unused]]` to indicate that, for instance, a function argument might not be used. There are other attributes like `[[deprecated]]` for functions, and -- though I skipped that bit earlier, attributes like `[[fallthrough]]` for switch statements. To be honest, at this point I'm only lightly reading the sections on attributes.
 
 ## Arrays with `std::array`
 

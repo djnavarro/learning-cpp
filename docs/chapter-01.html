@@ -405,6 +405,85 @@ a has integer code 97
 n has integer code 110
 i has integer code 105</code></pre>
 <p>(The integers correspond to the ASCII codes for each character).</p>
+<h3 id="useful-tidbits-about-functions">Useful tidbits about functions</h3>
+<ol type="1">
+<li>It’s possible to use the <code>auto</code> keyword to ask the compiler to figure out the output type for you. So, for instance, this works and returns an integer:</li>
+</ol>
+<div class="sourceCode" id="cb38"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="kw">auto</span> add_numbers(<span class="dt">int</span> x, <span class="dt">int</span> y) {</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a>    <span class="cf">return</span> x + y;</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true"></a>}</span></code></pre></div>
+<ol start="2" type="1">
+<li>Every function has a local variable <code>__func__</code> that contains the function name. As noted in the book, this can be helpful for logging purposes. Here’s a slightly expanded version of the example used in the book:</li>
+</ol>
+<div class="sourceCode" id="cb39"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true"></a><span class="co">// add-with-logging.cpp</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true"></a><span class="dt">int</span> add_numbers(<span class="dt">int</span> x, <span class="dt">int</span> y) {</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="ot">__func__</span> &lt;&lt; <span class="st">&quot;(&quot;</span> &lt;&lt; x &lt;&lt; <span class="st">&quot;, &quot;</span> &lt;&lt; y &lt;&lt; <span class="st">&quot;)&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb39-6"><a href="#cb39-6" aria-hidden="true"></a>    <span class="cf">return</span> x + y;</span>
+<span id="cb39-7"><a href="#cb39-7" aria-hidden="true"></a>}</span>
+<span id="cb39-8"><a href="#cb39-8" aria-hidden="true"></a></span>
+<span id="cb39-9"><a href="#cb39-9" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb39-10"><a href="#cb39-10" aria-hidden="true"></a>    <span class="dt">int</span> a = <span class="dv">1</span>;</span>
+<span id="cb39-11"><a href="#cb39-11" aria-hidden="true"></a>    <span class="dt">int</span> b = <span class="dv">2</span>;</span>
+<span id="cb39-12"><a href="#cb39-12" aria-hidden="true"></a>    <span class="dt">int</span> c = <span class="dv">3</span>;</span>
+<span id="cb39-13"><a href="#cb39-13" aria-hidden="true"></a>    <span class="dt">int</span> sum1 = add_numbers(a, b);</span>
+<span id="cb39-14"><a href="#cb39-14" aria-hidden="true"></a>    <span class="dt">int</span> sum2 = add_numbers(sum1, c);</span>
+<span id="cb39-15"><a href="#cb39-15" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;result: &quot;</span> &lt;&lt; sum2 &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb39-16"><a href="#cb39-16" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb39-17"><a href="#cb39-17" aria-hidden="true"></a>}</span></code></pre></div>
+<p>When this executes, we see the following written to stdout:</p>
+<pre><code>add_numbers(1, 2)
+add_numbers(3, 3)
+result: 6</code></pre>
+<ol start="3" type="1">
+<li>Function overloading is permitted: you can write multiple functions that have the same name but have different signatures. Note that in this case that means the function arguments must be different. It’s not sufficient merely to declare a different output type. As an example, we could use this to define addition functions that accept both integers and doubles, returning integers only if both arguments are integers:</li>
+</ol>
+<div class="sourceCode" id="cb41"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true"></a><span class="co">// add-with-overloading.cpp</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true"></a><span class="dt">int</span> add_numbers(<span class="dt">int</span> x, <span class="dt">int</span> y) {</span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="ot">__func__</span> &lt;&lt; <span class="st">&quot;(&quot;</span> &lt;&lt; x &lt;&lt; <span class="st">&quot;, &quot;</span> &lt;&lt; y &lt;&lt; <span class="st">&quot;)&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true"></a>    <span class="cf">return</span> x + y;</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true"></a>}</span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true"></a></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true"></a><span class="dt">double</span> add_numbers(<span class="dt">double</span> x, <span class="dt">double</span> y) {</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="ot">__func__</span> &lt;&lt; <span class="st">&quot;(&quot;</span> &lt;&lt; x &lt;&lt; <span class="st">&quot;, &quot;</span> &lt;&lt; y &lt;&lt; <span class="st">&quot;)&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true"></a>    <span class="cf">return</span> x + y;</span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true"></a>}</span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true"></a></span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true"></a><span class="dt">double</span> add_numbers(<span class="dt">int</span> x, <span class="dt">double</span> y) {</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="ot">__func__</span> &lt;&lt; <span class="st">&quot;(&quot;</span> &lt;&lt; x &lt;&lt; <span class="st">&quot;, &quot;</span> &lt;&lt; y &lt;&lt; <span class="st">&quot;)&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true"></a>    <span class="cf">return</span> <span class="kw">static_cast</span>&lt;<span class="dt">double</span>&gt;(x) + y;</span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true"></a>}</span>
+<span id="cb41-18"><a href="#cb41-18" aria-hidden="true"></a></span>
+<span id="cb41-19"><a href="#cb41-19" aria-hidden="true"></a><span class="dt">double</span> add_numbers(<span class="dt">double</span> x, <span class="dt">int</span> y) {</span>
+<span id="cb41-20"><a href="#cb41-20" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="ot">__func__</span> &lt;&lt; <span class="st">&quot;(&quot;</span> &lt;&lt; x &lt;&lt; <span class="st">&quot;, &quot;</span> &lt;&lt; y &lt;&lt; <span class="st">&quot;)&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb41-21"><a href="#cb41-21" aria-hidden="true"></a>    <span class="cf">return</span> x + <span class="kw">static_cast</span>&lt;<span class="dt">double</span>&gt;(y);</span>
+<span id="cb41-22"><a href="#cb41-22" aria-hidden="true"></a>}</span>
+<span id="cb41-23"><a href="#cb41-23" aria-hidden="true"></a></span>
+<span id="cb41-24"><a href="#cb41-24" aria-hidden="true"></a></span>
+<span id="cb41-25"><a href="#cb41-25" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb41-26"><a href="#cb41-26" aria-hidden="true"></a>    <span class="dt">int</span> int_a = <span class="dv">1</span>;</span>
+<span id="cb41-27"><a href="#cb41-27" aria-hidden="true"></a>    <span class="dt">int</span> int_b = <span class="dv">2</span>;</span>
+<span id="cb41-28"><a href="#cb41-28" aria-hidden="true"></a>    <span class="dt">double</span> dbl_c = <span class="fl">3.45</span>;</span>
+<span id="cb41-29"><a href="#cb41-29" aria-hidden="true"></a>    <span class="dt">double</span> dbl_d = <span class="fl">6.78</span>;</span>
+<span id="cb41-30"><a href="#cb41-30" aria-hidden="true"></a></span>
+<span id="cb41-31"><a href="#cb41-31" aria-hidden="true"></a>    <span class="dt">int</span> int_ab = add_numbers(int_a, int_b);</span>
+<span id="cb41-32"><a href="#cb41-32" aria-hidden="true"></a>    <span class="dt">double</span> dbl_cd = add_numbers(dbl_c, dbl_d);</span>
+<span id="cb41-33"><a href="#cb41-33" aria-hidden="true"></a>    <span class="dt">double</span> dbl_abcd = add_numbers(int_ab, dbl_cd);</span>
+<span id="cb41-34"><a href="#cb41-34" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;result: &quot;</span> &lt;&lt; dbl_abcd &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb41-35"><a href="#cb41-35" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb41-36"><a href="#cb41-36" aria-hidden="true"></a>}</span></code></pre></div>
+<p>Running this code produces the following output:</p>
+<pre><code>add_numbers(1, 2)
+add_numbers(3.45, 6.78)
+add_numbers(3, 10.23)
+result: 13.23</code></pre>
+<p>It works, but it can be a bit risky to abandon type stability. In this case it’s quite easy to reason about the output type of a call to <code>add_numbers()</code> simply by inspecting the input types, but in my experience things go bad quite quickly when you don’t take type stability seriously.</p>
+<ol start="4" type="1">
+<li>You can specify attributes like <code>[[maybe_unused]]</code> to indicate that, for instance, a function argument might not be used. There are other attributes like <code>[[deprecated]]</code> for functions, and – though I skipped that bit earlier, attributes like <code>[[fallthrough]]</code> for switch statements. To be honest, at this point I’m only lightly reading the sections on attributes.</li>
+</ol>
 <h2 id="arrays-with-stdarray">Arrays with <code>std::array</code></h2>
 <h2 id="vectors-with-stdvector">Vectors with <code>std::vector</code></h2>
 <p>To return to my new best friend the <a href="https://cplusplus.com/reference/random/"><code>&lt;random&gt;</code></a> library, let’s write a function that samples from a beta distribution. This is slightly tricky insofar as there isn’t actually a beta distribution function in the random library. Fortunately, I haven’t forgotten my basic variate relations. Specifically, if we let:</p>
@@ -418,48 +497,48 @@ y &amp; \sim &amp; \mbox{Gamma}(b, 1)
 <p><span class="math display">\[ 
 z \sim \mbox{Beta}(a, b)
 \]</span></p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true"></a><span class="co">// beta-sample.cpp</span></span>
-<span id="cb38-2"><a href="#cb38-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
-<span id="cb38-3"><a href="#cb38-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
-<span id="cb38-4"><a href="#cb38-4" aria-hidden="true"></a></span>
-<span id="cb38-5"><a href="#cb38-5" aria-hidden="true"></a><span class="dt">void</span> print_message(<span class="dt">double</span> value, <span class="dt">double</span> a, <span class="dt">double</span> b) {</span>
-<span id="cb38-6"><a href="#cb38-6" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;beta(&quot;</span> &lt;&lt; a &lt;&lt; <span class="st">&quot;,&quot;</span> &lt;&lt; b &lt;&lt; <span class="st">&quot;) sample: &quot;</span> &lt;&lt; value &lt;&lt; <span class="bu">std::</span>endl;</span>
-<span id="cb38-7"><a href="#cb38-7" aria-hidden="true"></a>}</span>
-<span id="cb38-8"><a href="#cb38-8" aria-hidden="true"></a></span>
-<span id="cb38-9"><a href="#cb38-9" aria-hidden="true"></a><span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; draw_betas(<span class="dt">int</span> n, <span class="dt">double</span> a, <span class="dt">double</span> b) {</span>
-<span id="cb38-10"><a href="#cb38-10" aria-hidden="true"></a>    <span class="co">// gamma distributions</span></span>
-<span id="cb38-11"><a href="#cb38-11" aria-hidden="true"></a>    <span class="bu">std::</span>gamma_distribution&lt;<span class="dt">double</span>&gt; gamma_a(a, <span class="fl">1.0</span>);</span>
-<span id="cb38-12"><a href="#cb38-12" aria-hidden="true"></a>    <span class="bu">std::</span>gamma_distribution&lt;<span class="dt">double</span>&gt; gamma_b(b, <span class="fl">1.0</span>);</span>
-<span id="cb38-13"><a href="#cb38-13" aria-hidden="true"></a></span>
-<span id="cb38-14"><a href="#cb38-14" aria-hidden="true"></a>    <span class="co">// mersenne twister numbers</span></span>
-<span id="cb38-15"><a href="#cb38-15" aria-hidden="true"></a>    <span class="bu">std::</span>random_device rd;</span>
-<span id="cb38-16"><a href="#cb38-16" aria-hidden="true"></a>    <span class="bu">std::</span>mt19937 mt(rd());</span>
-<span id="cb38-17"><a href="#cb38-17" aria-hidden="true"></a></span>
-<span id="cb38-18"><a href="#cb38-18" aria-hidden="true"></a>    <span class="co">// draw samples and return</span></span>
-<span id="cb38-19"><a href="#cb38-19" aria-hidden="true"></a>    <span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; beta_variates;</span>
-<span id="cb38-20"><a href="#cb38-20" aria-hidden="true"></a>    <span class="dt">double</span> x, y;</span>
-<span id="cb38-21"><a href="#cb38-21" aria-hidden="true"></a>    <span class="cf">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; i++) {</span>
-<span id="cb38-22"><a href="#cb38-22" aria-hidden="true"></a>        x = gamma_a(mt);</span>
-<span id="cb38-23"><a href="#cb38-23" aria-hidden="true"></a>        y = gamma_b(mt);</span>
-<span id="cb38-24"><a href="#cb38-24" aria-hidden="true"></a>        beta_variates[i] = x / (x + y);</span>
-<span id="cb38-25"><a href="#cb38-25" aria-hidden="true"></a>    }</span>
-<span id="cb38-26"><a href="#cb38-26" aria-hidden="true"></a>    <span class="cf">return</span> beta_variates;</span>
-<span id="cb38-27"><a href="#cb38-27" aria-hidden="true"></a>}</span>
-<span id="cb38-28"><a href="#cb38-28" aria-hidden="true"></a></span>
-<span id="cb38-29"><a href="#cb38-29" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
-<span id="cb38-30"><a href="#cb38-30" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">double</span> a = <span class="fl">2.0</span>; <span class="co">// shape parameter 1</span></span>
-<span id="cb38-31"><a href="#cb38-31" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">double</span> b = <span class="fl">1.0</span>; <span class="co">// shape parameter 2</span></span>
-<span id="cb38-32"><a href="#cb38-32" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">int</span> n = <span class="dv">5</span>; <span class="co">// length of output vector</span></span>
-<span id="cb38-33"><a href="#cb38-33" aria-hidden="true"></a></span>
-<span id="cb38-34"><a href="#cb38-34" aria-hidden="true"></a>    <span class="co">// draw samples</span></span>
-<span id="cb38-35"><a href="#cb38-35" aria-hidden="true"></a>    <span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; betas = draw_betas(n, a, b);</span>
-<span id="cb38-36"><a href="#cb38-36" aria-hidden="true"></a></span>
-<span id="cb38-37"><a href="#cb38-37" aria-hidden="true"></a>    <span class="co">// print messages and return</span></span>
-<span id="cb38-38"><a href="#cb38-38" aria-hidden="true"></a>    <span class="cf">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; i++) {</span>
-<span id="cb38-39"><a href="#cb38-39" aria-hidden="true"></a>        print_message(betas[i], a, b);</span>
-<span id="cb38-40"><a href="#cb38-40" aria-hidden="true"></a>    }</span>
-<span id="cb38-41"><a href="#cb38-41" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
-<span id="cb38-42"><a href="#cb38-42" aria-hidden="true"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true"></a><span class="co">// beta-sample.cpp</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;random&gt;</span></span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true"></a></span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true"></a><span class="dt">void</span> print_message(<span class="dt">double</span> value, <span class="dt">double</span> a, <span class="dt">double</span> b) {</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;beta(&quot;</span> &lt;&lt; a &lt;&lt; <span class="st">&quot;,&quot;</span> &lt;&lt; b &lt;&lt; <span class="st">&quot;) sample: &quot;</span> &lt;&lt; value &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true"></a>}</span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true"></a></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true"></a><span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; draw_betas(<span class="dt">int</span> n, <span class="dt">double</span> a, <span class="dt">double</span> b) {</span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true"></a>    <span class="co">// gamma distributions</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true"></a>    <span class="bu">std::</span>gamma_distribution&lt;<span class="dt">double</span>&gt; gamma_a(a, <span class="fl">1.0</span>);</span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true"></a>    <span class="bu">std::</span>gamma_distribution&lt;<span class="dt">double</span>&gt; gamma_b(b, <span class="fl">1.0</span>);</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true"></a></span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true"></a>    <span class="co">// mersenne twister numbers</span></span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true"></a>    <span class="bu">std::</span>random_device rd;</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true"></a>    <span class="bu">std::</span>mt19937 mt(rd());</span>
+<span id="cb43-17"><a href="#cb43-17" aria-hidden="true"></a></span>
+<span id="cb43-18"><a href="#cb43-18" aria-hidden="true"></a>    <span class="co">// draw samples and return</span></span>
+<span id="cb43-19"><a href="#cb43-19" aria-hidden="true"></a>    <span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; beta_variates;</span>
+<span id="cb43-20"><a href="#cb43-20" aria-hidden="true"></a>    <span class="dt">double</span> x, y;</span>
+<span id="cb43-21"><a href="#cb43-21" aria-hidden="true"></a>    <span class="cf">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; i++) {</span>
+<span id="cb43-22"><a href="#cb43-22" aria-hidden="true"></a>        x = gamma_a(mt);</span>
+<span id="cb43-23"><a href="#cb43-23" aria-hidden="true"></a>        y = gamma_b(mt);</span>
+<span id="cb43-24"><a href="#cb43-24" aria-hidden="true"></a>        beta_variates[i] = x / (x + y);</span>
+<span id="cb43-25"><a href="#cb43-25" aria-hidden="true"></a>    }</span>
+<span id="cb43-26"><a href="#cb43-26" aria-hidden="true"></a>    <span class="cf">return</span> beta_variates;</span>
+<span id="cb43-27"><a href="#cb43-27" aria-hidden="true"></a>}</span>
+<span id="cb43-28"><a href="#cb43-28" aria-hidden="true"></a></span>
+<span id="cb43-29"><a href="#cb43-29" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb43-30"><a href="#cb43-30" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">double</span> a = <span class="fl">2.0</span>; <span class="co">// shape parameter 1</span></span>
+<span id="cb43-31"><a href="#cb43-31" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">double</span> b = <span class="fl">1.0</span>; <span class="co">// shape parameter 2</span></span>
+<span id="cb43-32"><a href="#cb43-32" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">int</span> n = <span class="dv">5</span>; <span class="co">// length of output vector</span></span>
+<span id="cb43-33"><a href="#cb43-33" aria-hidden="true"></a></span>
+<span id="cb43-34"><a href="#cb43-34" aria-hidden="true"></a>    <span class="co">// draw samples</span></span>
+<span id="cb43-35"><a href="#cb43-35" aria-hidden="true"></a>    <span class="bu">std::</span>vector&lt;<span class="dt">double</span>&gt; betas = draw_betas(n, a, b);</span>
+<span id="cb43-36"><a href="#cb43-36" aria-hidden="true"></a></span>
+<span id="cb43-37"><a href="#cb43-37" aria-hidden="true"></a>    <span class="co">// print messages and return</span></span>
+<span id="cb43-38"><a href="#cb43-38" aria-hidden="true"></a>    <span class="cf">for</span> (<span class="dt">int</span> i = <span class="dv">0</span>; i &lt; n; i++) {</span>
+<span id="cb43-39"><a href="#cb43-39" aria-hidden="true"></a>        print_message(betas[i], a, b);</span>
+<span id="cb43-40"><a href="#cb43-40" aria-hidden="true"></a>    }</span>
+<span id="cb43-41"><a href="#cb43-41" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb43-42"><a href="#cb43-42" aria-hidden="true"></a>}</span></code></pre></div>
 <p>When we run this:</p>
 <pre><code>beta(2,1) sample: 0.80872
 beta(2,1) sample: 0.952428
