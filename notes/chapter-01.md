@@ -1020,3 +1020,26 @@ mean x: 5.65
 mean y: 86.6
 ```
 
+## Strings
+
+The book talks about strings next, but it's mostly a promissory note here. It mentions that the `std::string` type from `<string>` works more or less the way you'd expect for a string type. Here's a quick example:
+
+```cpp
+// simple-string.cpp
+#include <iostream>
+#include <vector>
+#include <string>
+
+int main() {
+    std::vector<std::string> name = { "Daniela", "Jasmine", "Navarro" };
+    for(std::string n : name) { std::cout << n << std::endl; }
+    return 0;
+}
+```
+
+```
+Daniela
+Jasmine
+Navarro
+```
+

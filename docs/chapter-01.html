@@ -727,7 +727,24 @@ attempts = 200744719</code></pre>
 <span id="cb61-16"><a href="#cb61-16" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;mean x: &quot;</span> &lt;&lt; x_bar &lt;&lt; <span class="bu">std::</span>endl;</span>
 <span id="cb61-17"><a href="#cb61-17" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;mean y: &quot;</span> &lt;&lt; y_bar &lt;&lt; <span class="bu">std::</span>endl;</span>
 <span id="cb61-18"><a href="#cb61-18" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
-<span id="cb61-19"><a href="#cb61-19" aria-hidden="true"></a>}</span></code></pre></div></div>
+<span id="cb61-19"><a href="#cb61-19" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>mean x: 5.65
+mean y: 86.6</code></pre>
+<h2 id="strings">Strings</h2>
+<p>The book talks about strings next, but it’s mostly a promissory note here. It mentions that the <code>std::string</code> type from <code>&lt;string&gt;</code> works more or less the way you’d expect for a string type. Here’s a quick example:</p>
+<div class="sourceCode" id="cb63"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true"></a><span class="co">// simple-string.cpp</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;vector&gt;</span></span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true"></a></span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true"></a>    <span class="bu">std::</span>vector&lt;<span class="bu">std::</span>string&gt; name = { <span class="st">&quot;Daniela&quot;</span>, <span class="st">&quot;Jasmine&quot;</span>, <span class="st">&quot;Navarro&quot;</span> };</span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true"></a>    <span class="cf">for</span>(<span class="bu">std::</span>string n : name) { <span class="bu">std::</span>cout &lt;&lt; n &lt;&lt; <span class="bu">std::</span>endl; }</span>
+<span id="cb63-9"><a href="#cb63-9" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb63-10"><a href="#cb63-10" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>Daniela
+Jasmine
+Navarro</code></pre></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -748,6 +765,7 @@ attempts = 200744719</code></pre>
 <li><a href="#structured-bindings">Structured bindings</a></li>
 <li><a href="#loops">Loops</a></li>
 <li><a href="#initialiser-lists">Initialiser lists</a></li>
+<li><a href="#strings">Strings</a></li>
 </ul></li>
                </ul>
             </div>
