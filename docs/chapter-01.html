@@ -706,7 +706,28 @@ attempts = 200744719</code></pre>
 3
 5
 8</code></pre>
-<p>Note that in this code, at each step of the iteration the variable <code>f</code> stores a copy of the relevant element of <code>fib</code>. However, it’s possible to do range-based <code>for</code> loops without making copies by using a reference variable. The book promises to discuss this later in the chapter.</p></div>
+<p>Note that in this code, at each step of the iteration the variable <code>f</code> stores a copy of the relevant element of <code>fib</code>. However, it’s possible to do range-based <code>for</code> loops without making copies by using a reference variable. The book promises to discuss this later in the chapter.</p>
+<h2 id="initialiser-lists">Initialiser lists</h2>
+<p>Initialiser lists are designed to make it easy to write functions that accept a variable number of arguments, and are provided by the <code>&lt;initializer_list&gt;</code> library. All values in an initialiser list must be the same type. Here’s an example that computes the mean of an arbitrary number of double values:</p>
+<div class="sourceCode" id="cb61"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true"></a><span class="co">// mean-value.cpp</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;initializer_list&gt;</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true"></a></span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true"></a><span class="dt">double</span> mean(<span class="bu">std::</span>initializer_list&lt;<span class="dt">double</span>&gt; values) {</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true"></a>    <span class="dt">double</span> tot = <span class="dv">0</span>;</span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true"></a>    <span class="cf">for</span> (<span class="dt">double</span> v : values) {</span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true"></a>        tot += v;</span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true"></a>    }</span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true"></a>    <span class="cf">return</span> tot / values.size();</span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true"></a>} </span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true"></a></span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb61-14"><a href="#cb61-14" aria-hidden="true"></a>    <span class="dt">double</span> x_bar = mean({ <span class="fl">2.3</span>, <span class="fl">1.5</span>, <span class="fl">7.8</span>, <span class="fl">11.0</span> });</span>
+<span id="cb61-15"><a href="#cb61-15" aria-hidden="true"></a>    <span class="dt">double</span> y_bar = mean({ <span class="fl">102.5</span>, <span class="fl">59.1</span>, <span class="fl">98.2</span> });</span>
+<span id="cb61-16"><a href="#cb61-16" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;mean x: &quot;</span> &lt;&lt; x_bar &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb61-17"><a href="#cb61-17" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;mean y: &quot;</span> &lt;&lt; y_bar &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb61-18"><a href="#cb61-18" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb61-19"><a href="#cb61-19" aria-hidden="true"></a>}</span></code></pre></div></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -726,6 +747,7 @@ attempts = 200744719</code></pre>
 <li><a href="#pairs-and-optionals">Pairs and optionals</a></li>
 <li><a href="#structured-bindings">Structured bindings</a></li>
 <li><a href="#loops">Loops</a></li>
+<li><a href="#initialiser-lists">Initialiser lists</a></li>
 </ul></li>
                </ul>
             </div>
