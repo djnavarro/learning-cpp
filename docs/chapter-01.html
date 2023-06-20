@@ -499,11 +499,11 @@ result: 13.23</code></pre>
 <pre><code>Danielle has 8 letters.</code></pre>
 <h2 id="vectors">Vectors</h2>
 <p>In many situations you don’t know in advance how many elements you need to store. To help with that, C++ provides the <code>std::vector</code> type via the <code>&lt;vector&gt;</code> library. Vectors are flexible containers that can grow and shrink at run time, so you don’t need to specify how long they will be and you don’t have to faff about with memory managemtn. Because vectors are more useful than arrays (in my experience) I’ll give an example that roughly mirrors a situation I’ve had to deal with in real life: when you’re collecting observations and you don’t know in advance how many observations might arise. In real applications the source of this variation usually comes from the outside source, but for this example I’ll rely on my new best friend, the <a href="https://cplusplus.com/reference/random/"><code>&lt;random&gt;</code></a> library.</p>
-<p>I’ll switch to statistical notation here. In the code below I assume the number of observations <span class="math inline">\(n\)</span> follows a Poisson distribution with rate parameter <code>\lambda</code>:</p>
+<p>I’ll switch to statistical notation here. In the code below I assume the number of observations <span class="math inline">\(n\)</span> follows a Poisson distribution with rate parameter <span class="math inline">\(\lambda\)</span>:</p>
 <p><span class="math display">\[
 n \sim \mbox{Poisson}(\lambda)
 \]</span></p>
-<p>and I’ll assume each value <code>v</code> is a Beta variate between 0 and 1:</p>
+<p>and I’ll assume each value <span class="math inline">\(v\)</span> is a Beta variate between 0 and 1:</p>
 <p><span class="math display">\[ 
 v \sim \mbox{Beta}(a, b)
 \]</span></p>

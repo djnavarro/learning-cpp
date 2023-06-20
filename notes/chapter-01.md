@@ -693,13 +693,13 @@ Danielle has 8 letters.
 
 In many situations you don't know in advance how many elements you need to store. To help with that, C++ provides the `std::vector` type via the `<vector>` library. Vectors are flexible containers that can grow and shrink at run time, so you don't need to specify how long they will be and you don't have to faff about with memory managemtn. Because vectors are more useful than arrays (in my experience) I'll give an example that roughly mirrors a situation I've had to deal with in real life: when you're collecting observations and you don't know in advance how many observations might arise. In real applications the source of this variation usually comes from the outside source, but for this example I'll rely on my new best friend, the [`<random>`](https://cplusplus.com/reference/random/) library.
 
-I'll switch to statistical notation here. In the code below I assume the number of observations $n$ follows a Poisson distribution with rate parameter `\lambda`:
+I'll switch to statistical notation here. In the code below I assume the number of observations $n$ follows a Poisson distribution with rate parameter $\lambda$:
 
 $$
 n \sim \mbox{Poisson}(\lambda)
 $$
 
-and I'll assume each value `v` is a Beta variate between 0 and 1:
+and I'll assume each value $v$ is a Beta variate between 0 and 1:
 
 $$ 
 v \sim \mbox{Beta}(a, b)
