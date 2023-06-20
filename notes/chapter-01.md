@@ -666,12 +666,46 @@ It works, but it can be a bit risky to abandon type stability. In this case it's
 
 4. You can specify attributes like `[[maybe_unused]]` to indicate that, for instance, a function argument might not be used. There are other attributes like `[[deprecated]]` for functions, and -- though I skipped that bit earlier, attributes like `[[fallthrough]]` for switch statements. To be honest, at this point I'm only lightly reading the sections on attributes.
 
-## Arrays with `std::array`
+## Arrays
 
+At this point, the book moves to a discussion of arrays. Specifically, it first talks about old-school C-style arrays before moving onto the C++ `std::array` type. Given that I try my very best never to use C-style arrays in my C++ code, I think I'll skip straight to `std::array` in these notes. C++ style array objects are provided by the `<array>` library. The size of the array must be specified in advance, and all elements of the array must have the same type. Indexing starts at 0. 
 
-## Vectors with `std::vector`
+Here's a simple example:
 
-To return to my new best friend the [`<random>`](https://cplusplus.com/reference/random/) library, let's write a function that samples from a beta distribution. This is slightly tricky insofar as there isn't actually a beta distribution function in the random library. Fortunately, I haven't forgotten my basic variate relations. Specifically, if we let:
+``` cpp
+// array-danielle.cpp
+#include <iostream>
+#include <array>
+
+int main() {
+    std::array<char, 8> danielle = { 'D', 'a', 'n', 'i', 'e', 'l', 'l', 'e' };
+    std::cout << "Danielle has " << danielle.size() << " letters." << std::endl;
+}
+```
+
+The nice thing here is that C++ arrays have a `.size()` method which makes it easy to do all sort of operations with them. The current example is a bit minimal: I'm just using it to count the letters in my name. Speaking of which, here's the output:
+
+```
+Danielle has 8 letters.
+```
+
+## Vectors
+
+In many situations you don't know in advance how many elements you need to store. To help with that, C++ provides the `std::vector` type via the `<vector>` library. Vectors are flexible containers that can grow and shrink at run time, so you don't need to specify how long they will be and you don't have to faff about with memory managemtn. Because vectors are more useful than arrays (in my experience) I'll give an example that roughly mirrors a situation I've had to deal with in real life: when you're collecting observations and you don't know in advance how many observations might arise. In real applications the source of this variation usually comes from the outside source, but for this example I'll rely on my new best friend, the [`<random>`](https://cplusplus.com/reference/random/) library.
+
+I'll switch to statistical notation here. In the code below I assume the number of observations $n$ follows a Poisson distribution with rate parameter `\lambda`:
+
+$$
+n \sim \mbox{Poisson}(\lambda)
+$$
+
+and I'll assume each value `v` is a Beta variate between 0 and 1:
+
+$$ 
+v \sim \mbox{Beta}(a, b)
+$$
+
+Annoyingly, the `<random>` library does not supply functions for beta distributions out of the box but happily I have not forgotten my basic variate relations. To sample $v$ from a Beta distribution I can draw two Gamma variates $x$ and $y$ as follows:
 
 $$
 \begin{array}{rcl}
@@ -680,38 +714,41 @@ y & \sim & \mbox{Gamma}(b, 1)
 \end{array}
 $$
 
-and define $z = x/(x + y)$, then:
+and set $v = x/(x + y)$. Problem solved. 
 
-$$ 
-z \sim \mbox{Beta}(a, b)
-$$
+Anyway, here's the code:
 
 
 ``` cpp
 // beta-sample.cpp
 #include <iostream>
+#include <vector>
 #include <random>
 
 void print_message(double value, double a, double b) {
     std::cout << "beta(" << a << "," << b << ") sample: " << value << std::endl;
 }
 
-std::vector<double> draw_betas(int n, double a, double b) {
-    // gamma distributions
+std::vector<double> draw_betas(double rate, double a, double b) {
+    // distributions
     std::gamma_distribution<double> gamma_a(a, 1.0);
     std::gamma_distribution<double> gamma_b(b, 1.0);
+    std::poisson_distribution<int> poisson(rate);
 
     // mersenne twister numbers
     std::random_device rd;
     std::mt19937 mt(rd());
 
-    // draw samples and return
-    std::vector<double> beta_variates;
+    // draw poisson sample to determine number of betas
+    int n = poisson(mt);
+
+    // draw beta samples and return
+    std::vector<double> beta_variates {};
     double x, y;
     for (int i = 0; i < n; i++) {
         x = gamma_a(mt);
         y = gamma_b(mt);
-        beta_variates[i] = x / (x + y);
+        beta_variates.push_back(x / (x + y));
     }
     return beta_variates;
 }
@@ -719,25 +756,42 @@ std::vector<double> draw_betas(int n, double a, double b) {
 int main() {
     const double a = 2.0; // shape parameter 1
     const double b = 1.0; // shape parameter 2
-    const int n = 5; // length of output vector
+    const double rate = 2.4; // rate for poisson dist
 
     // draw samples
-    std::vector<double> betas = draw_betas(n, a, b);
+    std::vector<double> betas = draw_betas(rate, a, b);
 
     // print messages and return
-    for (int i = 0; i < n; i++) {
+    std::cout << "collected " << betas.size() << " samples" << std::endl;
+    for (int i = 0; i < betas.size(); i++) {
         print_message(betas[i], a, b);
     }
     return 0;
 }
 ```
 
-When we run this: 
+Sometimes this code creates a `betas` vector containing four values:
 
 ```
-beta(2,1) sample: 0.80872
-beta(2,1) sample: 0.952428
-beta(2,1) sample: 0.964178
-beta(2,1) sample: 0.685391
-beta(2,1) sample: 0.969854
+collected 4 samples
+beta(2,1) sample: 0.293596
+beta(2,1) sample: 0.920161
+beta(2,1) sample: 0.971502
+beta(2,1) sample: 0.502786
 ```
+
+Sometimes the `betas` vector has no values:
+
+```
+collected 4 samples
+```
+
+Sometimes we sample two values, so the output looks like this:
+
+```
+collected 2 samples
+beta(2,1) sample: 0.729145
+beta(2,1) sample: 0.414129
+```
+
+And so on.
