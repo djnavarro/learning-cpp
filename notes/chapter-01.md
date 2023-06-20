@@ -849,3 +849,55 @@ age: 45
 sex: F
 location: Sydney
 ```
+
+## Loops
+
+The book now turns to loops. I'm trying very hard not to start skimming in case there's something secific to C++ that I need to know, but honestly this all feels very, very familiar. To keep my boredom to a minimum I'll try to find examples that I find entertaining. 
+
+### The `while` loop
+
+First up, a **while** loop calculating the sequence of integers $x_1, x_2, \ldots$
+
+$$
+x_{n+1} = \left\{ 
+\begin{array}{rl} 
+x_n/2 & \mbox{if $x_n$ is even} \\    
+3x_n +1 & \mbox{if $x_n$ is odd} \\  
+\end{array}  
+\right.
+$$
+
+terminating at the first $n$ such that $x_n = 1$. This is of course an implementation of the [collatz conjecture](https://en.wikipedia.org/wiki/Collatz_conjecture) which proposes that this collatz sequence, for every integer-valued choice of initial value $x_0$, eventually terminates in 1. Code:
+
+``` cpp
+// collatz.cpp
+#include <iostream>
+
+int main() {
+    int value = 39;
+    std::cout << value;
+    while (value != 1) {
+        value = (value % 2 == 0) ? (value / 2) : (3 * value + 1);
+        std::cout << " -> " << value;
+    }
+    std::cout << std::endl;
+    return 0;
+}
+```
+
+The results for $x_0 = 39$, where I've manually added linebreaks:
+
+```
+39 -> 118 -> 59 -> 178 -> 89 -> 268 -> 134 -> 67 -> 
+202 -> 101 -> 304 -> 152 -> 76 -> 38 -> 19 -> 58 -> 
+29 -> 88 -> 44 -> 22 -> 11 -> 34 -> 17 -> 52 -> 26 -> 
+13 -> 40 -> 20 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1
+```
+
+### The `do/while` loop
+
+### The `for` loop
+
+### The range-based `for` loop
+
+

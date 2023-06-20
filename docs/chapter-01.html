@@ -613,7 +613,41 @@ beta(2,1) sample: 0.414129</code></pre>
 <p>Aaaaaaanyway… the results:</p>
 <pre><code>age: 45
 sex: F
-location: Sydney</code></pre></div>
+location: Sydney</code></pre>
+<h2 id="loops">Loops</h2>
+<p>The book now turns to loops. I’m trying very hard not to start skimming in case there’s something secific to C++ that I need to know, but honestly this all feels very, very familiar. To keep my boredom to a minimum I’ll try to find examples that I find entertaining.</p>
+<h3 id="the-while-loop">The <code>while</code> loop</h3>
+<p>First up, a <strong>while</strong> loop calculating the sequence of integers <span class="math inline">\(x_1, x_2, \ldots\)</span></p>
+<p><span class="math display">\[
+x_{n+1} = \left\{ 
+\begin{array}{rl} 
+x_n/2 &amp; \mbox{if $x_n$ is even} \\    
+3x_n +1 &amp; \mbox{if $x_n$ is odd} \\  
+\end{array}  
+\right.
+\]</span></p>
+<p>terminating at the first <span class="math inline">\(n\)</span> such that <span class="math inline">\(x_n = 1\)</span>. This is of course an implementation of the <a href="https://en.wikipedia.org/wiki/Collatz_conjecture">collatz conjecture</a> which proposes that this collatz sequence, for every integer-valued choice of initial value <span class="math inline">\(x_0\)</span>, eventually terminates in 1. Code:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true"></a><span class="co">// collatz.cpp</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true"></a></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true"></a>    <span class="dt">int</span> value = <span class="dv">39</span>;</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; value;</span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true"></a>    <span class="cf">while</span> (value != <span class="dv">1</span>) {</span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true"></a>        value = (value % <span class="dv">2</span> == <span class="dv">0</span>) ? (value / <span class="dv">2</span>) : (<span class="dv">3</span> * value + <span class="dv">1</span>);</span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true"></a>        <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot; -&gt; &quot;</span> &lt;&lt; value;</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true"></a>    }</span>
+<span id="cb52-11"><a href="#cb52-11" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb52-12"><a href="#cb52-12" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb52-13"><a href="#cb52-13" aria-hidden="true"></a>}</span></code></pre></div>
+<p>The results for <span class="math inline">\(x_0 = 39\)</span>, where I’ve manually added linebreaks:</p>
+<pre><code>39 -&gt; 118 -&gt; 59 -&gt; 178 -&gt; 89 -&gt; 268 -&gt; 134 -&gt; 67 -&gt; 
+202 -&gt; 101 -&gt; 304 -&gt; 152 -&gt; 76 -&gt; 38 -&gt; 19 -&gt; 58 -&gt; 
+29 -&gt; 88 -&gt; 44 -&gt; 22 -&gt; 11 -&gt; 34 -&gt; 17 -&gt; 52 -&gt; 26 -&gt; 
+13 -&gt; 40 -&gt; 20 -&gt; 10 -&gt; 5 -&gt; 16 -&gt; 8 -&gt; 4 -&gt; 2 -&gt; 1</code></pre>
+<h3 id="the-dowhile-loop">The <code>do/while</code> loop</h3>
+<h3 id="the-for-loop">The <code>for</code> loop</h3>
+<h3 id="the-range-based-for-loop">The range-based <code>for</code> loop</h3></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -632,6 +666,7 @@ location: Sydney</code></pre></div>
 <li><a href="#vectors">Vectors</a></li>
 <li><a href="#pairs-and-optionals">Pairs and optionals</a></li>
 <li><a href="#structured-bindings">Structured bindings</a></li>
+<li><a href="#loops">Loops</a></li>
 </ul></li>
                </ul>
             </div>
