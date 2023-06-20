@@ -896,6 +896,52 @@ The results for $x_0 = 39$, where I've manually added linebreaks:
 
 ### The `do/while` loop
 
+The `do/while` loop is inherently boring, but is very occasionally handy if it is important to ensure that the code block is executed at least once. This pattern makes sense when, for example, you might need to repeatedly check something until it produces valid output. In that situation a while loop does make sense, but you really have to run *at least* once test in order to validate... whatever it is you're trying to validate.
+
+As a truly absurd example:
+
+``` cpp
+// validation-check.cpp
+#include <iostream>
+#include <ctime>
+
+bool valid_time() {
+    std::time_t elapsed = std::time(nullptr);
+    bool is_valid = elapsed % 2 == 0;
+    if (is_valid) {
+        std::cout << elapsed << " seconds since the epoch" << std::endl;
+    }
+    return is_valid;
+}
+
+int main() {
+    bool valid;
+    int i = 0;
+    do {
+        i++;
+    } while (!valid_time());
+    std::cout << "attempts = " << i << std::endl;
+    return 0;
+}
+```
+
+This code checks the current time, measured in number of seconds since the unix epoch. If that number is even, it deems the time to be "valid" and prints the elapsed seconds to stdout. If that number is odd, it deems the time to be "invalid" and refuses to terminate the `do/while` loop. That leads to some entertaining behaviour. About half the time you'll get output like this where it succeeds the first time:
+
+```
+1687250594 seconds since the epoch
+attempts = 1
+```
+
+But the other half of time the program fails about 200 million times before finally succeeding: 
+
+```
+1687250596 seconds since the epoch
+attempts = 200744719
+```
+
+Suffice it to say, although the idea of using `do/while` loops to implement validation checks makes sense, this is... um... an unhinged example. But I found it funny so I ran with it.
+
+
 ### The `for` loop
 
 ### The range-based `for` loop
