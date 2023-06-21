@@ -747,7 +747,75 @@ Jasmine
 Navarro
 Bullock</code></pre>
 <h2 id="oop-in-c">OOP in C++</h2>
-<p>The next section of the book introduces object oriented programming (OOP) features in C++. To write this section of my notes I went a little beyond the book itself, because the book relies on C++20 modules here which don’t seem to be fully supported in clang 15? So this section of my notes is also partly based on <a href="https://www.learncpp.com/cpp-tutorial/class-code-and-header-files/">this tutorial</a>. The traditional structure of a C++ program that defines custom classes is to split the code over three files. Let’s say I define a class named <code>Species</code> used to represent taxonomic information about a particular species, and I want to use it in a program that, idk, lists some species I guess? If I stick to convention I will end up with two files to define the class:</p>
+<p>The next section of the book introduces object oriented programming (OOP) features in C++. At this point I’m about 40 pages in, and now starting to hit material that isn’t already familiar to me. Yay! Time to learn new things!</p>
+<p>Some preliminaries:</p>
+<ul>
+<li>To orient an R user, it’s helpful to note that the OOP model in C++ is qualitatively similar to the “encapsulated OOP” approach taken by R6 classes (the “functional OOP” model in S3 classes is probably more analogous to function overloading in C++).</li>
+<li>To write this section of my notes I went a little beyond the book itself, because the book relies on C++20 modules here which don’t seem to be fully supported in clang 15? So this section of my notes is also partly based on <a href="https://www.learncpp.com/cpp-tutorial/class-code-and-header-files/">this tutorial</a>. The traditional structure of a C++ program that defines custom classes is to split the code over three files.</li>
+</ul>
+<h3 id="an-example">An example</h3>
+<p>Okay, after a bit of reading, the basic ideas seem clear:</p>
+<ul>
+<li>Like most OOP systems, we make a distinction between “public” and “private” fields/methods. Anything private cannot be directly accessed from outside the object. Only the public methods and fields are accessible. This gives us a way of separating the public API for the class from the private data structures used to represent data within an object. C++ also has a “protected” status, which the book defers to later chapters.</li>
+<li>Class constructor functions are supported: in C++ the class constructor is a special function that has the same name as the class itself, and doesn’t specify an output type. Function overloading is permitted here.</li>
+</ul>
+<p>Here’s my first attempt at defining a C++ class. One of my loves in life is gardening, so I’ll define a class <code>Species</code> that stores the taxonomic (binomial) name of a plant, and (optionally) stores the common name. Obviously this is too simple for real world use, because plants often have more than one common name, and the binomial name for a species is often insufficient to represent the taxonomic relations that we might care about. And of course it also fails to capture any of the practical information about a plant! But whatever. That’s not the bloody point. Anyway, here’s the code:</p>
+<div class="sourceCode" id="cb65"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true"></a><span class="co">// species-first-pass.cpp</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;optional&gt;</span></span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true"></a></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true"></a><span class="kw">class</span> Species {</span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true"></a>    <span class="kw">private</span>:</span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true"></a>        <span class="co">// internal data structure</span></span>
+<span id="cb65-9"><a href="#cb65-9" aria-hidden="true"></a>        <span class="bu">std::</span>string name_binomial;</span>
+<span id="cb65-10"><a href="#cb65-10" aria-hidden="true"></a>        <span class="bu">std::</span>optional&lt;<span class="bu">std::</span>string&gt; name_common;</span>
+<span id="cb65-11"><a href="#cb65-11" aria-hidden="true"></a></span>
+<span id="cb65-12"><a href="#cb65-12" aria-hidden="true"></a>    <span class="kw">public</span>:</span>
+<span id="cb65-13"><a href="#cb65-13" aria-hidden="true"></a>        <span class="co">// class constructor with one input</span></span>
+<span id="cb65-14"><a href="#cb65-14" aria-hidden="true"></a>        Species(<span class="bu">std::</span>string binomial) {</span>
+<span id="cb65-15"><a href="#cb65-15" aria-hidden="true"></a>            setBinomialName(binomial);</span>
+<span id="cb65-16"><a href="#cb65-16" aria-hidden="true"></a>        }</span>
+<span id="cb65-17"><a href="#cb65-17" aria-hidden="true"></a></span>
+<span id="cb65-18"><a href="#cb65-18" aria-hidden="true"></a>        <span class="co">// class constructor with two inputs</span></span>
+<span id="cb65-19"><a href="#cb65-19" aria-hidden="true"></a>        Species(<span class="bu">std::</span>string binomial, <span class="bu">std::</span>optional&lt;<span class="bu">std::</span>string&gt; common) {</span>
+<span id="cb65-20"><a href="#cb65-20" aria-hidden="true"></a>            setBinomialName(binomial);</span>
+<span id="cb65-21"><a href="#cb65-21" aria-hidden="true"></a>            setCommonName(common);</span>
+<span id="cb65-22"><a href="#cb65-22" aria-hidden="true"></a>        }</span>
+<span id="cb65-23"><a href="#cb65-23" aria-hidden="true"></a></span>
+<span id="cb65-24"><a href="#cb65-24" aria-hidden="true"></a>        <span class="co">// methods to set names</span></span>
+<span id="cb65-25"><a href="#cb65-25" aria-hidden="true"></a>        <span class="dt">void</span> setBinomialName(<span class="bu">std::</span>string name) { name_binomial = name; }</span>
+<span id="cb65-26"><a href="#cb65-26" aria-hidden="true"></a>        <span class="dt">void</span> setCommonName(<span class="bu">std::</span>optional&lt;<span class="bu">std::</span>string&gt; name) { name_common = name; }</span>
+<span id="cb65-27"><a href="#cb65-27" aria-hidden="true"></a></span>
+<span id="cb65-28"><a href="#cb65-28" aria-hidden="true"></a>        <span class="co">// methods to retrieve names</span></span>
+<span id="cb65-29"><a href="#cb65-29" aria-hidden="true"></a>        <span class="bu">std::</span>string getBinomialName() { <span class="cf">return</span> name_binomial; }</span>
+<span id="cb65-30"><a href="#cb65-30" aria-hidden="true"></a>        <span class="bu">std::</span>optional&lt;<span class="bu">std::</span>string&gt; getCommonName() { <span class="cf">return</span> name_common; }</span>
+<span id="cb65-31"><a href="#cb65-31" aria-hidden="true"></a></span>
+<span id="cb65-32"><a href="#cb65-32" aria-hidden="true"></a>        <span class="co">// print method</span></span>
+<span id="cb65-33"><a href="#cb65-33" aria-hidden="true"></a>        <span class="dt">void</span> print() {</span>
+<span id="cb65-34"><a href="#cb65-34" aria-hidden="true"></a>            <span class="bu">std::</span>cout &lt;&lt; name_binomial;</span>
+<span id="cb65-35"><a href="#cb65-35" aria-hidden="true"></a>            <span class="cf">if</span> (name_common.has_value()) {</span>
+<span id="cb65-36"><a href="#cb65-36" aria-hidden="true"></a>                <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot; (&quot;</span> &lt;&lt; name_common.value() &lt;&lt; <span class="st">&quot;)&quot;</span>;</span>
+<span id="cb65-37"><a href="#cb65-37" aria-hidden="true"></a>            }</span>
+<span id="cb65-38"><a href="#cb65-38" aria-hidden="true"></a>            <span class="bu">std::</span>cout &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb65-39"><a href="#cb65-39" aria-hidden="true"></a>        }</span>
+<span id="cb65-40"><a href="#cb65-40" aria-hidden="true"></a>};</span>
+<span id="cb65-41"><a href="#cb65-41" aria-hidden="true"></a></span>
+<span id="cb65-42"><a href="#cb65-42" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb65-43"><a href="#cb65-43" aria-hidden="true"></a>    Species yellow_plant { <span class="st">&quot;acacia amoena&quot;</span> };</span>
+<span id="cb65-44"><a href="#cb65-44" aria-hidden="true"></a>    Species purple_plant { <span class="st">&quot;hardenbergia violacea&quot;</span>, <span class="st">&quot;happy wanderer&quot;</span> };</span>
+<span id="cb65-45"><a href="#cb65-45" aria-hidden="true"></a>    yellow_plant.print();</span>
+<span id="cb65-46"><a href="#cb65-46" aria-hidden="true"></a>    purple_plant.print();</span>
+<span id="cb65-47"><a href="#cb65-47" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb65-48"><a href="#cb65-48" aria-hidden="true"></a>}</span></code></pre></div>
+<p>When I run this program, I get this as the output:</p>
+<pre><code>acacia amoena
+hardenbergia violacea (happy wanderer)</code></pre>
+<p>Neat. The output always prints the binomial name of the species, and appends the common name in parentheses if one exists. Additionally, because the <code>.setCommonName()</code> method is public, should I later happen to discover to my delight that the <em>acacia amoena</em> is commonly referred to as the boomerang wattle, I can update the record like so:</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true"></a>yellow_plant.setCommonName(<span class="st">&quot;boomerang wattle&quot;</span>);</span></code></pre></div>
+<p>Fab. Moving on.</p>
+<h3 id="separating-class-definition-from-class-methods">Separating class definition from class methods</h3>
+<p>If I stick to convention I will end up with two files to define the class:</p>
 <ul>
 <li><code>Species.h</code> contains the <strong>class definition</strong></li>
 <li><code>Species.cpp</code> defines the <strong>class methods</strong></li>

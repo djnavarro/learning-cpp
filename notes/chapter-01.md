@@ -1046,7 +1046,91 @@ Bullock
 
 ## OOP in C++
 
-The next section of the book introduces object oriented programming (OOP) features in C++. To write this section of my notes I went a little beyond the book itself, because the book relies on C++20 modules here which don't seem to be fully supported in clang 15? So this section of my notes is also partly based on [this tutorial](https://www.learncpp.com/cpp-tutorial/class-code-and-header-files/). The traditional structure of a C++ program that defines custom classes is to split the code over three files. Let's say I define a class named `Species` used to represent taxonomic information about a particular species, and I want to use it in a program that, idk, lists some species I guess? If I stick to convention I will end up with two files to define the class:
+The next section of the book introduces object oriented programming (OOP) features in C++. At this point I'm about 40 pages in, and now starting to hit material that isn't already familiar to me. Yay! Time to learn new things! 
+
+Some preliminaries:
+
+- To orient an R user, it's helpful to note that the OOP model in C++ is qualitatively similar to the "encapsulated OOP" approach taken by R6 classes (the "functional OOP" model in S3 classes is probably more analogous to function overloading in C++). 
+- To write this section of my notes I went a little beyond the book itself, because the book relies on C++20 modules here which don't seem to be fully supported in clang 15? So this section of my notes is also partly based on [this tutorial](https://www.learncpp.com/cpp-tutorial/class-code-and-header-files/). The traditional structure of a C++ program that defines custom classes is to split the code over three files. 
+
+### An example
+
+Okay, after a bit of reading, the basic ideas seem clear:
+
+- Like most OOP systems, we make a distinction between "public" and "private" fields/methods. Anything private cannot be directly accessed from outside the object. Only the public methods and fields are accessible. This gives us a way of separating the public API for the class from the private data structures used to represent data within an object. C++ also has a "protected" status, which the book defers to later chapters. 
+- Class constructor functions are supported: in C++ the class constructor is a special function that has the same name as the class itself, and doesn't specify an output type. Function overloading is permitted here. 
+
+Here's my first attempt at defining a C++ class. One of my loves in life is gardening, so I'll define a class `Species` that stores the taxonomic (binomial) name of a plant, and (optionally) stores the common name. Obviously this is too simple for real world use, because plants often have more than one common name, and the binomial name for a species is often insufficient to represent the taxonomic relations that we might care about. And of course it also fails to capture any of the practical information about a plant! But whatever. That's not the bloody point. Anyway, here's the code:
+
+``` cpp
+// species-first-pass.cpp
+#include <iostream>
+#include <string>
+#include <optional>
+
+class Species {
+    private:
+        // internal data structure
+        std::string name_binomial;
+        std::optional<std::string> name_common;
+
+    public:
+        // class constructor with one input
+        Species(std::string binomial) {
+            setBinomialName(binomial);
+        }
+
+        // class constructor with two inputs
+        Species(std::string binomial, std::optional<std::string> common) {
+            setBinomialName(binomial);
+            setCommonName(common);
+        }
+
+        // methods to set names
+        void setBinomialName(std::string name) { name_binomial = name; }
+        void setCommonName(std::optional<std::string> name) { name_common = name; }
+
+        // methods to retrieve names
+        std::string getBinomialName() { return name_binomial; }
+        std::optional<std::string> getCommonName() { return name_common; }
+
+        // print method
+        void print() {
+            std::cout << name_binomial;
+            if (name_common.has_value()) {
+                std::cout << " (" << name_common.value() << ")";
+            }
+            std::cout << std::endl;
+        }
+};
+
+int main() {
+    Species yellow_plant { "acacia amoena" };
+    Species purple_plant { "hardenbergia violacea", "happy wanderer" };
+    yellow_plant.print();
+    purple_plant.print();
+    return 0;
+}
+```
+
+When I run this program, I get this as the output:
+
+```
+acacia amoena
+hardenbergia violacea (happy wanderer)
+```
+
+Neat. The output always prints the binomial name of the species, and appends the common name in parentheses if one exists. Additionally, because the `.setCommonName()` method is public, should I later happen to discover to my delight that the *acacia amoena* is commonly referred to as the boomerang wattle, I can update the record like so:
+
+``` cpp
+yellow_plant.setCommonName("boomerang wattle");
+```
+
+Fab. Moving on. 
+
+### Separating class definition from class methods
+
+If I stick to convention I will end up with two files to define the class:
 
 - `Species.h` contains the **class definition**
 - `Species.cpp` defines the **class methods**
