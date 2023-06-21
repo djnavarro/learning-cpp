@@ -29,13 +29,13 @@
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>; </span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>}</span></code></pre></div>
 <h2 id="compiling-helloworld.cpp">Compiling helloworld.cpp</h2>
-<p>That’s all well and good, but I can’t do anything useful with this until I compile it, and for that to happen I need a C++ compiler. As it happens I already have g++ on my system, but – for no particular reason – I’ve decided to use clang. Installing clang on Ubuntu is pretty straightforward:</p>
+<p>That’s all well and good, but I can’t do anything useful with this until I compile it, and for that to happen I need a C++ compiler. As it happens I already have g++ on my system, but – for no particular reason – I’ve decided to use clang. Installing clang on ubuntu is pretty straightforward:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="fu">sudo</span> apt install clang</span></code></pre></div>
 <p>Now that I have a compiler, I need to actually compile it. Here’s the command:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="fu">clang</span>++ --std=c++20 helloworld.cpp -o helloworld</span></code></pre></div>
 <p>The <code>--std=c++20</code> flag tells clang what version of C++ I’m using, and the <code>-o</code> flag is used to specify the output file.</p>
-<p>In practice, this isn’t the commmand I actually use. I don’t want my binaries to build into in the same folder as my source code, so I keep all the source code in <code>src</code> and the binaries in <code>bin</code>. So the command would actually look like this:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">clang</span>++ --std=c++20 ./src/helloworld.cpp -o ./bin/helloworld</span></code></pre></div>
+<p>In practice, this isn’t the commmand I actually use. I don’t want my binaries to build into in the same folder as my source code, so I keep all the source code in <code>src</code> and the binaries in <code>bin</code>. Additionally, I’ve done a bit of tinkering and installed clang 15, and I want to use that as my compiler rather than clang 14 (which is what ubuntu ends up installing with the command above). I could tinker with links to set my default clang to version 15, but at some level I think I prefer the command to explicitly specify the compiler version, so my command would actually look like this:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="fu">clang</span>++-15 --std=c++20 ./src/helloworld.cpp -o ./bin/helloworld</span></code></pre></div>
 <p>As a side benefit, structuring the project this way makes it much easier to avoid accidentally commiting binary files to the git repository. All I have to do is add the <code>bin</code> folder to my <code>.gitignore</code> file. Fantastic.</p>
 <p>That being said, I don’t actually want to type this command for every source file. Instead, because I’m a fundamentally lazy person, I’ve written a <code>Makefile</code> that takes care of that for me, and also renders the markdown files to html. So really the only command I ever use is simply:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="fu">make</span></span></code></pre></div>
@@ -738,13 +738,14 @@ mean y: 86.6</code></pre>
 <span id="cb63-4"><a href="#cb63-4" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
 <span id="cb63-5"><a href="#cb63-5" aria-hidden="true"></a></span>
 <span id="cb63-6"><a href="#cb63-6" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
-<span id="cb63-7"><a href="#cb63-7" aria-hidden="true"></a>    <span class="bu">std::</span>vector&lt;<span class="bu">std::</span>string&gt; name = { <span class="st">&quot;Daniela&quot;</span>, <span class="st">&quot;Jasmine&quot;</span>, <span class="st">&quot;Navarro&quot;</span> };</span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true"></a>    <span class="bu">std::</span>vector&lt;<span class="bu">std::</span>string&gt; name = { <span class="st">&quot;Daniela&quot;</span>, <span class="st">&quot;Jasmine&quot;</span>, <span class="st">&quot;Navarro&quot;</span>, <span class="st">&quot;Bullock&quot;</span> };</span>
 <span id="cb63-8"><a href="#cb63-8" aria-hidden="true"></a>    <span class="cf">for</span>(<span class="bu">std::</span>string n : name) { <span class="bu">std::</span>cout &lt;&lt; n &lt;&lt; <span class="bu">std::</span>endl; }</span>
 <span id="cb63-9"><a href="#cb63-9" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
 <span id="cb63-10"><a href="#cb63-10" aria-hidden="true"></a>}</span></code></pre></div>
 <pre><code>Daniela
 Jasmine
-Navarro</code></pre></div>
+Navarro
+Bullock</code></pre></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>

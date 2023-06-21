@@ -20,7 +20,7 @@ int main() {
 
 ## Compiling helloworld.cpp
 
-That's all well and good, but I can't do anything useful with this until I compile it, and for that to happen I need a C++ compiler. As it happens I already have g++ on my system, but -- for no particular reason -- I've decided to use clang. Installing clang on Ubuntu is pretty straightforward:
+That's all well and good, but I can't do anything useful with this until I compile it, and for that to happen I need a C++ compiler. As it happens I already have g++ on my system, but -- for no particular reason -- I've decided to use clang. Installing clang on ubuntu is pretty straightforward:
 
 ``` bash
 sudo apt install clang
@@ -34,10 +34,10 @@ clang++ --std=c++20 helloworld.cpp -o helloworld
 
 The `--std=c++20` flag tells clang what version of C++ I'm using, and the `-o` flag is used to specify the output file. 
 
-In practice, this isn't the commmand I actually use. I don't want my binaries to build into in the same folder as my source code, so I keep all the source code in `src` and the binaries in `bin`. So the command would actually look like this:
+In practice, this isn't the commmand I actually use. I don't want my binaries to build into in the same folder as my source code, so I keep all the source code in `src` and the binaries in `bin`. Additionally, I've done a bit of tinkering and installed clang 15, and I want to use that as my compiler rather than clang 14 (which is what ubuntu ends up installing with the command above). I could tinker with links to set my default clang to version 15, but at some level I think I prefer the command to explicitly specify the compiler version, so my command would actually look like this:
 
 ```bash
-clang++ --std=c++20 ./src/helloworld.cpp -o ./bin/helloworld
+clang++-15 --std=c++20 ./src/helloworld.cpp -o ./bin/helloworld
 ```
 
 As a side benefit, structuring the project this way makes it much easier to avoid accidentally commiting binary files to the git repository. All I have to do is add the `bin` folder to my `.gitignore` file. Fantastic. 
@@ -1031,7 +1031,7 @@ The book talks about strings next, but it's mostly a promissory note here. It me
 #include <string>
 
 int main() {
-    std::vector<std::string> name = { "Daniela", "Jasmine", "Navarro" };
+    std::vector<std::string> name = { "Daniela", "Jasmine", "Navarro", "Bullock" };
     for(std::string n : name) { std::cout << n << std::endl; }
     return 0;
 }
@@ -1041,5 +1041,8 @@ int main() {
 Daniela
 Jasmine
 Navarro
+Bullock
 ```
+
+
 
