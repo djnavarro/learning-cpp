@@ -1044,5 +1044,13 @@ Navarro
 Bullock
 ```
 
+## OOP in C++
+
+The next section of the book introduces object oriented programming (OOP) features in C++. To write this section of my notes I went a little beyond the book itself, because the book relies on C++20 modules here which don't seem to be fully supported in clang 15? So this section of my notes is also partly based on [this tutorial](https://www.learncpp.com/cpp-tutorial/class-code-and-header-files/). The traditional structure of a C++ program that defines custom classes is to split the code over three files. Let's say I define a class named `Species` used to represent taxonomic information about a particular species, and I want to use it in a program that, idk, lists some species I guess? If I stick to convention I will end up with two files to define the class:
+
+- `Species.h` contains the **class definition**
+- `Species.cpp` defines the **class methods**
+
+I would then save the source code for my program as something like `my-species-list.cpp`, and incorporate the class into my code with `#include` directives.
 
 

@@ -745,7 +745,14 @@ mean y: 86.6</code></pre>
 <pre><code>Daniela
 Jasmine
 Navarro
-Bullock</code></pre></div>
+Bullock</code></pre>
+<h2 id="oop-in-c">OOP in C++</h2>
+<p>The next section of the book introduces object oriented programming (OOP) features in C++. To write this section of my notes I went a little beyond the book itself, because the book relies on C++20 modules here which don’t seem to be fully supported in clang 15? So this section of my notes is also partly based on <a href="https://www.learncpp.com/cpp-tutorial/class-code-and-header-files/">this tutorial</a>. The traditional structure of a C++ program that defines custom classes is to split the code over three files. Let’s say I define a class named <code>Species</code> used to represent taxonomic information about a particular species, and I want to use it in a program that, idk, lists some species I guess? If I stick to convention I will end up with two files to define the class:</p>
+<ul>
+<li><code>Species.h</code> contains the <strong>class definition</strong></li>
+<li><code>Species.cpp</code> defines the <strong>class methods</strong></li>
+</ul>
+<p>I would then save the source code for my program as something like <code>my-species-list.cpp</code>, and incorporate the class into my code with <code>#include</code> directives.</p></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -767,6 +774,7 @@ Bullock</code></pre></div>
 <li><a href="#loops">Loops</a></li>
 <li><a href="#initialiser-lists">Initialiser lists</a></li>
 <li><a href="#strings">Strings</a></li>
+<li><a href="#oop-in-c">OOP in C++</a></li>
 </ul></li>
                </ul>
             </div>
