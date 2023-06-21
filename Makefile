@@ -11,7 +11,7 @@ dirs:
 	@mkdir -p ./docs
 
 bin/%: src/%.cpp
-	clang++ --std=c++20 $< -o $@
+	clang++-15 --std=c++20 $< -o $@
 
 docs/style.css: pandoc/style.css
 	cp pandoc/style.css docs/style.css
