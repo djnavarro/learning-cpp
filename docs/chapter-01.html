@@ -815,12 +815,49 @@ hardenbergia violacea (happy wanderer)</code></pre>
 <div class="sourceCode" id="cb67"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true"></a>yellow_plant.setCommonName(<span class="st">&quot;boomerang wattle&quot;</span>);</span></code></pre></div>
 <p>Fab. Moving on.</p>
 <h3 id="separating-class-definition-from-class-methods">Separating class definition from class methods</h3>
-<p>If I stick to convention I will end up with two files to define the class:</p>
+<p>The program I wrote above is simple enough that it could probably stay as a single script, but that quickly becomes unworkable for larger programs, especially if the class needs to be make available in multiple parts of the code base. For that reason it’s conventional to define the class using one or more dedicated files, where the file name is identical to the class name. The specific convention seems to be:</p>
 <ul>
 <li><code>Species.h</code> contains the <strong>class definition</strong></li>
 <li><code>Species.cpp</code> defines the <strong>class methods</strong></li>
 </ul>
-<p>I would then save the source code for my program as something like <code>my-species-list.cpp</code>, and incorporate the class into my code with <code>#include</code> directives.</p></div>
+<p>I would then save the source code that actually uses these classes for something as <code>species-second-pass.cpp</code> or whatever, and incorporate the class using <code>#include</code> directives.</p>
+<h2 id="scopes">Scopes</h2>
+<p>Next up the book discusses C++ scopes. It all feels very familiar. Every variable and function belongs to a scope and is usually visible only within that scope. Examples:</p>
+<ul>
+<li>Functions define a scope. Variables defined in a function are available only within that function.</li>
+<li>Variables deined in the initialiser when using <code>if</code>, <code>switch</code>, or <code>for</code> are scoped to the code block for that loop/conditional.</li>
+<li>Class definitions provide scopes: variables defined within a class are scoped to the class.</li>
+<li>Curly braces can be used to define a code block, and again variables are scoped to the block.</li>
+<li><code>namespace</code> declarations create variables scoped to that namespace. Variables within a namespace can be explicitly referenced from outside the scope using the <code>::</code> operator (which is what I’ve been doing with the <code>std</code> namespace throughout this code)</li>
+</ul>
+<p>Here’s an adaptation of the example used in the book:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true"></a><span class="co">// scope-resolution.cpp</span></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true"></a></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true"></a><span class="co">// value() is scoped to the Five class</span></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true"></a><span class="kw">class</span> Five  {</span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true"></a>    <span class="kw">public</span>:</span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true"></a>        <span class="dt">int</span> value() { <span class="cf">return</span> <span class="dv">5</span>; }</span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true"></a>};</span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true"></a></span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true"></a><span class="co">// value() belongs to the global scope</span></span>
+<span id="cb68-11"><a href="#cb68-11" aria-hidden="true"></a><span class="dt">int</span> value() { <span class="cf">return</span> <span class="dv">10</span>; }</span>
+<span id="cb68-12"><a href="#cb68-12" aria-hidden="true"></a></span>
+<span id="cb68-13"><a href="#cb68-13" aria-hidden="true"></a><span class="co">// value() belongs to the twenty namespace</span></span>
+<span id="cb68-14"><a href="#cb68-14" aria-hidden="true"></a><span class="kw">namespace</span> twenty {</span>
+<span id="cb68-15"><a href="#cb68-15" aria-hidden="true"></a>    <span class="dt">int</span> value() { <span class="cf">return</span> <span class="dv">20</span>; }</span>
+<span id="cb68-16"><a href="#cb68-16" aria-hidden="true"></a>}</span>
+<span id="cb68-17"><a href="#cb68-17" aria-hidden="true"></a></span>
+<span id="cb68-18"><a href="#cb68-18" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb68-19"><a href="#cb68-19" aria-hidden="true"></a>    Five five;</span>
+<span id="cb68-20"><a href="#cb68-20" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; five.value() &lt;&lt; <span class="bu">std::</span>endl;    <span class="co">// prints 5</span></span>
+<span id="cb68-21"><a href="#cb68-21" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; value() &lt;&lt; <span class="bu">std::</span>endl;         <span class="co">// prints 10</span></span>
+<span id="cb68-22"><a href="#cb68-22" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; twenty::value() &lt;&lt; <span class="bu">std::</span>endl; <span class="co">// prints 20</span></span>
+<span id="cb68-23"><a href="#cb68-23" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb68-24"><a href="#cb68-24" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>5
+10
+20</code></pre></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -843,6 +880,7 @@ hardenbergia violacea (happy wanderer)</code></pre>
 <li><a href="#initialiser-lists">Initialiser lists</a></li>
 <li><a href="#strings">Strings</a></li>
 <li><a href="#oop-in-c">OOP in C++</a></li>
+<li><a href="#scopes">Scopes</a></li>
 </ul></li>
                </ul>
             </div>

@@ -1130,11 +1130,55 @@ Fab. Moving on.
 
 ### Separating class definition from class methods
 
-If I stick to convention I will end up with two files to define the class:
-
+The program I wrote above is simple enough that it could probably stay as a single script, but that quickly becomes unworkable for larger programs, especially if the class needs to be make available in multiple parts of the code base. For that reason it's conventional to define the class using one or more dedicated files, where the file name is identical to the class name. The specific convention seems to be:
+ 
 - `Species.h` contains the **class definition**
 - `Species.cpp` defines the **class methods**
 
-I would then save the source code for my program as something like `my-species-list.cpp`, and incorporate the class into my code with `#include` directives.
+I would then save the source code that actually uses these classes for something as `species-second-pass.cpp` or whatever, and incorporate the class using `#include` directives.
 
 
+## Scopes
+
+Next up the book discusses C++ scopes. It all feels very familiar. Every variable and function belongs to a scope and is usually visible only within that scope. Examples:
+
+- Functions define a scope. Variables defined in a function are available only within that function.
+- Variables deined in the initialiser when using `if`, `switch`, or `for` are scoped to the code block for that loop/conditional. 
+- Class definitions provide scopes: variables defined within a class are scoped to the class.
+- Curly braces can be used to define a code block, and again variables are scoped to the block.
+- `namespace` declarations create variables scoped to that namespace. Variables within a namespace can be explicitly referenced from outside the scope using the `::` operator (which is what I've been doing with the `std` namespace throughout this code)
+
+Here's an adaptation of the example used in the book:
+
+``` cpp
+// scope-resolution.cpp
+#include <iostream>
+
+// value() is scoped to the Five class
+class Five  {
+    public:
+        int value() { return 5; }
+};
+
+// value() belongs to the global scope
+int value() { return 10; }
+
+// value() belongs to the twenty namespace
+namespace twenty {
+    int value() { return 20; }
+}
+
+int main() {
+    Five five;
+    std::cout << five.value() << std::endl;    // prints 5
+    std::cout << value() << std::endl;         // prints 10
+    std::cout << twenty::value() << std::endl; // prints 20
+    return 0;
+}
+```
+
+```
+5
+10
+20
+```
