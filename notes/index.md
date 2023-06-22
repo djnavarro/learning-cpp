@@ -7,3 +7,4 @@ These pages contain the notes I've been writing for myself as I work through [*P
 Chapter notes:
 
 - [Chapter 1: A crash course in C++ and the standard library](chapter-01.html)
+- [Chapter 2: Working with strings and string views](chapter-02.html)
