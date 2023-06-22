@@ -1547,3 +1547,5 @@ Note that when the exception is thrown the `try` code block immediately terminat
 ## Additional sections
 
 The final sections in the chapter discuss the `auto` keyword and the `decltype` keyword, before finishing with an example of a bigger C++ program. For now I'm going to skip those in these notes and move onto the next chapter.
+
+[Back to top](index.html)
