@@ -17,7 +17,43 @@
    <body>
             <div class="container">
          <h1 class="title">2: Working with strings and string views</h1>
-         <p><a href="index.html">Back to top</a></p>      </div>
+                  <div class="row">
+            <div class="col-xl-10"><p><a href="index.html">Back to top</a></p>
+<h2 id="c-style-strings">C-style strings</h2>
+<p>The chapter begins with a discussion of strings in C. I understand why the book does this, but C-style strings are terrible and I want to make it a life goal never to use them again. In C, a string is literally an array of characters with a special <code>NUL</code> character (written <code>'\0'</code>) occupying the final slot. The string <code>"danielle"</code> is nothing more than a character array with values <code>{'d', 'a', 'n', 'i', 'e', 'l', 'l', 'e', '\0'}</code>. It’s “fine”, but only in the sense of the everything-is-on-fire-dog-holding-a-cup-of-coffee-saying-this-is-fine sense of the term. It’s especially horrible because the nul-terminator character is not included in the length of the string, and so you have to keep remembering that the length of every string is always +1 character longer than what it looks like. This leads to annoying code like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="co">// append-c-strings.cpp</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;cstring&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true"></a><span class="dt">char</span>* paste_strings(<span class="at">const</span> <span class="dt">char</span>* str1, <span class="at">const</span> <span class="dt">char</span>* str2, <span class="at">const</span> <span class="dt">char</span>* str3) {</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">unsigned</span> <span class="dt">long</span> len1 { <span class="bu">std::</span>strlen(str1) };</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">unsigned</span> <span class="dt">long</span> len2 { <span class="bu">std::</span>strlen(str2) };</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">unsigned</span> <span class="dt">long</span> len3 { <span class="bu">std::</span>strlen(str3) };</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true"></a>    <span class="dt">char</span>* out { <span class="kw">new</span> <span class="dt">char</span>[len1 + len2 + len3 + <span class="dv">1</span>] }; </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true"></a>    <span class="bu">std::</span>strcpy(out, str1);</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true"></a>    <span class="bu">std::</span>strcat(out, str2);</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true"></a>    <span class="bu">std::</span>strcat(out, str3);</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true"></a>    <span class="cf">return</span> out;</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true"></a>}</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; paste_strings(<span class="st">&quot;I&quot;</span>, <span class="st">&quot;hate&quot;</span>, <span class="st">&quot;this&quot;</span>) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>Ihatethis</code></pre>
+<p>I really, really do.</p>
+<h2 id="string-literals">String literals</h2>
+<p>Next the book turns to string literals.</p></div>
+            <div class="d-none d-xl-block col-xl-2 bd-toc">
+               <ul class="section-nav">
+                  <li class="toc-entry"><ul>
+<li><a href="#c-style-strings">C-style strings</a></li>
+<li><a href="#string-literals">String literals</a></li>
+</ul></li>
+               </ul>
+            </div>
+         </div>
+               </div>
             <!-- JS, Popper.js, and jQuery -->
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
