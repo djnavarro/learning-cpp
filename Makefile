@@ -11,22 +11,29 @@ dirs:
 	@mkdir -p ./docs
 
 bin/%: src/%.cpp
-	clang++-15 --std=c++20 $< -o $@
+	@echo "[compiling]" $<
+	@clang++-15 --std=c++20 $< -o $@
 
 docs/style.css: pandoc/style.css
-	cp pandoc/style.css docs/style.css
+	@echo "[copying]  " $<
+	@cp pandoc/style.css docs/style.css
 
 docs/.nojekyll:
-	touch docs/.nojekyll
+	@echo "[writing]  " $@
+	@touch docs/.nojekyll
 
 docs/CNAME:
-	echo "learning-cpp.djnavarro.net" > docs/CNAME
+	@echo "[writing]  " $@
+	@echo "learning-cpp.djnavarro.net" > docs/CNAME
 
 docs/%.html: notes/%.md
-	pandoc $< -o $@ --template=./pandoc/template.html \
+	@echo "[rendering]" $<
+	@pandoc $< -o $@ --template=./pandoc/template.html \
 		--standalone --mathjax --toc --toc-depth 2
 
 clean:
-	rm -rf docs
-	rm -rf bin
+	@echo "[deleting]  docs"
+	@echo "[deleting]  bin"
+	@rm -rf docs
+	@rm -rf bin
 
