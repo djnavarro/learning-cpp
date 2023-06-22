@@ -1182,3 +1182,64 @@ int main() {
 10
 20
 ```
+
+## Uniform initialisation 
+
+In early versions of C++, variable initialisation statements looked different depending on what kind of object is being initialised. Since C++11, however, uniform initialisation has been available so you can initialise variables using the same syntax regardless of type. The book gives the following example:
+
+``` cpp
+// circles.cpp
+
+struct CircleStruct {
+    int x, y;
+    double radius;
+};
+
+class CircleClass {
+    public:
+        CircleClass(int x, int y, double radius) 
+            : m_x { x }, m_y { y }, m_radius { radius } {}
+    private:
+        int m_x, m_y;
+        double m_radius;
+};
+
+int main() {
+    // these both use uniform initialisation
+    CircleStruct circle1 { 10, 10, 2.5 };
+    CircleClass circle2 { 10, 10, 2.5};
+
+    // pre C++11, you had to do this:
+    CircleStruct circle3 = { 10, 10, 2.5 };
+    CircleClass circle4(10, 10, 2.5);
+
+    // note that this is not uniform initialisation
+    int a = 3;
+    int b(3);
+
+    // these are both uniform
+    int c = { 3 };
+    int d { 3};
+
+    return 0;
+}
+```
+
+There are some subtle differences between uniform and non-uniform initialisation, particularly in reference to **narrowing**. In old style initialisation, this works...
+
+``` cpp
+int x = 3.14;
+```
+
+but because `x` is an integer the value stored is `3`. This is the narrowing phenomenon. If you use uniform initialisation, narrowing is forbidden. This produces a compiler error:
+
+``` cpp
+int x { 3.14 };
+```
+
+There are tools to explicitly perform narrowing if that's what's needed: the book mentions the `gsl::narrow_cast()` function in the Guidelines Support Library (GSL).
+
+In general, the book recommends uniform initialisation. 
+
+## Pointers and Dynamic Memory
+

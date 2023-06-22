@@ -857,7 +857,50 @@ hardenbergia violacea (happy wanderer)</code></pre>
 <span id="cb68-24"><a href="#cb68-24" aria-hidden="true"></a>}</span></code></pre></div>
 <pre><code>5
 10
-20</code></pre></div>
+20</code></pre>
+<h2 id="uniform-initialisation">Uniform initialisation</h2>
+<p>In early versions of C++, variable initialisation statements looked different depending on what kind of object is being initialised. Since C++11, however, uniform initialisation has been available so you can initialise variables using the same syntax regardless of type. The book gives the following example:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true"></a><span class="co">// circles.cpp</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true"></a></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true"></a><span class="kw">struct</span> CircleStruct {</span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true"></a>    <span class="dt">int</span> x, y;</span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true"></a>    <span class="dt">double</span> radius;</span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true"></a>};</span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true"></a></span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true"></a><span class="kw">class</span> CircleClass {</span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true"></a>    <span class="kw">public</span>:</span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true"></a>        CircleClass(<span class="dt">int</span> x, <span class="dt">int</span> y, <span class="dt">double</span> radius) </span>
+<span id="cb70-11"><a href="#cb70-11" aria-hidden="true"></a>            : <span class="va">m_x</span> { x }, <span class="va">m_y</span> { y }, <span class="va">m_radius</span> { radius } {}</span>
+<span id="cb70-12"><a href="#cb70-12" aria-hidden="true"></a>    <span class="kw">private</span>:</span>
+<span id="cb70-13"><a href="#cb70-13" aria-hidden="true"></a>        <span class="dt">int</span> <span class="va">m_x</span>, <span class="va">m_y</span>;</span>
+<span id="cb70-14"><a href="#cb70-14" aria-hidden="true"></a>        <span class="dt">double</span> <span class="va">m_radius</span>;</span>
+<span id="cb70-15"><a href="#cb70-15" aria-hidden="true"></a>};</span>
+<span id="cb70-16"><a href="#cb70-16" aria-hidden="true"></a></span>
+<span id="cb70-17"><a href="#cb70-17" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb70-18"><a href="#cb70-18" aria-hidden="true"></a>    <span class="co">// these both use uniform initialisation</span></span>
+<span id="cb70-19"><a href="#cb70-19" aria-hidden="true"></a>    CircleStruct circle1 { <span class="dv">10</span>, <span class="dv">10</span>, <span class="fl">2.5</span> };</span>
+<span id="cb70-20"><a href="#cb70-20" aria-hidden="true"></a>    CircleClass circle2 { <span class="dv">10</span>, <span class="dv">10</span>, <span class="fl">2.5</span>};</span>
+<span id="cb70-21"><a href="#cb70-21" aria-hidden="true"></a></span>
+<span id="cb70-22"><a href="#cb70-22" aria-hidden="true"></a>    <span class="co">// pre C++11, you had to do this:</span></span>
+<span id="cb70-23"><a href="#cb70-23" aria-hidden="true"></a>    CircleStruct circle3 = { <span class="dv">10</span>, <span class="dv">10</span>, <span class="fl">2.5</span> };</span>
+<span id="cb70-24"><a href="#cb70-24" aria-hidden="true"></a>    CircleClass circle4(<span class="dv">10</span>, <span class="dv">10</span>, <span class="fl">2.5</span>);</span>
+<span id="cb70-25"><a href="#cb70-25" aria-hidden="true"></a></span>
+<span id="cb70-26"><a href="#cb70-26" aria-hidden="true"></a>    <span class="co">// note that this is not uniform initialisation</span></span>
+<span id="cb70-27"><a href="#cb70-27" aria-hidden="true"></a>    <span class="dt">int</span> a = <span class="dv">3</span>;</span>
+<span id="cb70-28"><a href="#cb70-28" aria-hidden="true"></a>    <span class="dt">int</span> b(<span class="dv">3</span>);</span>
+<span id="cb70-29"><a href="#cb70-29" aria-hidden="true"></a></span>
+<span id="cb70-30"><a href="#cb70-30" aria-hidden="true"></a>    <span class="co">// these are both uniform</span></span>
+<span id="cb70-31"><a href="#cb70-31" aria-hidden="true"></a>    <span class="dt">int</span> c = { <span class="dv">3</span> };</span>
+<span id="cb70-32"><a href="#cb70-32" aria-hidden="true"></a>    <span class="dt">int</span> d { <span class="dv">3</span>};</span>
+<span id="cb70-33"><a href="#cb70-33" aria-hidden="true"></a></span>
+<span id="cb70-34"><a href="#cb70-34" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb70-35"><a href="#cb70-35" aria-hidden="true"></a>}</span></code></pre></div>
+<p>There are some subtle differences between uniform and non-uniform initialisation, particularly in reference to <strong>narrowing</strong>. In old style initialisation, this works…</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true"></a><span class="dt">int</span> x = <span class="fl">3.14</span>;</span></code></pre></div>
+<p>but because <code>x</code> is an integer the value stored is <code>3</code>. This is the narrowing phenomenon. If you use uniform initialisation, narrowing is forbidden. This produces a compiler error:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true"></a><span class="dt">int</span> x { <span class="fl">3.14</span> };</span></code></pre></div>
+<p>There are tools to explicitly perform narrowing if that’s what’s needed: the book mentions the <code>gsl::narrow_cast()</code> function in the Guidelines Support Library (GSL).</p>
+<p>In general, the book recommends uniform initialisation.</p></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -881,6 +924,7 @@ hardenbergia violacea (happy wanderer)</code></pre>
 <li><a href="#strings">Strings</a></li>
 <li><a href="#oop-in-c">OOP in C++</a></li>
 <li><a href="#scopes">Scopes</a></li>
+<li><a href="#uniform-initialisation">Uniform initialisation</a></li>
 </ul></li>
                </ul>
             </div>
