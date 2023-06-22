@@ -944,7 +944,35 @@ hardenbergia violacea (happy wanderer)</code></pre>
 <p>Okay fair enough. Moving on.</p>
 <h3 id="dynamically-allocated-arrays">Dynamically allocated arrays</h3>
 <p>The book here has a short section on dynamically allocated arrays, but I’m going to skip over that for now. The main thing is that it advises not to use <code>malloc()</code> and <code>free()</code> from C for this, and instead use <code>new</code> and <code>delete</code> or <code>new[]</code> and <code>delete[]</code>. Noted :-)</p>
-<h2 id="the-const-keyword">The <code>const</code> keyword</h2></div>
+<h2 id="the-const-keyword">The <code>const</code> keyword</h2>
+<p>The <code>const</code> keyword is used to indicate that something is not permitted to change within the program. It can be used in a few ways. The simplest case is declaring that the value of a variable must not be changed:</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true"></a><span class="at">const</span> <span class="dt">int</span> versionNumberMajor { <span class="dv">2</span> };</span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true"></a><span class="at">const</span> <span class="dt">int</span> versionNumberMinor { <span class="dv">1</span> };</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true"></a><span class="at">const</span> str::string productName { <span class="st">&quot;My fabulous product&quot;</span> };</span></code></pre></div>
+<p>The same idea can be applied to pointers:</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true"></a><span class="co">// the pointed-to value cannot be changed</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true"></a><span class="at">const</span> <span class="dt">int</span>* ptr; </span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true"></a><span class="dt">int</span> <span class="at">const</span>* ptr; <span class="co">// same meaning</span></span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true"></a></span>
+<span id="cb81-5"><a href="#cb81-5" aria-hidden="true"></a><span class="co">// the pointer itself cannot be changed</span></span>
+<span id="cb81-6"><a href="#cb81-6" aria-hidden="true"></a><span class="dt">int</span>* <span class="at">const</span> ptr { <span class="kw">nullptr</span> }; </span>
+<span id="cb81-7"><a href="#cb81-7" aria-hidden="true"></a>ptr = <span class="kw">new</span> <span class="dt">int</span>; <span class="co">// this won&#39;t compile</span></span>
+<span id="cb81-8"><a href="#cb81-8" aria-hidden="true"></a></span>
+<span id="cb81-9"><a href="#cb81-9" aria-hidden="true"></a><span class="co">// the pointer itself cannot be changed</span></span>
+<span id="cb81-10"><a href="#cb81-10" aria-hidden="true"></a><span class="dt">int</span>* <span class="at">const</span> ptr { <span class="kw">new</span> <span class="dt">int</span>[<span class="dv">10</span>] };</span></code></pre></div>
+<p>You can also do things like this:</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true"></a><span class="dt">void</span> func(<span class="at">const</span> <span class="dt">int</span> param) {</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true"></a>    <span class="co">// this code cannot change the value of param</span></span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true"></a>}</span></code></pre></div>
+<p>You can also use <code>const</code> to declare that certain methods of a class are not permitted to change the member data. So the relevant bit of the code might look like this:</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true"></a><span class="kw">public</span>: </span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true"></a>    <span class="dt">int</span> methodToComputeSomething() <span class="at">const</span>; <span class="co">// cannot modify internal data</span></span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true"></a>    <span class="dt">void</span> methodToSetInternalData();       <span class="co">// can modifiy internal data</span></span></code></pre></div>
+<p>It’s generally considered best practice to follow the “const correctness” principle, and always declare member functions that do not change any data members as <code>const</code>. The terminology here is:</p>
+<ul>
+<li>A <code>const</code> member function, which cannot modify data, is called an <strong>inspector</strong></li>
+<li>A non-<code>const</code> member function, which does modify data, is called a <strong>mutator</strong></li>
+</ul></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>

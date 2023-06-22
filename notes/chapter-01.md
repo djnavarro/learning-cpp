@@ -1324,3 +1324,49 @@ Okay fair enough. Moving on.
 
 The book here has a short section on dynamically allocated arrays, but I'm going to skip over that for now. The main thing is that it advises not to use `malloc()` and `free()` from C for this, and instead use `new` and `delete` or `new[]` and `delete[]`. Noted :-) 
 
+## The `const` keyword
+
+The `const` keyword is used to indicate that something is not permitted to change within the program. It can be used in a few ways. The simplest case is declaring that the value of a variable must not be changed:
+
+``` cpp
+const int versionNumberMajor { 2 };
+const int versionNumberMinor { 1 };
+const str::string productName { "My fabulous product" };
+```  
+
+The same idea can be applied to pointers:
+
+``` cpp
+// the pointed-to value cannot be changed
+const int* ptr; 
+int const* ptr; // same meaning
+
+// the pointer itself cannot be changed
+int* const ptr { nullptr }; 
+ptr = new int; // this won't compile
+
+// the pointer itself cannot be changed
+int* const ptr { new int[10] };
+```
+
+You can also do things like this:
+
+``` cpp
+void func(const int param) {
+    // this code cannot change the value of param
+}
+```
+
+You can also use `const` to declare that certain methods of a class are not permitted to change the member data. So the relevant bit of the code might look like this:
+
+``` cpp
+public: 
+    int methodToComputeSomething() const; // cannot modify internal data
+    void methodToSetInternalData();       // can modifiy internal data
+```
+
+It's generally considered best practice to follow the "const correctness" principle, and always declare member functions that do not change any data members as `const`. The terminology here is:
+
+- A `const` member function, which cannot modify data, is called an **inspector**
+- A non-`const` member function, which does modify data, is called a **mutator**
+
