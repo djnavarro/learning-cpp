@@ -900,7 +900,50 @@ hardenbergia violacea (happy wanderer)</code></pre>
 <p>but because <code>x</code> is an integer the value stored is <code>3</code>. This is the narrowing phenomenon. If you use uniform initialisation, narrowing is forbidden. This produces a compiler error:</p>
 <div class="sourceCode" id="cb72"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true"></a><span class="dt">int</span> x { <span class="fl">3.14</span> };</span></code></pre></div>
 <p>There are tools to explicitly perform narrowing if that’s what’s needed: the book mentions the <code>gsl::narrow_cast()</code> function in the Guidelines Support Library (GSL).</p>
-<p>In general, the book recommends uniform initialisation.</p></div>
+<p>In general, the book recommends uniform initialisation.</p>
+<h2 id="pointers-and-dynamic-memory">Pointers and dynamic memory</h2>
+<p>Notes on memory management in C++. There are two different kinds of memory allocation in C++: the <strong>stack</strong> and the <strong>free store</strong>. The metaphor used to describe the stack is a “deck of cards”. The top “card” (or, <strong>stack frame</strong>) represents the current scope (e.g., function currently being executed). Variables declared within that scope are stored in this stack frame. Parameters passed to a function call are copied into the stack associated with the function scope. When the scope goes away (e.g., function completes), so too does the corresponding stack frame. Variables allocated to stack memory don’t require any special management: C++ automatically takes care of the allocation and deallocation of memory.</p>
+<p>The free store is different. It corresponds to an area of memory that is independent of the stack, and you can place variables there that will persist even when the scope in which they were declared goes away. Memory on the free store needs to be manually managed: it has no notion of frames, and there is no automatic deallocation. (…Unless, apparently, you use smart pointers, which the book foreshadows will be discussed later).</p>
+<h3 id="pointers-to-free-store-variables">Pointers to free store variables</h3>
+<p>Okay, so… noting that smart pointers are coming later in the book, I think all I’ll do here is quickly summarise the key things. If you want to place an integer on the free store, we first declare a <strong>pointer</strong>. A pointer is a reference to a location in memory. So when I do this:</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true"></a><span class="dt">int</span>* my_int_pointer { <span class="kw">nullptr</span> };</span></code></pre></div>
+<p>what I’m doing is specifying that <code>my_int_pointer</code> is going to reference the location of an integer value (the <code>*</code> in <code>int*</code> indicates that a pointer is being declared). At this stage, the pointer doesn’t actually reference a specific location: the <code>nullptr</code> (“null pointer”) value is a special value that doesn’t correspond to a valid location, and evaluates to <code>false</code> if used in a logical expression.</p>
+<p>To allocate the memory and have the pointer reference that location in memory, we use <code>new</code>:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true"></a>my_int_pointer = <span class="kw">new</span> <span class="dt">int</span>;</span></code></pre></div>
+<p>At this stage, a block of memory has been allocated for the integer and <code>my_int_pointer</code> now references that location. To access that location, either to retrieve the value or assign a value to it, we <strong>dereference</strong> the pointer:</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true"></a>*my_int_pointer = <span class="dv">8</span>;</span></code></pre></div>
+<p>My example program:</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true"></a><span class="co">// pointer-free-store.cpp</span></span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true"></a></span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true"></a>    <span class="dt">int</span>* int_ptr { <span class="kw">new</span> <span class="dt">int</span> }; <span class="co">// declare pointer &amp; allocate memory</span></span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true"></a>    *int_ptr = <span class="dv">8</span>;             <span class="co">// assign value to the allocated memory</span></span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; *int_ptr + <span class="dv">2</span> &lt;&lt; <span class="bu">std::</span>endl; <span class="co">// retrieve and print</span></span>
+<span id="cb76-8"><a href="#cb76-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb76-9"><a href="#cb76-9" aria-hidden="true"></a>}</span></code></pre></div>
+<p>When executed, it prints 10 to stdout.</p>
+<h3 id="pointers-to-stack-variables">Pointers to stack variables</h3>
+<p>C++ also allows pointers to variables on the stack (and even pointers to pointers, but whatever). The key thing here is to use <code>&amp;</code> (“address of”) to return a pointer to a stack-allocated variable. So this works and also prints 10 to stdout:</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true"></a><span class="co">// pointer-stack.cpp</span></span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true"></a></span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb77-5"><a href="#cb77-5" aria-hidden="true"></a>    <span class="dt">int</span> value { <span class="dv">8</span> };          <span class="co">// variable on the stack</span></span>
+<span id="cb77-6"><a href="#cb77-6" aria-hidden="true"></a>    <span class="dt">int</span>* int_ptr { &amp;value };  <span class="co">// declare pointer to it</span></span>
+<span id="cb77-7"><a href="#cb77-7" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; *int_ptr + <span class="dv">2</span> &lt;&lt; <span class="bu">std::</span>endl; <span class="co">// retrieve and print</span></span>
+<span id="cb77-8"><a href="#cb77-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb77-9"><a href="#cb77-9" aria-hidden="true"></a>}</span></code></pre></div>
+<h3 id="pointers-to-structs-and-classes">Pointers to structs and classes</h3>
+<p>There’s a little bit of syntactic sugar for pointers to structs and classes. Copying the code directly from the book. Assume there’s a function <code>getEmployee()</code> that returns a pointer to an <code>Employee</code> instance. Then we could write the salary to stdout like so:</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true"></a>Employee* anEmployee { getEmployee() }; </span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true"></a><span class="bu">std::</span>cout &lt;&lt; (*anEmployee).salary &lt;&lt; <span class="bu">std::</span>cout;</span></code></pre></div>
+<p>The <code>-&gt;</code> operator allows a shortcut:</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true"></a>Employee* anEmployee { getEmployee() }; </span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true"></a><span class="bu">std::</span>cout &lt;&lt; anEmployee-&gt;salary &lt;&lt; <span class="bu">std::</span>cout;</span></code></pre></div>
+<p>Okay fair enough. Moving on.</p>
+<h3 id="dynamically-allocated-arrays">Dynamically allocated arrays</h3>
+<p>The book here has a short section on dynamically allocated arrays, but I’m going to skip over that for now. The main thing is that it advises not to use <code>malloc()</code> and <code>free()</code> from C for this, and instead use <code>new</code> and <code>delete</code> or <code>new[]</code> and <code>delete[]</code>. Noted :-)</p></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -925,6 +968,7 @@ hardenbergia violacea (happy wanderer)</code></pre>
 <li><a href="#oop-in-c">OOP in C++</a></li>
 <li><a href="#scopes">Scopes</a></li>
 <li><a href="#uniform-initialisation">Uniform initialisation</a></li>
+<li><a href="#pointers-and-dynamic-memory">Pointers and dynamic memory</a></li>
 </ul></li>
                </ul>
             </div>

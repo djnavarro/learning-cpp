@@ -1241,5 +1241,86 @@ There are tools to explicitly perform narrowing if that's what's needed: the boo
 
 In general, the book recommends uniform initialisation. 
 
-## Pointers and Dynamic Memory
+## Pointers and dynamic memory
+
+Notes on memory management in C++. There are two different kinds of memory allocation in C++: the **stack** and the **free store**. The metaphor used to describe the stack is a "deck of cards". The top "card" (or, **stack frame**) represents the current scope (e.g., function currently being executed). Variables declared within that scope are stored in this stack frame. Parameters passed to a function call are copied into the stack associated with the function scope. When the scope goes away (e.g., function completes), so too does the corresponding stack frame. Variables allocated to stack memory don't require any special management: C++ automatically takes care of the allocation and deallocation of memory.
+
+The free store is different. It corresponds to an area of memory that is independent of the stack, and you can place variables there that will persist even when the scope in which they were declared goes away. Memory on the free store needs to be manually managed: it has no notion of frames, and there is no automatic deallocation. (...Unless, apparently, you use smart pointers, which the book foreshadows will be discussed later).
+
+### Pointers to free store variables
+
+Okay, so... noting that smart pointers are coming later in the book, I think all I'll do here is quickly summarise the key things. If you want to place an integer on the free store, we first declare a **pointer**. A pointer is a reference to a location in memory. So when I do this:
+
+``` cpp
+int* my_int_pointer { nullptr };
+```
+
+what I'm doing is specifying that `my_int_pointer` is going to reference the location of an integer value (the `*` in `int*` indicates that a pointer is being declared). At this stage, the pointer doesn't actually reference a specific location: the `nullptr` ("null pointer") value is a special value that doesn't correspond to a valid location, and evaluates to `false` if used in a logical expression. 
+
+To allocate the memory and have the pointer reference that location in memory, we use `new`:
+
+``` cpp
+my_int_pointer = new int;
+```
+
+At this stage, a block of memory has been allocated for the integer and `my_int_pointer` now references that location. To access that location, either to retrieve the value or assign a value to it, we **dereference** the pointer:
+
+``` cpp 
+*my_int_pointer = 8;
+```
+
+My example program:
+
+``` cpp
+// pointer-free-store.cpp
+#include <iostream>
+
+int main() {
+    int* int_ptr { new int }; // declare pointer & allocate memory
+    *int_ptr = 8;             // assign value to the allocated memory
+    std::cout << *int_ptr + 2 << std::endl; // retrieve and print
+    return 0;
+}
+```
+
+When executed, it prints 10 to stdout. 
+
+
+### Pointers to stack variables
+
+C++ also allows pointers to variables on the stack (and even pointers to pointers, but whatever). The key thing here is to use `&` ("address of") to return a pointer to a stack-allocated variable. So this works and also prints 10 to stdout:
+
+``` cpp
+// pointer-stack.cpp
+#include <iostream>
+
+int main() {
+    int value { 8 };          // variable on the stack
+    int* int_ptr { &value };  // declare pointer to it
+    std::cout << *int_ptr + 2 << std::endl; // retrieve and print
+    return 0;
+}
+```
+
+### Pointers to structs and classes
+
+There's a little bit of syntactic sugar for pointers to structs and classes. Copying the code directly from the book. Assume there's a function `getEmployee()` that returns a pointer to an `Employee` instance. Then we could write the salary to stdout like so:
+
+```cpp
+Employee* anEmployee { getEmployee() }; 
+std::cout << (*anEmployee).salary << std::cout;
+```
+
+The `->` operator allows a shortcut:
+
+```cpp
+Employee* anEmployee { getEmployee() }; 
+std::cout << anEmployee->salary << std::cout;
+```
+
+Okay fair enough. Moving on.
+
+### Dynamically allocated arrays
+
+The book here has a short section on dynamically allocated arrays, but I'm going to skip over that for now. The main thing is that it advises not to use `malloc()` and `free()` from C for this, and instead use `new` and `delete` or `new[]` and `delete[]`. Noted :-) 
 
