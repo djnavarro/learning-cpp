@@ -972,7 +972,96 @@ hardenbergia violacea (happy wanderer)</code></pre>
 <ul>
 <li>A <code>const</code> member function, which cannot modify data, is called an <strong>inspector</strong></li>
 <li>A non-<code>const</code> member function, which does modify data, is called a <strong>mutator</strong></li>
-</ul></div>
+</ul>
+<h2 id="references">References</h2>
+<p>A <strong>reference</strong> is an alias for another variable: essentially another name given to the same object. Changes to the reference variable are reflected in the original variable, and vice versa. The mental model suggested in the book is that you can think of references as implicit pointers, where you don’t have to take care of addressing and dereferencing yourself. Declaring the reference variable is done using <code>&amp;</code>, like this:</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true"></a><span class="dt">int</span> x { <span class="dv">10</span> };      <span class="co">// original variable</span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true"></a><span class="dt">int</span>&amp; x_ref { x };  <span class="co">// reference variable</span></span></code></pre></div>
+<p>The equivalence of the original and the reference is illustrated in this simple program:</p>
+<div class="sourceCode" id="cb85"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true"></a><span class="co">// simple-reference.cpp</span></span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true"></a></span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb85-5"><a href="#cb85-5" aria-hidden="true"></a>    <span class="dt">int</span> x { <span class="dv">10</span> };     <span class="co">// original </span></span>
+<span id="cb85-6"><a href="#cb85-6" aria-hidden="true"></a>    <span class="dt">int</span>&amp; x_ref { x }; <span class="co">// reference</span></span>
+<span id="cb85-7"><a href="#cb85-7" aria-hidden="true"></a></span>
+<span id="cb85-8"><a href="#cb85-8" aria-hidden="true"></a>    x_ref++; <span class="co">// change the reference, *and* the original</span></span>
+<span id="cb85-9"><a href="#cb85-9" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; x &lt;&lt; <span class="bu">std::</span>endl; <span class="co">// prints 11</span></span>
+<span id="cb85-10"><a href="#cb85-10" aria-hidden="true"></a></span>
+<span id="cb85-11"><a href="#cb85-11" aria-hidden="true"></a>    x++; <span class="co">// change the original, *and* the reference</span></span>
+<span id="cb85-12"><a href="#cb85-12" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; x_ref &lt;&lt; <span class="bu">std::</span>endl; <span class="co">// prints 12</span></span>
+<span id="cb85-13"><a href="#cb85-13" aria-hidden="true"></a>    </span>
+<span id="cb85-14"><a href="#cb85-14" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb85-15"><a href="#cb85-15" aria-hidden="true"></a>}</span></code></pre></div>
+<p>References must always be initialised when declared. This won’t compile:</p>
+<div class="sourceCode" id="cb86"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true"></a><span class="dt">int</span>&amp; empty_ref; </span></code></pre></div>
+<p>Along similar lines, you cannot change the mapping once a reference variable is initialised (i.e., it always refers to the same original variable, and you can’t move it to a new one). This is illustrated in this program:</p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true"></a><span class="co">// immovable-reference.cpp</span></span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true"></a></span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb87-5"><a href="#cb87-5" aria-hidden="true"></a>    <span class="dt">int</span> x { <span class="dv">3</span> };</span>
+<span id="cb87-6"><a href="#cb87-6" aria-hidden="true"></a>    <span class="dt">int</span> y { <span class="dv">4</span> };</span>
+<span id="cb87-7"><a href="#cb87-7" aria-hidden="true"></a></span>
+<span id="cb87-8"><a href="#cb87-8" aria-hidden="true"></a>    <span class="dt">int</span>&amp; x_ref { x };</span>
+<span id="cb87-9"><a href="#cb87-9" aria-hidden="true"></a>    x_ref = y;  <span class="co">// changes the value of x to match y</span></span>
+<span id="cb87-10"><a href="#cb87-10" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; x &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb87-11"><a href="#cb87-11" aria-hidden="true"></a></span>
+<span id="cb87-12"><a href="#cb87-12" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb87-13"><a href="#cb87-13" aria-hidden="true"></a>}</span></code></pre></div>
+<h3 id="reference-to-const">Reference-to-const</h3>
+<p>You are allowed to specify a “reference to const”, as illustrated in the second line of the code snippet below:</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true"></a><span class="dt">double</span> val { <span class="fl">1.234</span> }; <span class="co">// ok</span></span>
+<span id="cb88-2"><a href="#cb88-2" aria-hidden="true"></a><span class="at">const</span> <span class="dt">double</span>&amp; val_ref_const { val }; <span class="co">// ok</span></span></code></pre></div>
+<p>The creates something akin to a “read only” reference. You can access the value of <code>val</code> by using <code>val_ref_const</code>, and you can change the value of both by modifying <code>val</code>:</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true"></a>val = <span class="fl">2.345</span>; <span class="co">// ok, changes val and val_ref_const</span></span></code></pre></div>
+<p>What you can’t do, however, is change the value of <code>val</code> by modifying <code>val_ref_const</code>:</p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true"></a>val_ref_const = <span class="fl">3.456</span>; <span class="co">// fails, does not compile</span></span></code></pre></div>
+<p>This turns out to be super helpful when passing by reference.</p>
+<h3 id="pass-by-reference-semantics">Pass-by-reference semantics</h3>
+<p>The main use for references is to avoid making copies of values when passing arguments to a function. You could do this with pointers, of course, but pointers are messier, so it’s generally better to do it with references. There can be performance gains by not making unnecessary copies, but there are also other neat things you can do:</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true"></a><span class="co">// swap.cpp</span></span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true"></a></span>
+<span id="cb91-4"><a href="#cb91-4" aria-hidden="true"></a><span class="dt">void</span> swap(<span class="dt">int</span>&amp; first, <span class="dt">int</span>&amp; second) {</span>
+<span id="cb91-5"><a href="#cb91-5" aria-hidden="true"></a>    <span class="dt">int</span> temp { first };</span>
+<span id="cb91-6"><a href="#cb91-6" aria-hidden="true"></a>    first = second; </span>
+<span id="cb91-7"><a href="#cb91-7" aria-hidden="true"></a>    second = temp;</span>
+<span id="cb91-8"><a href="#cb91-8" aria-hidden="true"></a>}</span>
+<span id="cb91-9"><a href="#cb91-9" aria-hidden="true"></a></span>
+<span id="cb91-10"><a href="#cb91-10" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb91-11"><a href="#cb91-11" aria-hidden="true"></a>    <span class="dt">int</span> x { <span class="dv">10</span> }, y { <span class="dv">20</span> };</span>
+<span id="cb91-12"><a href="#cb91-12" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;original x value is &quot;</span> &lt;&lt; x &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb91-13"><a href="#cb91-13" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;original y value is &quot;</span> &lt;&lt; y &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb91-14"><a href="#cb91-14" aria-hidden="true"></a>    swap(x, y);</span>
+<span id="cb91-15"><a href="#cb91-15" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;swapped x is now &quot;</span> &lt;&lt; x &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb91-16"><a href="#cb91-16" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;swapped y is now &quot;</span> &lt;&lt; y &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb91-17"><a href="#cb91-17" aria-hidden="true"></a></span>
+<span id="cb91-18"><a href="#cb91-18" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb91-19"><a href="#cb91-19" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>original x value is 10
+original y value is 20
+swapped x is now 20
+swapped y is now 10</code></pre>
+<p>Notice that when passing a reference, it’s possible to modify the original variables (outside the scope of the function) by performing operations on the references. That was a handy feature in the <code>swap()</code> example, but normally it’s undesirable. A more typical scenario is one in which you <em>don’t</em> want the function to possess the ability to modify the out-of-scope variables that have been passed through the function arguments (because the only reason you’ve chosen to pass-by-reference rather than pass-by-value is to avoid making copies). In this situation, the best bet is to pass-by-reference-to-const. Because the reference-to-const cannot modify the original variable, it is now impossible for the function to accidentally modify the originals.</p>
+<p>Here’s the idea:</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true"></a><span class="co">// pass-by-reference-to-const.cpp</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true"></a></span>
+<span id="cb93-5"><a href="#cb93-5" aria-hidden="true"></a><span class="co">// str_print() declares a reference-to-const as the argument</span></span>
+<span id="cb93-6"><a href="#cb93-6" aria-hidden="true"></a><span class="dt">void</span> str_print(<span class="at">const</span> <span class="bu">std::</span>string&amp; x) {</span>
+<span id="cb93-7"><a href="#cb93-7" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; x &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb93-8"><a href="#cb93-8" aria-hidden="true"></a>}</span>
+<span id="cb93-9"><a href="#cb93-9" aria-hidden="true"></a></span>
+<span id="cb93-10"><a href="#cb93-10" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb93-11"><a href="#cb93-11" aria-hidden="true"></a>    <span class="bu">std::</span>string str { <span class="st">&quot;hello cruel world&quot;</span> }; </span>
+<span id="cb93-12"><a href="#cb93-12" aria-hidden="true"></a>    str_print( str ); <span class="co">// passing a string variable works</span></span>
+<span id="cb93-13"><a href="#cb93-13" aria-hidden="true"></a>    str_print( <span class="st">&quot;goodbye cruel world&quot;</span> ); <span class="co">// so does passing a literal</span></span>
+<span id="cb93-14"><a href="#cb93-14" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb93-15"><a href="#cb93-15" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>hello cruel world
+goodbye cruel world</code></pre></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -999,6 +1088,7 @@ hardenbergia violacea (happy wanderer)</code></pre>
 <li><a href="#uniform-initialisation">Uniform initialisation</a></li>
 <li><a href="#pointers-and-dynamic-memory">Pointers and dynamic memory</a></li>
 <li><a href="#the-const-keyword">The <code>const</code> keyword</a></li>
+<li><a href="#references">References</a></li>
 </ul></li>
                </ul>
             </div>

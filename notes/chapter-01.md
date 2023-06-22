@@ -1370,3 +1370,139 @@ It's generally considered best practice to follow the "const correctness" princi
 - A `const` member function, which cannot modify data, is called an **inspector**
 - A non-`const` member function, which does modify data, is called a **mutator**
 
+## References
+
+A **reference** is an alias for another variable: essentially another name given to the same object. Changes to the reference variable are reflected in the original variable, and vice versa. The mental model suggested in the book is that you can think of references as implicit pointers, where you don't have to take care of addressing and dereferencing yourself. Declaring the reference variable is done using `&`, like this:
+
+``` cpp
+int x { 10 };      // original variable
+int& x_ref { x };  // reference variable
+```
+
+The equivalence of the original and the reference is illustrated in this simple program:
+
+``` cpp
+// simple-reference.cpp
+#include <iostream>
+
+int main() {
+    int x { 10 };     // original 
+    int& x_ref { x }; // reference
+
+    x_ref++; // change the reference, *and* the original
+    std::cout << x << std::endl; // prints 11
+
+    x++; // change the original, *and* the reference
+    std::cout << x_ref << std::endl; // prints 12
+    
+    return 0;
+}
+```
+
+References must always be initialised when declared. This won't compile:
+
+``` cpp
+int& empty_ref; 
+```
+
+Along similar lines, you cannot change the mapping once a reference variable is initialised (i.e., it always refers to the same original variable, and you can't move it to a new one). This is illustrated in this program:
+
+``` cpp
+// immovable-reference.cpp
+#include <iostream>
+
+int main() {
+    int x { 3 };
+    int y { 4 };
+
+    int& x_ref { x };
+    x_ref = y;  // changes the value of x to match y
+    std::cout << x << std::endl;
+
+    return 0;
+}
+```
+
+### Reference-to-const
+
+You are allowed to specify a "reference to const", as illustrated in the second line of the code snippet below:
+
+``` cpp
+double val { 1.234 }; // ok
+const double& val_ref_const { val }; // ok
+```
+
+The creates something akin to a "read only" reference. You can access the value of `val` by using `val_ref_const`, and you can change the value of both by modifying `val`:
+
+``` cpp
+val = 2.345; // ok, changes val and val_ref_const
+```
+
+What you can't do, however, is change the value of `val` by modifying `val_ref_const`:
+
+``` cpp
+val_ref_const = 3.456; // fails, does not compile
+```
+
+This turns out to be super helpful when passing by reference. 
+
+
+### Pass-by-reference semantics
+
+The main use for references is to avoid making copies of values when passing arguments to a function. You could do this with pointers, of course, but pointers are messier, so it's generally better to do it with references. There can be performance gains by not making unnecessary copies, but there are also other neat things you can do:
+
+``` cpp
+// swap.cpp
+#include <iostream>
+
+void swap(int& first, int& second) {
+    int temp { first };
+    first = second; 
+    second = temp;
+}
+
+int main() {
+    int x { 10 }, y { 20 };
+    std::cout << "original x value is " << x << std::endl;
+    std::cout << "original y value is " << y << std::endl;
+    swap(x, y);
+    std::cout << "swapped x is now " << x << std::endl;
+    std::cout << "swapped y is now " << y << std::endl;
+
+    return 0;
+}
+```
+
+```
+original x value is 10
+original y value is 20
+swapped x is now 20
+swapped y is now 10
+```
+
+Notice that when passing a reference, it's possible to modify the original variables (outside the scope of the function) by performing operations on the references. That was a handy feature in the `swap()` example, but normally it's undesirable. A more typical scenario is one in which you *don't* want the function to possess the ability to modify the out-of-scope variables that have been passed through the function arguments (because the only reason you've chosen to pass-by-reference rather than pass-by-value is to avoid making copies). In this situation, the best bet is to pass-by-reference-to-const. Because the reference-to-const cannot modify the original variable, it is now impossible for the function to accidentally modify the originals.
+
+Here's the idea:
+
+``` cpp
+// pass-by-reference-to-const.cpp
+#include <iostream>
+#include <string>
+
+// str_print() declares a reference-to-const as the argument
+void str_print(const std::string& x) {
+    std::cout << x << std::endl;
+}
+
+int main() {
+    std::string str { "hello cruel world" }; 
+    str_print( str ); // passing a string variable works
+    str_print( "goodbye cruel world" ); // so does passing a literal
+    return 0;
+}
+```
+
+```
+hello cruel world
+goodbye cruel world
+```
