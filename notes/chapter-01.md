@@ -1506,3 +1506,44 @@ int main() {
 hello cruel world
 goodbye cruel world
 ```
+
+
+## Exception handling
+
+The `divide()` function in this code throws an invalid-argument exception if the denominator is zero. The code within `main()` implements a try-catch block to handle such an exception if thrown:
+
+``` cpp
+// try-catch.cpp
+#include <iostream>
+#include <stdexcept>
+
+// a divide() function that throws an error for divide-by-zero
+double divide(double numerator, double denominator) {
+    if (denominator == 0) {
+        throw std::invalid_argument { "Denominator cannot be 0." };
+    }
+    return numerator / denominator; 
+}
+
+int main() {
+    try {
+        std::cout << divide(13, 2) << std::endl;
+        std::cout << divide(13, 0) << std::endl;
+        std::cout << divide(13, 3) << std::endl;
+    } catch (const std::invalid_argument& exception) {
+        std::cout << "Exception caught: " << exception.what() << std::endl;
+    }
+    return 0;
+}
+```
+
+```
+6.5
+Exception caught: Denominator cannot be 0.
+```
+
+Note that when the exception is thrown the `try` code block immediately terminates and is passed to the `catch` code block. The third division is never attempted. 
+
+## Additional sections
+
+The final sections in the chapter discuss the `auto` keyword and the `decltype` keyword, before finishing with an example of a bigger C++ program. For now I'm going to skip those in these notes and move onto the next chapter.

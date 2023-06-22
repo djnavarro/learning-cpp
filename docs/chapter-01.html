@@ -1061,7 +1061,36 @@ swapped y is now 10</code></pre>
 <span id="cb93-14"><a href="#cb93-14" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
 <span id="cb93-15"><a href="#cb93-15" aria-hidden="true"></a>}</span></code></pre></div>
 <pre><code>hello cruel world
-goodbye cruel world</code></pre></div>
+goodbye cruel world</code></pre>
+<h2 id="exception-handling">Exception handling</h2>
+<p>The <code>divide()</code> function in this code throws an invalid-argument exception if the denominator is zero. The code within <code>main()</code> implements a try-catch block to handle such an exception if thrown:</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true"></a><span class="co">// try-catch.cpp</span></span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;stdexcept&gt;</span></span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true"></a></span>
+<span id="cb95-5"><a href="#cb95-5" aria-hidden="true"></a><span class="co">// a divide() function that throws an error for divide-by-zero</span></span>
+<span id="cb95-6"><a href="#cb95-6" aria-hidden="true"></a><span class="dt">double</span> divide(<span class="dt">double</span> numerator, <span class="dt">double</span> denominator) {</span>
+<span id="cb95-7"><a href="#cb95-7" aria-hidden="true"></a>    <span class="cf">if</span> (denominator == <span class="dv">0</span>) {</span>
+<span id="cb95-8"><a href="#cb95-8" aria-hidden="true"></a>        <span class="cf">throw</span> <span class="bu">std::</span>invalid_argument { <span class="st">&quot;Denominator cannot be 0.&quot;</span> };</span>
+<span id="cb95-9"><a href="#cb95-9" aria-hidden="true"></a>    }</span>
+<span id="cb95-10"><a href="#cb95-10" aria-hidden="true"></a>    <span class="cf">return</span> numerator / denominator; </span>
+<span id="cb95-11"><a href="#cb95-11" aria-hidden="true"></a>}</span>
+<span id="cb95-12"><a href="#cb95-12" aria-hidden="true"></a></span>
+<span id="cb95-13"><a href="#cb95-13" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb95-14"><a href="#cb95-14" aria-hidden="true"></a>    <span class="cf">try</span> {</span>
+<span id="cb95-15"><a href="#cb95-15" aria-hidden="true"></a>        <span class="bu">std::</span>cout &lt;&lt; divide(<span class="dv">13</span>, <span class="dv">2</span>) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb95-16"><a href="#cb95-16" aria-hidden="true"></a>        <span class="bu">std::</span>cout &lt;&lt; divide(<span class="dv">13</span>, <span class="dv">0</span>) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb95-17"><a href="#cb95-17" aria-hidden="true"></a>        <span class="bu">std::</span>cout &lt;&lt; divide(<span class="dv">13</span>, <span class="dv">3</span>) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb95-18"><a href="#cb95-18" aria-hidden="true"></a>    } <span class="cf">catch</span> (<span class="at">const</span> <span class="bu">std::</span>invalid_argument&amp; exception) {</span>
+<span id="cb95-19"><a href="#cb95-19" aria-hidden="true"></a>        <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;Exception caught: &quot;</span> &lt;&lt; exception.what() &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb95-20"><a href="#cb95-20" aria-hidden="true"></a>    }</span>
+<span id="cb95-21"><a href="#cb95-21" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb95-22"><a href="#cb95-22" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>6.5
+Exception caught: Denominator cannot be 0.</code></pre>
+<p>Note that when the exception is thrown the <code>try</code> code block immediately terminates and is passed to the <code>catch</code> code block. The third division is never attempted.</p>
+<h2 id="additional-sections">Additional sections</h2>
+<p>The final sections in the chapter discuss the <code>auto</code> keyword and the <code>decltype</code> keyword, before finishing with an example of a bigger C++ program. For now I’m going to skip those in these notes and move onto the next chapter.</p></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
@@ -1089,6 +1118,8 @@ goodbye cruel world</code></pre></div>
 <li><a href="#pointers-and-dynamic-memory">Pointers and dynamic memory</a></li>
 <li><a href="#the-const-keyword">The <code>const</code> keyword</a></li>
 <li><a href="#references">References</a></li>
+<li><a href="#exception-handling">Exception handling</a></li>
+<li><a href="#additional-sections">Additional sections</a></li>
 </ul></li>
                </ul>
             </div>
