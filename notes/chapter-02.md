@@ -222,3 +222,34 @@ bear is also substring of owlbear
 the bear substring starts at 3
 a teddybear is a different string
 ```
+
+Anyway. The book has a whole thing here about "class template argument deduction" (CTAD), talking about how the type of a `vector` class can be automatically inferred from the values used when initialising the variable. It's a bit tricky in the case of strings because a string literal like `"cat"` is treated as `cont char*` by default, not `std::string`. That can lead to annoying problems when relying on CTAD for strings. Most of the time you probably want a vector of `std::string` types, not a vector of `const char*` types. The book points out that you can get around this by writing something `"cat"s`: the `s` at the end is used to specify that this string literal should give rise to `std::string` type when used for CTAD. 
+
+Which. Fine. But honestly, I feel like this is a situation where it makes more sense to explicitly state that the thing you want is a vector of strings. In the following code, specifying `vector<string>` as the type makes so much more sense than trying to save some key strokes by typing `vector` and then appending a bunch of weird `s` characters to all my string literals:
+
+``` cpp
+// string-vectors.cpp
+#include <iostream>
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int main() {
+    vector<string> names { "Dani", "Danielle", "Daniela" };
+    for (string name : names) {
+        cout << name << " ";
+    }
+    cout << endl;
+    return 0;
+}
+```
+
+```
+Dani Danielle Daniela 
+```
+
+Anyway.
+
+## Numeric conversion
+

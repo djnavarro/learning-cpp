@@ -169,13 +169,34 @@ so is the uppercase string &#39;less than&#39;? 1</code></pre>
 <pre><code>owl is a substring of owlbear
 bear is also substring of owlbear
 the bear substring starts at 3
-a teddybear is a different string</code></pre></div>
+a teddybear is a different string</code></pre>
+<p>Anyway. The book has a whole thing here about “class template argument deduction” (CTAD), talking about how the type of a <code>vector</code> class can be automatically inferred from the values used when initialising the variable. It’s a bit tricky in the case of strings because a string literal like <code>"cat"</code> is treated as <code>cont char*</code> by default, not <code>std::string</code>. That can lead to annoying problems when relying on CTAD for strings. Most of the time you probably want a vector of <code>std::string</code> types, not a vector of <code>const char*</code> types. The book points out that you can get around this by writing something <code>"cat"s</code>: the <code>s</code> at the end is used to specify that this string literal should give rise to <code>std::string</code> type when used for CTAD.</p>
+<p>Which. Fine. But honestly, I feel like this is a situation where it makes more sense to explicitly state that the thing you want is a vector of strings. In the following code, specifying <code>vector&lt;string&gt;</code> as the type makes so much more sense than trying to save some key strokes by typing <code>vector</code> and then appending a bunch of weird <code>s</code> characters to all my string literals:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="co">// string-vectors.cpp</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;vector&gt;</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true"></a><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true"></a></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true"></a>    vector&lt;string&gt; names { <span class="st">&quot;Dani&quot;</span>, <span class="st">&quot;Danielle&quot;</span>, <span class="st">&quot;Daniela&quot;</span> };</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true"></a>    <span class="cf">for</span> (string name : names) {</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true"></a>        cout &lt;&lt; name &lt;&lt; <span class="st">&quot; &quot;</span>;</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true"></a>    }</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true"></a>    cout &lt;&lt; endl;</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>Dani Danielle Daniela </code></pre>
+<p>Anyway.</p>
+<h2 id="numeric-conversion">Numeric conversion</h2></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
 <li><a href="#c-style-strings">C-style strings</a></li>
 <li><a href="#string-literals">String literals</a></li>
 <li><a href="#the-c-stdstring-class">The C++ <code>std::string</code> class</a></li>
+<li><a href="#numeric-conversion">Numeric conversion</a></li>
 </ul></li>
                </ul>
             </div>
