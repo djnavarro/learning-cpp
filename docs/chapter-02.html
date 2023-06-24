@@ -43,7 +43,54 @@
 <pre><code>Ihatethis</code></pre>
 <p>I really, really do.</p>
 <h2 id="string-literals">String literals</h2>
-<p>Next the book turns to string literals.</p></div>
+<p>Next the book turns to string literals. It starts by defining terms: the terms “string literal” just refers to the actual string value itself, rather than the variable. So <code>"cat"</code> is a string literal.</p>
+<h3 id="literal-pooling">Literal pooling</h3>
+<p>String literals pose different issues for languages than other kinds of literals because there’s an incredibly large number of possible string literals, and a single string literal can be quite large. C++ (much like R, actually) does the smart thing from a memory perspective by having <strong>literal pooling</strong>. String literals are stored in read-only memory, which allows the compiler to optimise memory usage: every use of the <code>"cat"</code> string literal (or a string literal containing the entire Treaty of Westphalia) is treated as a reference to the same location in memory. That way you can use the same string over and over without wasting memory.</p>
+<p>That all makes sense but this is where things become tricky. You can technically assign a string literal to a variable but string literal pooling produces weirdness. Formally a string literal of length <span class="math inline">\(n\)</span> is an array of <span class="math inline">\(n\)</span> <code>const char</code> types, but (for backward compatibility, apparently) the compiler doesn’t enforce the implicit <code>const</code> in this context:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="dt">char</span>* ptr { <span class="st">&quot;cat&quot;</span> }; <span class="co">// string literal is assigned to a variable</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a>ptr[<span class="dv">1</span>] = <span class="st">&quot;o&quot;</span>;        <span class="co">// the behaviour here is undefined</span></span></code></pre></div>
+<p>A slightly safer thing to do here is to explicitly use the <code>const</code> keyword. In this case, the compiler will explicitly recognise that we’re trying to modify a <code>const</code> and throws an error:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="at">const</span> <span class="dt">char</span>* ptr { <span class="st">&quot;cat&quot;</span> }; <span class="co">// string literal is assigned to a variable</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>ptr[<span class="dv">1</span>] = <span class="st">&quot;o&quot;</span>;              <span class="co">// compiler throws error because you can&#39;t change a const</span></span></code></pre></div>
+<p>The book has a few other details here, but I’m skipping them for now.</p>
+<h3 id="escaping-in-string-literals">Escaping in string literals</h3>
+<p>As with most languages, string literals in C++ include escape sequences as use <code>\</code> as the way to escaping special characters. The book treats this as assumed knowledge, which probably makes sense becaus this isn’t an introductory book and you’re expected to have some prior coding experience before attempting to read it. But for what it’s worth:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="co">// string-escapes.cpp</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">char</span>* str { <span class="st">&quot;Dear world,</span><span class="sc">\n</span><span class="st">I should like to say </span><span class="sc">\&quot;</span><span class="st">hello</span><span class="sc">\&quot;</span><span class="st">.&quot;</span> };</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; str &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>Dear world,
+I should like to say &quot;hello&quot;.</code></pre>
+<h3 id="raw-string-literals">Raw string literals</h3>
+<p>To make life a little easier, C++ also supports <strong>raw string literals</strong>, which do not support escape sequences and do not require escaping of quote marks. To open a raw string literal use <code>R"(</code>, and to close it use <code>)"</code>. Naturally, you cannot construct a raw string literal that actually contains <code>)"</code> as part of the string using this syntax. You can, however, include line breaks by literally typing “enter” when specifying the string. So, ugly as it is, this works:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="co">// raw-string-literal.cpp</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">char</span>* str { <span class="st">R&quot;(Dear world,</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a><span class="st">I too would like to say &quot;hello&quot;.)&quot;</span> };</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; str &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>Dear world,
+I too would like to say &quot;hello&quot;.</code></pre>
+<p>Finally, yes, C++ does support an extended raw string literal syntax in pretty much exactly the way you’d hope, where you can adopt a user defined sequence to signal the opening and closing of the string. For instance, to use <code>**</code> as the delimiter for an extended raw string literal corresponding to <code>"cat"</code>, I’d write <code>R"**(cat)**"</code>. It looks clunky in this case, but it’s super handy for regular expressions and various other situations. A simple example:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a><span class="co">// extended-raw-string-literal.cpp</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">char</span>* str1 { <span class="st">R&quot;**(Raw string literal containing &quot;))**&quot;</span>};</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">char</span>* str2 { <span class="st">R&quot;%%(Raw string literal containing **)%%&quot;</span>};</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; str1 &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; str2 &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>Raw string literal containing &quot;)
+Raw string literal containing **</code></pre></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
