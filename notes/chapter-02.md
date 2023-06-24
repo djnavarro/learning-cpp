@@ -122,3 +122,103 @@ Raw string literal containing ")
 Raw string literal containing **
 ```
 
+## The C++ `std::string` class
+
+At this point the book formally introduces the `std::string` class, a vastly superior option to using C style strings in most contexts. The class is defined in `<string>`, and functionality belongs to the `std` namespace. C++ strings support `+` and `+=` operators for concatenation, `==` for comparison, and subsetting with `[`. Some examples of this here:
+
+```cpp
+// string-class-examples.cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    string a { "owl" };
+    string b { "bear" };
+    string c;
+
+    // overloaded + operator for strings
+    c = a + b;
+    cout << a << " + " << b << " = " << c << endl;
+    
+    // overloaded += operator
+    c += " is the strangest creature"; 
+    cout << c << endl;
+
+    // extracting elements with []
+    cout << "the 17th character in '" << c << "' is " << c[16] << endl; 
+
+    return 0;
+}
+```
+
+```
+owl + bear = owlbear
+owlbear is the strangest creature
+the 17th character in 'owlbear is the strangest creature' is t
+```
+
+At this point the book spends quite a bit of time trying to convince C programmers that C++ strings are a better option if you need to do any string comparison, but of course I'm coming from interpreted languages like R and Python, so I'm coming to this part of the discussion already sold. I have not made any serious attempt to use C strings since 1994, and I have no intention of backsliding now. Suffice it to say logical operations on C++ strings have their usual meaning. Some silly code:
+
+``` cpp
+// string-class-examples.cpp
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    string lowercase { "owl" };
+    string uppercase { "OWL" };
+    bool is_equal { lowercase == uppercase };
+    bool is_lower_lower { lowercase < uppercase };
+    bool is_upper_lower { uppercase < lowercase };
+    cout << "is a lowercase string equal to its uppercase version? " << is_equal << endl;
+    cout << "is a lowercase string 'less than' an uppercase string? " << is_lower_lower << endl;
+    cout << "so is the uppercase string 'less than'? " << is_upper_lower << endl;
+    return 0;
+}
+```
+
+```
+is a lowercase string equal to its uppercase version? 0
+is a lowercase string 'less than' an uppercase string? 0
+so is the uppercase string 'less than'? 1
+```
+
+All according to expectations, so let's move on. C++ strings have a lot of helpful methods that make it easier to work with them. A few examples are demonstrated in this program:
+
+```cpp
+// string-class-handy.cpp
+#include <iostream>
+#include <string>
+
+int main() {
+    std::string owlbear { "owlbear" };
+    std::string owl;
+    std::string bear;
+    int pos;
+
+    // these methods don't change the value of owlbear
+    owl = owlbear.substr(0, 3);  // .substr(pos, len)
+    bear = owlbear.substr(3, 4);
+    pos = owlbear.find("bear");  // .find(str)
+
+    std::cout << owl << " is a substring of " << owlbear << std::endl;
+    std::cout << bear << " is also substring of " << owlbear << std::endl;
+    std::cout << "the " << bear << " substring starts at " << pos << std::endl;
+
+    // this one does
+    owlbear.replace(0, 3, "teddy"); // .replace(pos, len, str)
+    std::cout << "a " << owlbear << " is a different string" << std::endl;
+    return 0;
+}
+```
+
+```
+owl is a substring of owlbear
+bear is also substring of owlbear
+the bear substring starts at 3
+a teddybear is a different string
+```

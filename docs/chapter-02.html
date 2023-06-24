@@ -90,12 +90,92 @@ I too would like to say &quot;hello&quot;.</code></pre>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a>}</span></code></pre></div>
 <pre><code>Raw string literal containing &quot;)
-Raw string literal containing **</code></pre></div>
+Raw string literal containing **</code></pre>
+<h2 id="the-c-stdstring-class">The C++ <code>std::string</code> class</h2>
+<p>At this point the book formally introduces the <code>std::string</code> class, a vastly superior option to using C style strings in most contexts. The class is defined in <code>&lt;string&gt;</code>, and functionality belongs to the <code>std</code> namespace. C++ strings support <code>+</code> and <code>+=</code> operators for concatenation, <code>==</code> for comparison, and subsetting with <code>[</code>. Some examples of this here:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="co">// string-class-examples.cpp</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a>    string a { <span class="st">&quot;owl&quot;</span> };</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true"></a>    string b { <span class="st">&quot;bear&quot;</span> };</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true"></a>    string c;</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true"></a>    <span class="co">// overloaded + operator for strings</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true"></a>    c = a + b;</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true"></a>    cout &lt;&lt; a &lt;&lt; <span class="st">&quot; + &quot;</span> &lt;&lt; b &lt;&lt; <span class="st">&quot; = &quot;</span> &lt;&lt; c &lt;&lt; endl;</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true"></a>    </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true"></a>    <span class="co">// overloaded += operator</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true"></a>    c += <span class="st">&quot; is the strangest creature&quot;</span>; </span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true"></a>    cout &lt;&lt; c &lt;&lt; endl;</span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true"></a></span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true"></a>    <span class="co">// extracting elements with []</span></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true"></a>    cout &lt;&lt; <span class="st">&quot;the 17th character in &#39;&quot;</span> &lt;&lt; c &lt;&lt; <span class="st">&quot;&#39; is &quot;</span> &lt;&lt; c[<span class="dv">16</span>] &lt;&lt; endl; </span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true"></a></span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>owl + bear = owlbear
+owlbear is the strangest creature
+the 17th character in &#39;owlbear is the strangest creature&#39; is t</code></pre>
+<p>At this point the book spends quite a bit of time trying to convince C programmers that C++ strings are a better option if you need to do any string comparison, but of course I’m coming from interpreted languages like R and Python, so I’m coming to this part of the discussion already sold. I have not made any serious attempt to use C strings since 1994, and I have no intention of backsliding now. Suffice it to say logical operations on C++ strings have their usual meaning. Some silly code:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a><span class="co">// string-class-examples.cpp</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true"></a><span class="kw">using</span> <span class="kw">namespace</span> std;</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true"></a>    string lowercase { <span class="st">&quot;owl&quot;</span> };</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true"></a>    string uppercase { <span class="st">&quot;OWL&quot;</span> };</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true"></a>    <span class="dt">bool</span> is_equal { lowercase == uppercase };</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true"></a>    <span class="dt">bool</span> is_lower_lower { lowercase &lt; uppercase };</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true"></a>    <span class="dt">bool</span> is_upper_lower { uppercase &lt; lowercase };</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true"></a>    cout &lt;&lt; <span class="st">&quot;is a lowercase string equal to its uppercase version? &quot;</span> &lt;&lt; is_equal &lt;&lt; endl;</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true"></a>    cout &lt;&lt; <span class="st">&quot;is a lowercase string &#39;less than&#39; an uppercase string? &quot;</span> &lt;&lt; is_lower_lower &lt;&lt; endl;</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true"></a>    cout &lt;&lt; <span class="st">&quot;so is the uppercase string &#39;less than&#39;? &quot;</span> &lt;&lt; is_upper_lower &lt;&lt; endl;</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>is a lowercase string equal to its uppercase version? 0
+is a lowercase string &#39;less than&#39; an uppercase string? 0
+so is the uppercase string &#39;less than&#39;? 1</code></pre>
+<p>All according to expectations, so let’s move on. C++ strings have a lot of helpful methods that make it easier to work with them. A few examples are demonstrated in this program:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a><span class="co">// string-class-handy.cpp</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a>    <span class="bu">std::</span>string owlbear { <span class="st">&quot;owlbear&quot;</span> };</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true"></a>    <span class="bu">std::</span>string owl;</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true"></a>    <span class="bu">std::</span>string bear;</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a>    <span class="dt">int</span> pos;</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true"></a>    <span class="co">// these methods don&#39;t change the value of owlbear</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true"></a>    owl = owlbear.substr(<span class="dv">0</span>, <span class="dv">3</span>);  <span class="co">// .substr(pos, len)</span></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true"></a>    bear = owlbear.substr(<span class="dv">3</span>, <span class="dv">4</span>);</span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true"></a>    pos = owlbear.find(<span class="st">&quot;bear&quot;</span>);  <span class="co">// .find(str)</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true"></a></span>
+<span id="cb15-16"><a href="#cb15-16" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; owl &lt;&lt; <span class="st">&quot; is a substring of &quot;</span> &lt;&lt; owlbear &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb15-17"><a href="#cb15-17" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; bear &lt;&lt; <span class="st">&quot; is also substring of &quot;</span> &lt;&lt; owlbear &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb15-18"><a href="#cb15-18" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;the &quot;</span> &lt;&lt; bear &lt;&lt; <span class="st">&quot; substring starts at &quot;</span> &lt;&lt; pos &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb15-19"><a href="#cb15-19" aria-hidden="true"></a></span>
+<span id="cb15-20"><a href="#cb15-20" aria-hidden="true"></a>    <span class="co">// this one does</span></span>
+<span id="cb15-21"><a href="#cb15-21" aria-hidden="true"></a>    owlbear.replace(<span class="dv">0</span>, <span class="dv">3</span>, <span class="st">&quot;teddy&quot;</span>); <span class="co">// .replace(pos, len, str)</span></span>
+<span id="cb15-22"><a href="#cb15-22" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;a &quot;</span> &lt;&lt; owlbear &lt;&lt; <span class="st">&quot; is a different string&quot;</span> &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb15-23"><a href="#cb15-23" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb15-24"><a href="#cb15-24" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>owl is a substring of owlbear
+bear is also substring of owlbear
+the bear substring starts at 3
+a teddybear is a different string</code></pre></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
 <li><a href="#c-style-strings">C-style strings</a></li>
 <li><a href="#string-literals">String literals</a></li>
+<li><a href="#the-c-stdstring-class">The C++ <code>std::string</code> class</a></li>
 </ul></li>
                </ul>
             </div>
