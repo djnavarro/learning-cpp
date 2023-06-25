@@ -189,7 +189,7 @@ a teddybear is a different string</code></pre>
 <span id="cb17-15"><a href="#cb17-15" aria-hidden="true"></a>}</span></code></pre></div>
 <pre><code>Dani Danielle Daniela </code></pre>
 <p>Anyway.</p>
-<h2 id="numeric-conversion">Numeric conversion</h2>
+<h2 id="converting-numerics-to-strings">Converting numerics to strings</h2>
 <p>Conversion from strings to numeric and vice versa requires a little thought. First, let’s consider “high level” conversion from string to numeric types. We can do that with the <code>to_string()</code> function exposed by <code>&lt;string&gt;</code>. Here’s an example:</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a><span class="co">// string-to-numeric.cpp</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
@@ -221,14 +221,54 @@ a teddybear is a different string</code></pre>
 <pre><code>+ operator on double: 96.4887
 + operator on string: 32.14350064.345200
 + operator on integers: 667
-+ operator on string: 145522</code></pre></div>
++ operator on string: 145522</code></pre>
+<h2 id="converting-strings-to-numerics">Converting strings to numerics</h2>
+<p>To convert a string to a numeric type, you call one of the "sto*" functions. There’s a naming convention for these functions reflecting the specific output type you want. It’s comprehensible, albeit only barely and the names are pointlessly terse. The sheer effort that programmers will go to sometimes to write code that saves a few keystrokes at the cost of making the code look like utter gibberish is remarkable. Anyway:</p>
+<ul>
+<li><code>stoi()</code> returns an <code>int</code></li>
+<li><code>stol()</code> returns a <code>long</code></li>
+<li><code>stoul()</code> returns an <code>unsigned long</code></li>
+<li><code>stoll()</code> returns a <code>long long</code></li>
+<li><code>stoull()</code> returns an <code>unsigned long long</code></li>
+<li><code>stof()</code> returns a <code>float</code></li>
+<li><code>stod()</code> returns a <code>double</code></li>
+<li><code>stold()</code> returns a <code>long double</code></li>
+</ul>
+<p>Peeking ahead a little, I have a suspicion this is something where templates come in handy? But I’m not yet ready for templates so whatever. The key thing for now is that in practice I’d be most likely to need <code>stoi()</code> or <code>stod()</code>, since integers and doubles are my go-to numeric types.</p>
+<p>In any case, all of these functions have identical arguments, so for what it’s worth here’s the function signature for <code>stoi()</code>:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true"></a><span class="dt">int</span> stoi(<span class="at">const</span> string&amp; str, <span class="dt">size_t</span> *idx = <span class="dv">0</span>, <span class="dt">int</span> base = <span class="dv">10</span>);</span></code></pre></div>
+<ul>
+<li>The first argument <code>str</code> is the to-be-converted string</li>
+<li>The second (optional) argument <code>*idk</code> is a pointer that takes the index of the first non-parsed character in the string</li>
+<li>The third (optional) argument <code>base</code> is an integer specifying the mathematical base (defaults to 10, but you could get hexadecimal numbers by setting <code>base = 16</code>).</li>
+</ul>
+<p>When these functions are called, there are a couple of things to note. First, any leading whitespace in the string is ignored. Second, the functions have both a return value (the numeric value) and a side effect (the index of the first nonparsed character is updated). Inelegant as that feels, it can be handy. Here’s a slighly tweaked version of the example given in the book that illustrates the point:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="co">// stoi.cpp</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true"></a></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true"></a>    <span class="bu">std::</span>string monetary_string {}, monetary_unit {};</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true"></a>    <span class="dt">size_t</span> index { <span class="dv">0</span> };</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true"></a>    <span class="dt">int</span> monetary_value { <span class="dv">0</span> };</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true"></a></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true"></a>    <span class="co">// number is stored as the return value, index is modified</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true"></a>    monetary_string = <span class="st">&quot;    123AUD&quot;</span>;</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true"></a>    monetary_value = <span class="bu">std::</span>stoi(monetary_string, &amp;index);</span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true"></a>    monetary_unit = monetary_string.substr(index, <span class="dv">3</span>);</span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true"></a></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;value: &quot;</span> &lt;&lt; monetary_value &lt;&lt; <span class="st">&quot;, unit: &quot;</span> &lt;&lt; monetary_unit &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>value: 123, unit: AUD</code></pre></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
 <li><a href="#c-style-strings">C-style strings</a></li>
 <li><a href="#string-literals">String literals</a></li>
 <li><a href="#the-c-stdstring-class">The C++ <code>std::string</code> class</a></li>
-<li><a href="#numeric-conversion">Numeric conversion</a></li>
+<li><a href="#converting-numerics-to-strings">Converting numerics to strings</a></li>
+<li><a href="#converting-strings-to-numerics">Converting strings to numerics</a></li>
 </ul></li>
                </ul>
             </div>

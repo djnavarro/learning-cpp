@@ -251,7 +251,7 @@ Dani Danielle Daniela
 
 Anyway.
 
-## Numeric conversion
+## Converting numerics to strings
 
 Conversion from strings to numeric and vice versa requires a little thought. First, let's consider "high level" conversion from string to numeric types. We can do that with the `to_string()` function exposed by `<string>`. Here's an example:
 
@@ -290,4 +290,55 @@ int main () {
 + operator on string: 32.14350064.345200
 + operator on integers: 667
 + operator on string: 145522
+```
+
+## Converting strings to numerics
+
+To convert a string to a numeric type, you call one of the "sto*" functions. There's a naming convention for these functions reflecting the specific output type you want. It's comprehensible, albeit only barely and the names are pointlessly terse. The sheer effort that programmers will go to sometimes to write code that saves a few keystrokes at the cost of making the code look like utter gibberish is remarkable. Anyway:
+
+- `stoi()` returns an `int`
+- `stol()` returns a `long`
+- `stoul()` returns an `unsigned long`
+- `stoll()` returns a `long long`
+- `stoull()` returns an `unsigned long long`
+- `stof()` returns a `float`
+- `stod()` returns a `double`
+- `stold()` returns a `long double`
+
+Peeking ahead a little, I have a suspicion this is something where templates come in handy? But I'm not yet ready for templates so whatever. The key thing for now is that in practice I'd be most likely to need `stoi()` or `stod()`, since integers and doubles are my go-to numeric types.
+
+In any case, all of these functions have identical arguments, so for what it's worth here's the function signature for `stoi()`:
+
+``` cpp
+int stoi(const string& str, size_t *idx = 0, int base = 10);
+```
+
+- The first argument `str` is the to-be-converted string
+- The second (optional) argument `*idk` is a pointer that takes the index of the first non-parsed character in the string
+- The third (optional) argument `base` is an integer specifying the mathematical base (defaults to 10, but you could get hexadecimal numbers by setting `base = 16`).
+
+When these functions are called, there are a couple of things to note. First, any leading whitespace in the string is ignored. Second, the functions have both a return value (the numeric value) and a side effect (the index of the first nonparsed character is updated). Inelegant as that feels, it can be handy. Here's a slighly tweaked version of the example given in the book that illustrates the point:
+
+``` cpp
+// stoi.cpp
+#include <iostream>
+#include <string>
+
+int main() {
+    std::string monetary_string {}, monetary_unit {};
+    size_t index { 0 };
+    int monetary_value { 0 };
+
+    // number is stored as the return value, index is modified
+    monetary_string = "    123AUD";
+    monetary_value = std::stoi(monetary_string, &index);
+    monetary_unit = monetary_string.substr(index, 3);
+
+    std::cout << "value: " << monetary_value << ", unit: " << monetary_unit << std::endl;
+    return 0;
+}
+```
+
+```
+value: 123, unit: AUD
 ```
