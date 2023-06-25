@@ -91,7 +91,7 @@ I too would like to say &quot;hello&quot;.</code></pre>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true"></a>}</span></code></pre></div>
 <pre><code>Raw string literal containing &quot;)
 Raw string literal containing **</code></pre>
-<h2 id="the-c-stdstring-class">The C++ <code>std::string</code> class</h2>
+<h2 id="the-stdstring-class">The <code>std::string</code> class</h2>
 <p>At this point the book formally introduces the <code>std::string</code> class, a vastly superior option to using C style strings in most contexts. The class is defined in <code>&lt;string&gt;</code>, and functionality belongs to the <code>std</code> namespace. C++ strings support <code>+</code> and <code>+=</code> operators for concatenation, <code>==</code> for comparison, and subsetting with <code>[</code>. Some examples of this here:</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a><span class="co">// string-class-examples.cpp</span></span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
@@ -260,15 +260,20 @@ a teddybear is a different string</code></pre>
 <span id="cb22-15"><a href="#cb22-15" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; <span class="st">&quot;value: &quot;</span> &lt;&lt; monetary_value &lt;&lt; <span class="st">&quot;, unit: &quot;</span> &lt;&lt; monetary_unit &lt;&lt; <span class="bu">std::</span>endl;</span>
 <span id="cb22-16"><a href="#cb22-16" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
 <span id="cb22-17"><a href="#cb22-17" aria-hidden="true"></a>}</span></code></pre></div>
-<pre><code>value: 123, unit: AUD</code></pre></div>
+<pre><code>value: 123, unit: AUD</code></pre>
+<h2 id="low-level-conversions">Low level conversions</h2>
+<p>At this point the book also discusses lower level functions to convert between strings and numeric values. The lower level functions require more care but can be much much faster. For now, I’m going to skip this section and leave it as a promissory note to myself that I may want to return to this one day.</p>
+<h2 id="the-stdstring_view-class">The <code>std::string_view</code> class</h2></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
 <li><a href="#c-style-strings">C-style strings</a></li>
 <li><a href="#string-literals">String literals</a></li>
-<li><a href="#the-c-stdstring-class">The C++ <code>std::string</code> class</a></li>
+<li><a href="#the-stdstring-class">The <code>std::string</code> class</a></li>
 <li><a href="#converting-numerics-to-strings">Converting numerics to strings</a></li>
 <li><a href="#converting-strings-to-numerics">Converting strings to numerics</a></li>
+<li><a href="#low-level-conversions">Low level conversions</a></li>
+<li><a href="#the-stdstring_view-class">The <code>std::string_view</code> class</a></li>
 </ul></li>
                </ul>
             </div>

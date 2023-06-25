@@ -122,7 +122,7 @@ Raw string literal containing ")
 Raw string literal containing **
 ```
 
-## The C++ `std::string` class
+## The `std::string` class
 
 At this point the book formally introduces the `std::string` class, a vastly superior option to using C style strings in most contexts. The class is defined in `<string>`, and functionality belongs to the `std` namespace. C++ strings support `+` and `+=` operators for concatenation, `==` for comparison, and subsetting with `[`. Some examples of this here:
 
@@ -342,3 +342,9 @@ int main() {
 ```
 value: 123, unit: AUD
 ```
+
+## Low level conversions
+
+At this point the book also discusses lower level functions to convert between strings and numeric values. The lower level functions require more care but can be much much faster. For now, I'm going to skip this section and leave it as a promissory note to myself that I may want to return to this one day.
+
+## The `std::string_view` class
