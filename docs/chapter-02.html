@@ -263,7 +263,65 @@ a teddybear is a different string</code></pre>
 <pre><code>value: 123, unit: AUD</code></pre>
 <h2 id="low-level-conversions">Low level conversions</h2>
 <p>At this point the book also discusses lower level functions to convert between strings and numeric values. The lower level functions require more care but can be much much faster. For now, I’m going to skip this section and leave it as a promissory note to myself that I may want to return to this one day.</p>
-<h2 id="the-stdstring_view-class">The <code>std::string_view</code> class</h2></div>
+<h2 id="the-stdstring_view-class">The <code>std::string_view</code> class</h2>
+<p>Until this very moment in my life I had not heard of C++ string views. Not because they aren’t valuable, but, rather, because they were introduced only in C++17. Most R code that calls C++ uses C++11, and most other projects I’ve interacted with are also on older C++ versions. The problem solved by string views is to provide a read-only view of a string (it doesn’t make copies) and as such is pretty handy when defining functions that take a read-only string as input.</p>
+<p>The book uses the example of a function that extracts a file extension:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true"></a><span class="co">// file-extension.cpp</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true"></a><span class="bu">std::</span>string_view file_extension(<span class="bu">std::</span>string_view file_name) {</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true"></a>    <span class="cf">return</span> file_name.substr(file_name.rfind(<span class="ch">&#39;.&#39;</span>));</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true"></a>}</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true"></a>    <span class="co">// same content, different types</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true"></a>    <span class="bu">std::</span>string file1 { <span class="st">R&quot;(c:\temp\badly named file.txt)&quot;</span> }; </span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true"></a>    <span class="at">const</span> <span class="dt">char</span>* file2 { <span class="st">R&quot;(c:\temp\badly named file.txt)&quot;</span> }; </span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true"></a></span>
+<span id="cb24-14"><a href="#cb24-14" aria-hidden="true"></a>    <span class="co">// works for C++ strings, C strings, and string literals</span></span>
+<span id="cb24-15"><a href="#cb24-15" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; file_extension(file1) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb24-16"><a href="#cb24-16" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; file_extension(file2) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb24-17"><a href="#cb24-17" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; file_extension(<span class="st">R&quot;(c:\temp\badly named file.txt)&quot;</span>) &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb24-18"><a href="#cb24-18" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb24-19"><a href="#cb24-19" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>.txt
+.txt
+.txt</code></pre>
+<p>The thing to keep in mind is that you can’t implicitly convert a string view to a string. You have to construct it explicitly. You can do this by calling the <code>.data()</code> method for a string view, or by explicit construction:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true"></a><span class="co">// file-extension-2.cpp</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;iostream&gt;</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true"></a><span class="pp">#include </span><span class="im">&lt;string&gt;</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true"></a><span class="bu">std::</span>string_view file_extension(<span class="bu">std::</span>string_view file_name) {</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true"></a>    <span class="cf">return</span> file_name.substr(file_name.rfind(<span class="ch">&#39;.&#39;</span>));</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true"></a>}</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true"></a></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true"></a><span class="dt">void</span> print_string(<span class="at">const</span> <span class="bu">std::</span>string&amp; str) {</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true"></a>    <span class="bu">std::</span>cout &lt;&lt; str &lt;&lt; <span class="bu">std::</span>endl;</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true"></a>}</span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true"></a></span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true"></a><span class="dt">int</span> main() {</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true"></a>    <span class="bu">std::</span>string file { <span class="st">R&quot;(c:\temp\badly named file.txt)&quot;</span> }; </span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true"></a></span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true"></a>    <span class="co">// print_string(file_extension(file));              // fails</span></span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true"></a>    print_string(file_extension(file).data());          <span class="co">// works</span></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true"></a>    print_string(<span class="bu">std::</span>string { file_extension(file) }); <span class="co">// works</span></span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true"></a></span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true"></a>    <span class="cf">return</span> <span class="dv">0</span>;</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true"></a>}</span></code></pre></div>
+<pre><code>.txt
+.txt</code></pre>
+<p>I think the key message implicit in these examples is that you always want to think about precisely what you are trying to do with the text.</p>
+<ul>
+<li>Are you trying to pass a read-only string to a function: have it accept a string view</li>
+<li>Should the return value of a function be read-only? If yes, it can return a <code>std::string_view</code>, but if it’s supposed to be modifiable then the return type you want is either <code>std::string</code> or – if a reference is preferred – <code>const std::string&amp;</code></li>
+</ul>
+<p>There’s also a need for care in regards to temporary strings. You don’t want to store a view of a temporary string: if the string itself goes away, so too does the view. The example usd in the book is essentially this:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true"></a><span class="bu">std::</span>string s { <span class="st">&quot;Hello&quot;</span> }; </span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true"></a><span class="bu">std::</span>string_view v { s + <span class="st">&quot; world&quot;</span> };  <span class="co">// badness!</span></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true"></a><span class="bu">std::</span>cout &lt;&lt; v &lt;&lt; <span class="bu">std::</span>endl;</span></code></pre></div>
+<p>This is undefined behaviour, and apparently gives different results depending on the compiler and compiler settings. It took me a moment to understand where the badness is coming from. The issue here is that when <code>v</code> is initialised, a temporary string <code>s + " world"</code> is constructed, and then <code>v</code> is defined as string view of that temporary string. However, it really is a temporary string: it goes away at the end of line 2, which leaves <code>v</code> undefined (or more precisely, <code>v</code> is now a dangling pointer to a string that doesn’t exist). That is the badness.</p></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>

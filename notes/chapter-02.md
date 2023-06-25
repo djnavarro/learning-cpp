@@ -348,3 +348,81 @@ value: 123, unit: AUD
 At this point the book also discusses lower level functions to convert between strings and numeric values. The lower level functions require more care but can be much much faster. For now, I'm going to skip this section and leave it as a promissory note to myself that I may want to return to this one day.
 
 ## The `std::string_view` class
+
+Until this very moment in my life I had not heard of C++ string views. Not because they aren't valuable, but, rather, because they were introduced only in C++17. Most R code that calls C++ uses C++11, and most other projects I've interacted with are also on older C++ versions. The problem solved by string views is to provide a read-only view of a string (it doesn't make copies) and as such is pretty handy when defining functions that take a read-only string as input.
+
+The book uses the example of a function that extracts a file extension:
+
+``` cpp
+// file-extension.cpp
+#include <iostream>
+#include <string>
+
+std::string_view file_extension(std::string_view file_name) {
+    return file_name.substr(file_name.rfind('.'));
+}
+
+int main() {
+    // same content, different types
+    std::string file1 { R"(c:\temp\badly named file.txt)" }; 
+    const char* file2 { R"(c:\temp\badly named file.txt)" }; 
+
+    // works for C++ strings, C strings, and string literals
+    std::cout << file_extension(file1) << std::endl;
+    std::cout << file_extension(file2) << std::endl;
+    std::cout << file_extension(R"(c:\temp\badly named file.txt)") << std::endl;
+    return 0;
+}
+```
+
+```
+.txt
+.txt
+.txt
+```
+
+The thing to keep in mind is that you can't implicitly convert a string view to a string. You have to construct it explicitly. You can do this by calling the `.data()` method for a string view, or by explicit construction:
+
+``` cpp
+// file-extension-2.cpp
+#include <iostream>
+#include <string>
+
+std::string_view file_extension(std::string_view file_name) {
+    return file_name.substr(file_name.rfind('.'));
+}
+
+void print_string(const std::string& str) {
+    std::cout << str << std::endl;
+}
+
+int main() {
+    std::string file { R"(c:\temp\badly named file.txt)" }; 
+
+    // print_string(file_extension(file));              // fails
+    print_string(file_extension(file).data());          // works
+    print_string(std::string { file_extension(file) }); // works
+
+    return 0;
+}
+```
+
+```
+.txt
+.txt
+```
+
+I think the key message implicit in these examples is that you always want to think about precisely what you are trying to do with the text. 
+
+- Are you trying to pass a read-only string to a function: have it accept a string view
+- Should the return value of a function be read-only? If yes, it can return a `std::string_view`, but if it's supposed to be modifiable then the return type you want is either `std::string` or -- if a reference is preferred -- `const std::string&`
+
+There's also a need for care in regards to temporary strings. You don't want to store a view of a temporary string: if the string itself goes away, so too does the view. The example usd in the book is essentially this:
+
+``` cpp
+std::string s { "Hello" }; 
+std::string_view v { s + " world" };  // badness!
+std::cout << v << std::endl;
+```
+
+This is undefined behaviour, and apparently gives different results depending on the compiler and compiler settings. It took me a moment to understand where the badness is coming from. The issue here is that when `v` is initialised, a temporary string `s + " world"` is constructed, and then `v` is defined as string view of that temporary string. However, it really is a temporary string: it goes away at the end of line 2, which leaves `v` undefined (or more precisely, `v` is now a dangling pointer to a string that doesn't exist). That is the badness. 
