@@ -8,3 +8,4 @@ Chapter notes:
 
 - [Chapter 1: A crash course in C++ and the standard library](chapter-01.html)
 - [Chapter 2: Working with strings and string views](chapter-02.html)
+- [Chapter 3: Coding with style](chapter-03.html)

@@ -426,3 +426,9 @@ std::cout << v << std::endl;
 ```
 
 This is undefined behaviour, and apparently gives different results depending on the compiler and compiler settings. It took me a moment to understand where the badness is coming from. The issue here is that when `v` is initialised, a temporary string `s + " world"` is constructed, and then `v` is defined as string view of that temporary string. However, it really is a temporary string: it goes away at the end of line 2, which leaves `v` undefined (or more precisely, `v` is now a dangling pointer to a string that doesn't exist). That is the badness. 
+
+## String formatting
+
+The book has a long discussion at this point about C++20 style string formatting options using the `format()` function provided by the `<format>` library. It looks really nice, but doesn't seem to be supported in clang15 so I'm skipping this section. That said, I did a bit of extra reading elsewhere and the `<fmt>` library (external) appears to be the way you would do this properly in older versions of C++. That's nice and all, but again I'm going to leave this as a promissory note to future me. 
+
+[Back to top](index.html)
