@@ -17,7 +17,118 @@
    <body>
             <div class="container">
          <h1 class="title">3: Coding with style</h1>
-         <p><a href="index.html">Back to top</a></p>      </div>
+                  <div class="row">
+            <div class="col-xl-10"><p><a href="index.html">Back to top</a></p>
+<p>Chapter 3 focuses on the elements of good coding style. The short version is very familiar. At the beginning of the chapter the following themes are listed:</p>
+<ul>
+<li>Documentation</li>
+<li>Decomposition</li>
+<li>Naming</li>
+<li>Use of the language</li>
+<li>Formatting</li>
+</ul>
+<h2 id="documentation">Documentation</h2>
+<p>I found the section on documentation interesting, because it focuses very heavily on code comments (which generally target developers maintaining or extending the code), whereas most of my experience with writing documentation targets users who need to call the code. In that sense it seems like there’s a meaningful difference between <strong>documentation for developers</strong> and <strong>documentation for users</strong>. The chapter seems to focus more on the former than the latter: regular users don’t look at the source code to work out how to interact with the public facing API, they look for tutorials, API reference pages, and so on. It’s only the devs (which, could of course include anyone submitting a pull request) who read the code comments!</p>
+<h3 id="comments-explain-the-things-that-are-hard-to-extract-from-the-code">Comments explain the things that are hard to extract from the code</h3>
+<p>With that in mind, one thing I found especially interesting is that the book advocates for a much more verbose commenting style than I typically see in the wild (either in C++ or R). Here’s what I mean. The book uses the example of a <code>saveRecord()</code> function with this signature:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="dt">int</span> saveRecord(Record&amp; record);</span></code></pre></div>
+<p>There’s no actual source code provided, but <em>maaaaaaaybe</em> someone reading the source code would work out that this function will throw an exception if <code>openDatabase()</code> has not yet been called. However, the most likely scenario is that it’s a pain in the arse for the reader of the code – per the fundamental law of programming that code is harder to read than to write – so it’s best to preface the source code with a comment like this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co">// Throws:</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a><span class="co">//    DatabaseNotOpenedException if the openDatabase() method </span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a><span class="co">//    has not been called yet</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="dt">int</span> saveRecord(Record&amp; record);</span></code></pre></div>
+<p>There are other things about this function that might not be obvious. Someone reading the code might notice that the <code>record</code> argument has type <code>Record&amp;</code>: it’s a reference to a non-const. A reader might wonder if that ought to be <code>const Record&amp;</code>, so this should be explained:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="co">// Parameters:</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="co">//    record: If the given record does not yet have a database </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true"></a><span class="co">//    ID, then the method modifies the record object to store</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true"></a><span class="co">//    the ID assigned by the database     </span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true"></a><span class="co">// Throws:</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true"></a><span class="co">//    DatabaseNotOpenedException if the openDatabase() method </span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true"></a><span class="co">//    has not been called yet</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true"></a><span class="dt">int</span> saveRecord(Record&amp; record);</span></code></pre></div>
+<p>That makes a lot more sense. The <code>record</code> argument cannot be declared <code>const</code> because it’s possible that the <code>saveRecord()</code> function will modify the original <code>Record</code> object to which it refers.</p>
+<p>As an aside, I’m genuinely delighted to see the author advocating that code comments preserve this level of detail. Over and over again I find myself reading through a code base where it is 100% clear to me that the developer thinks “oh this is obvious, you should just be able to read my code, it is totally self-documenting”. This is almost <em>never</em> true. I’ve seen very little code that is truly self-documenting for a reader who is not the same person as the author. Of course, that doesn’t mean every code base should be meticulously documented, it’s more… if you document at the level where only future-you can easily read the code, then other people will be less inclined to interact with your code. That’s a legitimate choice… the <em>vast</em> majority of my code on GitHub is like that because I’m not looking for other users. I wrote the code for myself, and I’ve documented it to exactly the level required to ensure that future-Danielle (who has similar skills and thought patterns to me, I presume!) will be able to make sense of it.</p>
+<h3 id="sometimes-a-well-named-class-removes-the-need-for-a-comment">Sometimes a well-named class removes the need for a comment</h3>
+<p>Anyway, getting back on track, the book then asks the question of whether we should consider extending the documentation even further by explaining the <code>int</code> return type? We could, for example, do this:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="co">// Parameters:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a><span class="co">//    record: If the given record does not yet have a database </span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true"></a><span class="co">//    ID, then the method modifies the record object to store</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true"></a><span class="co">//    the ID assigned by the database  </span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true"></a><span class="co">// Returns: int</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true"></a><span class="co">//    An integer representing the ID of the saved record</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true"></a><span class="co">// Throws:</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true"></a><span class="co">//    DatabaseNotOpenedException if the openDatabase() method </span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true"></a><span class="co">//    has not been called yet</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true"></a><span class="dt">int</span> saveRecord(Record&amp; record);</span></code></pre></div>
+<p>It’s pretty tempting to do this, because honestly that <code>int</code> isn’t very comprehensible, and the reader would have to dig into the code a fair ways in order to make sense of it. However, a better approach would be to define a very simple <code>RecordID</code> class. Most likely, a <code>RecordID</code> object would simply store an integer, but the mere fact that we’ve defined the class and given it a comprehensible name ensures that the function signature of <code>saveRecord()</code> is quite a bit more comprehensible:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="co">// Parameters:</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a><span class="co">//    record: If the given record does not yet have a database </span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a><span class="co">//    ID, then the method modifies the record object to store</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a><span class="co">//    the ID assigned by the database     </span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true"></a><span class="co">// Throws:</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true"></a><span class="co">//    DatabaseNotOpenedException if the openDatabase() method </span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true"></a><span class="co">//    has not been called yet</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true"></a>RecordID saveRecord(Record&amp; record);</span></code></pre></div>
+<p>Plus, it’s a little more future proof: the <code>RecordID</code> class could be extended later if need be.</p>
+<h3 id="your-code-is-a-lot-more-complex-than-you-think-it-is">Your code is a lot more complex than you think it is</h3>
+<p>The next point the book makes about commenting is that comments within a function serve an important purpose too. My experience has been that programmers grossly underestimate the complexity of their own code, and grossly overestimate the degree to which a reader of their code shares “common ground knowledge” with them. The book – perhaps pointedly, I can’t tell? – gives the example of insertion sort. A loooooooooooooot of programmers would write this and think the code is “self-documenting”:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="dt">void</span> sort(<span class="dt">int</span> data[], <span class="dt">size_t</span> size) {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>    <span class="cf">for</span> (<span class="dt">int</span> i { <span class="dv">1</span> }; i &lt; size; i++) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true"></a>        <span class="dt">int</span> element { data[i] };</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true"></a>        <span class="dt">int</span> j { i };</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true"></a>        <span class="cf">while</span> (j &gt; <span class="dv">0</span> &amp;&amp; data[j - <span class="dv">1</span>] &gt; element) {</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true"></a>            data[j] = data[j - <span class="dv">1</span>];</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true"></a>            j--;</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true"></a>        }</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true"></a>        data[j] = element;</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true"></a>    }</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true"></a>}</span></code></pre></div>
+<p>The book has words of wisdom here:</p>
+<blockquote>
+<p>You might recognize the algorithm if you have seen it before, but a newcomer probably wouldn’t understand the way the code works.</p>
+</blockquote>
+<p>The implication here is that if you believe this code “doesn’t need comments”, what you’re really saying is “newcomers can fuck off”. There’s, um, quite a bit of that attitude in the programming world. The implicit assumption here that “everybody knows insertion sort (because undergrad compsci classes almost always use sorting algorithms for pedagogical purposes)” functions as a kind of cultural shibboleth. It ensures that the world remains closed to everyone who arrived to programming from a non-traditional background and didn’t take those classes.</p>
+<p>The book then goes on to offer the following as an example of better documentation:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a><span class="co">// Implements the &quot;insertion sort&quot; algorithm. The algorithm separates the </span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="co">// array into two parts -- the sorted part and the unsorted part. Each </span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true"></a><span class="co">// element, starting at position 1, is examined. Everything earlier in the</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true"></a><span class="co">// array is in the sorted part, so the algorithm shifts each element over</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true"></a><span class="co">// until the correct position is found to insert the current element. When</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true"></a><span class="co">// the algorithm finishes with the last element, the entire array is sorted.</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true"></a><span class="dt">void</span> sort(<span class="dt">int</span> data[], <span class="dt">size_t</span> size) {</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true"></a>    <span class="co">// Start at position 1 and examine each element</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true"></a>    <span class="cf">for</span> (<span class="dt">int</span> i { <span class="dv">1</span> }; i &lt; size; i++) {</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true"></a>        <span class="co">// Loop invariant:</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true"></a>        <span class="co">//    All elements in the range 0 to i-1 (inclusive) are sorted</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true"></a>        <span class="dt">int</span> element { data[i] };</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true"></a>        <span class="dt">int</span> j { i }; <span class="co">// j is the position in the sorted part where element will be inserted</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true"></a></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true"></a>        <span class="co">// As long as the value in the slot before the current slot in the </span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true"></a>        <span class="co">// sorted array is higher than the element, shift values to the right</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true"></a>        <span class="co">// to make room for inserting element (hence the name, &quot;insertion </span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true"></a>        <span class="co">// sort&quot;) in the correct position</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true"></a>        <span class="cf">while</span> (j &gt; <span class="dv">0</span> &amp;&amp; data[j - <span class="dv">1</span>] &gt; element) {</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true"></a>            data[j] = data[j - <span class="dv">1</span>]; <span class="co">// invariant: elements in the range j+1 to i are &gt; element</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true"></a>            j--; <span class="co">// invariant: elements in the range i to i are &gt; element</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true"></a>        }</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true"></a></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true"></a>        <span class="co">// At this point the current position in the sorted array is *not* greater</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true"></a>        <span class="co">// than the element, so this is its new position</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true"></a>        data[j] = element;</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true"></a>    }</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true"></a>}</span></code></pre></div>
+<p>It’s actually rather surprising to me that the book goes this far in arguing for detailed internal documentation. Not going to lie, it does make me happy, because I can look at the second version and immediately understand what the code does. The first version? Not so much.</p></div>
+            <div class="d-none d-xl-block col-xl-2 bd-toc">
+               <ul class="section-nav">
+                  <li class="toc-entry"><ul>
+<li><a href="#documentation">Documentation</a></li>
+</ul></li>
+               </ul>
+            </div>
+         </div>
+               </div>
             <!-- JS, Popper.js, and jQuery -->
       <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
