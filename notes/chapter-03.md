@@ -143,3 +143,51 @@ void sort(int data[], size_t size) {
 
 It's actually rather surprising to me that the book goes this far in arguing for detailed internal documentation. Not going to lie, it does make me happy, because I can look at the second version and immediately understand what the code does. The first version? Not so much. 
 
+At this point the book goes on a bit to talk about the idea of "commenting every line", which takes things to an extreme. Not surprisingly, the author concludes that in practice this is unwieldy. Sometimes it's useful to do that, but it's more the exception than the rule, and often the real advantage to doing so is that it helps the author of the code ensure that each line of code is doing something worth including!
+
+It also leads naturally to an extension of the idea we saw earlier with the `RecordID` helper class:
+
+### Sometimes a well-named function removes the need for a comment
+
+In the middle of one of the examples of not-so-great commenting, the book shows a line of code that includes this comment:
+
+``` cpp
+if (result % 2 == 0) {        // If the result modulo 2 is 0 ...
+```
+
+This comment is almost completely useless because it's literally a redescription of the code. A slightly better version of the same comment would describe the *functionality* provided by this line of code:
+
+``` cpp
+if (result % 2 == 0) {        // If the result is an even number ...
+```
+
+But the moment you write something like this, you realise that you can eliminate the comment entirely by writing a helper function:
+
+``` cpp
+bool isEven(int value) { return value % 2 == 0; }
+```
+
+This helper is so obvious that it doesn't need any commenting, and better yet, if we invoke the helper function in the original context we don't need to comment that either:
+
+``` cpp
+if (isEven(result)) { 
+```
+
+This code is both easier to read *and* easier to maintain: by encapsulating the "semantics" into a helper function (or, in the earlier example, a helper class), the developer can write code that expresses the core meaning more transparently (`saveRecord()` returns a `RecordID`, and `isEven(result)` checks for evenness), and doesn't have to worry about the possibility that later edits will accidentally change the semantics of code without having those changes reflected in the comments.
+
+(Though I will mention that one problem I've seen in large code bases that rely extensively on these tricks is that they run the risk of including so many of these helper functions and classes that it's really hard to figure out how all the parts fit together)
+
+### Other stylistic comments on comments?
+
+The book has a bunch of other recommendations about comment style. I mostly agree with these.
+
+- Before adding a comment, see if you can rewrite the code to make it unnecessary. Helper functions, helper classes, sensible choice of variable names, etc, can be valuable. Yep, no disagreements here.
+- Imagine someone else is reading your code. This might help you find things that need documentation. Okay yes, I agree, but at the same time I think it's important to think about *who* this other person is an what knowledge they might have. It's waaaaay too easy to accidentally end up imagining an "other" person who happens to have the exact same knowledge and experience that you do. Doing so leads to comments that don't help anyone except the specific person who wrote the code.
+- Don't use comments for things that version control handles for you: `git blame` will tell you who wrote a particular code snippet etc.
+- When calling some other API that someone else (again: someone else who isn't just "you wearing a different hat") might not be familiar with, include a link or reference to the relevant documentation for that API
+- Take comments seriously: updating the code is *not* finished until you've updated the comments
+- Avoid derogatory or offensive language. I mean... yeah.
+- The author writes "Liberal use of inside jokes is generally considered OK." I would disagree. That works if you're writing a blog post for your friends, or whatever. It *doesn't* work when you're writing something that has to be understood by others. Too often, overusing inside jokes inside the codebase functions as shibboleths, and contributes to a culture that is hostile to outsiders. Yes, we all have to have some fun, but... inside jokes should be uses sparingly (not liberally), in my opinion.
+
+## Decomposition
+
