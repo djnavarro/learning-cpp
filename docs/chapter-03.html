@@ -144,12 +144,70 @@
 <li>Avoid derogatory or offensive language. I mean… yeah.</li>
 <li>The author writes “Liberal use of inside jokes is generally considered OK.” I would disagree. That works if you’re writing a blog post for your friends, or whatever. It <em>doesn’t</em> work when you’re writing something that has to be understood by others. Too often, overusing inside jokes inside the codebase functions as shibboleths, and contributes to a culture that is hostile to outsiders. Yes, we all have to have some fun, but… inside jokes should be uses sparingly (not liberally), in my opinion.</li>
 </ul>
-<h2 id="decomposition">Decomposition</h2></div>
+<h2 id="decomposition">Decomposition</h2>
+<p>The central idea in decomposition is to write code in small, reusable chunks rather than putting all the code into one long function or script. To an extent we all agree that this is a good idea, but of course it’s not something easy to formalise. I once worked on a project where the linter started yelling at you whenever the <a href="https://en.wikipedia.org/wiki/Cyclomatic_complexity">cyclomatic complexity</a> of any function exceeded some largely arbitrary threshold. It mostly worked, but there were a couple of places in the code base where it actually made sense to dump many, many things into one tedious function. Because there wasn’t a way of telling the linter to easy up, it became necessary to split the large function up into many smaller functions… but those smaller functions weren’t actually any easier to understand. In fact it was worse, because the smaller functions were more arbitrary than the big one.</p>
+<p>But whatevs. That’s probably the exception that proves the rule. On the whole it’s a good idea to break up really big functions into smaller reusable ones. Probably the more important thing here is to look at methods to help you decompose your code when you’ve decided it’s necessary.</p>
+<h3 id="refactoring-tricks">Refactoring tricks</h3>
+<p>Right, so the book starts this section by defining <strong>refactoring</strong>: restructuring your code, for whatever reason. It’s a big topic in itself, but the book lists some tips. First, you can rewrite your code to allow for more abstraction:</p>
+<ul>
+<li>Encapsulate a field: Make the relevant field private, and write public get/set methods</li>
+<li>Generalise types: Create more general-purpose types to make code sharing/reuse easier</li>
+</ul>
+<p>Second, you can break the code apart:</p>
+<ul>
+<li>Extract a method/function: Take part of a large method/function and make it into its own method/function to make the code easier to read</li>
+<li>Extract a class: Take parts of a big class and make it into its own smaller class.</li>
+</ul>
+<p>Third, you can improve code names and location of code:</p>
+<ul>
+<li>Move a method/field to a more appropriate class or file</li>
+<li>Rename method or field to something that clarifies its role</li>
+<li>“Pull up”: in the OOP context, move to a base class</li>
+<li>“Push down”: again in the OOP context, move to a derived class</li>
+</ul>
+<p>Those last two are a bit opaque to me but the rest makes sense.</p>
+<p>(The book includes the standard warning here about the importance of unit testing… don’t try to refactor your code until you have some unit tests you trust. Otherwise it’s too easy to end up ugly code that works, and ending up with pretty code that doesn’t… which is not in fact helpful)</p>
+<h3 id="decomposition-by-design">Decomposition by design</h3>
+<p>The other possibility, of course, is to design your code to be modular from the very beginning. Fair point. There’s a lot to be said for starting out with a “sketch” of the code plans in advance how the functionality will be decomposed.</p>
+<h2 id="naming-things">Naming things</h2>
+<p>Ah, everyone’s favourite topic. Quick summary of key points:</p>
+<ul>
+<li>Prefer names that disambiguate: <code>sourceData</code> and <code>outputData</code> are better than <code>dat1</code> and <code>dat2</code></li>
+<li>Prefer names that are not too long: the book suggests <code>g_settings</code> is sufficient to specify a global setting, whereas <code>globalUserSpecificSettingsAndPreferences</code> is going overboard</li>
+<li>Prefer names that are not too short: <code>m_commonName</code> is sufficient to describe the variable and indicate that it is a data member, whereas <code>m_cn</code> doesn’t tell the reader anything</li>
+<li>Prefer names that convey behaviour precisely: <code>computeDerivative()</code> tells you what the function does, whereas <code>doThing()</code> of course does not</li>
+<li>Prefer human readable names: <code>mersenneTwister</code> is comprehensible to a reader, <code>mt19937_64</code> is… not</li>
+<li>Prefer names that don’t abbreviate, where possible: <code>sourceFile</code> is better than <code>srcFile</code></li>
+<li>As usual, don’t use offensive names, and avoid inside jokes</li>
+</ul>
+<p>Some specific comments on names for indexing variables, which are conventionally given the labels <code>i</code> and <code>j</code>:</p>
+<ul>
+<li>When indices are used to specify row and column indices in a dimensional object, it’s often better to explicitly call them <code>row</code> and <code>col</code>. That way you never get confused about whether <code>i</code> refers to the row index or the column index.</li>
+<li>While it’s <em>usually</em> conventional to assume that <code>i</code> indexes the outermost loop, <code>j</code> indexes the next loop, and <code>k</code> indexes the third level of nested indexing, it’s sometimes more readable if <code>i</code> and <code>j</code> are replaced by something like <code>inner</code> and <code>outer</code>. More generally, choosing something meaningful helps. In the statistical context, for instance, <code>t</code> might be used to iterate over times, <code>g</code> iterates over groups, etc. I have found that helpful because those indexing variable are almost always a better match to subscripts or other variables that appear in the mathematical specification of a model.</li>
+</ul>
+<p>It’s often valuable to have a system of comprehensible prefixes that make certain information immediately clear (at least to someone who knows the system) from the variable name. Examples of this:</p>
+<ul>
+<li>Use <code>m_</code> (for “member”) to specify a data member within a class</li>
+<li>Use <code>s_</code> (for “static”) to specify a static variable</li>
+</ul>
+<p>The book goes on to suggest things like <code>b</code> for boolean, but in practice you can use <code>is</code> for this purpose: names like <code>isCompleted</code> and <code>isEven()</code> seem more sensible to me than <code>bCompleted</code> or <code>bEven()</code></p>
+<p>Another kind of prefixing is to always use <code>get</code> and <code>set</code> as the prefixes for methods that retrieve or modify member data for an object: <code>getCommonName()</code> and <code>setCommonName()</code> would likely be names used to get or set the <code>m_commonName</code> data member of a class.</p>
+<p>The book also mentions that <code>lowerCamelCase</code> and <code>UpperCamelCase</code> are traditionally used in C++ for methods and functions, with <code>UpperCamelCase</code> being the norm for classes, and <code>lowerCamelCase</code> for function/method names. Variables and data members tend to be <code>snake_case</code> or <code>lowerCamelCase</code>. That’s one area where my intuitions are a bit askew coming from R, where <code>snake_case</code> predominates except when using encapsulated OOP methods. I’ll try to remember that.</p>
+<p>Other naming strategies:</p>
+<ul>
+<li>Using constants is helpful. If your code sets <code>const int SecondsPerHour { 3600 };</code> it’s a lot easier to read later on when <code>SecondsPerHour</code> pops up in the subsequent code, and the reader isn’t left to guess where the “magic number” 3600 comes from.</li>
+<li>Using custom exceptions. The book issues a promissory note that chapter 14 will explain all the error handling stuff properly, but the main thing for now is that if you do this well you can end up with more readable code. Makes sense.</li>
+</ul>
+<h2 id="formatting">Formatting</h2>
+<p>I’m skimming this section. It’s a long conversation about how disagreements over fairly arbitrary things can lead to messy code and broken hearts. Spaces vs tabs, where to put curly braces, when to insert line breaks, etc etc. As usual, I think the main thing is that there be <em>some</em> agreed upon style for a specific project that is followed as consistently as possible, within reason.</p>
+<p><a href="index.html">Back to top</a></p></div>
             <div class="d-none d-xl-block col-xl-2 bd-toc">
                <ul class="section-nav">
                   <li class="toc-entry"><ul>
 <li><a href="#documentation">Documentation</a></li>
 <li><a href="#decomposition">Decomposition</a></li>
+<li><a href="#naming-things">Naming things</a></li>
+<li><a href="#formatting">Formatting</a></li>
 </ul></li>
                </ul>
             </div>

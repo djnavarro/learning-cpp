@@ -191,3 +191,75 @@ The book has a bunch of other recommendations about comment style. I mostly agre
 
 ## Decomposition
 
+The central idea in decomposition is to write code in small, reusable chunks rather than putting all the code into one long function or script. To an extent we all agree that this is a good idea, but of course it's not something easy to formalise. I once worked on a project where the linter started yelling at you whenever the [cyclomatic complexity](https://en.wikipedia.org/wiki/Cyclomatic_complexity) of any function exceeded some largely arbitrary threshold. It mostly worked, but there were a couple of places in the code base where it actually made sense to dump many, many things into one tedious function. Because there wasn't a way of telling the linter to easy up, it became necessary to split the large function up into many smaller functions... but those smaller functions weren't actually any easier to understand. In fact it was worse, because the smaller functions were more arbitrary than the big one. 
+
+But whatevs. That's probably the exception that proves the rule. On the whole it's a good idea to break up really big functions into smaller reusable ones. Probably the more important thing here is to look at methods to help you decompose your code when you've decided it's necessary.
+
+### Refactoring tricks
+
+Right, so the book starts this section by defining **refactoring**: restructuring your code, for whatever reason. It's a big topic in itself, but the book lists some tips. First, you can rewrite your code to allow for more abstraction:
+
+- Encapsulate a field: Make the relevant field private, and write public get/set methods
+- Generalise types: Create more general-purpose types to make code sharing/reuse easier
+
+Second, you can break the code apart:
+
+- Extract a method/function: Take part of a large method/function and make it into its own method/function to make the code easier to read
+- Extract a class: Take parts of a big class and make it into its own smaller class.
+
+Third, you can improve code names and location of code:
+
+- Move a method/field to a more appropriate class or file
+- Rename method or field to something that clarifies its role
+- "Pull up": in the OOP context, move to a base class
+- "Push down": again in the OOP context, move to a derived class
+
+Those last two are a bit opaque to me but the rest makes sense. 
+
+(The book includes the standard warning here about the importance of unit testing... don't try to refactor your code until you have some unit tests you trust. Otherwise it's too easy to end up ugly code that works, and ending up with pretty code that doesn't... which is not in fact helpful)
+
+### Decomposition by design
+
+The other possibility, of course, is to design your code to be modular from the very beginning. Fair point. There's a lot to be said for starting out with a "sketch" of the code plans in advance how the functionality will be decomposed. 
+
+## Naming things
+
+Ah, everyone's favourite topic. Quick summary of key points:
+
+- Prefer names that disambiguate: `sourceData` and `outputData` are better than `dat1` and `dat2`
+- Prefer names that are not too long: the book suggests `g_settings` is sufficient to specify a global setting, whereas `globalUserSpecificSettingsAndPreferences` is going overboard
+- Prefer names that are not too short: `m_commonName` is sufficient to describe the variable and indicate that it is a data member, whereas `m_cn` doesn't tell the reader anything
+- Prefer names that convey behaviour precisely: `computeDerivative()` tells you what the function does, whereas `doThing()` of course does not
+- Prefer human readable names: `mersenneTwister` is comprehensible to a reader, `mt19937_64` is... not
+- Prefer names that don't abbreviate, where possible: `sourceFile` is better than `srcFile` 
+- As usual, don't use offensive names, and avoid inside jokes
+
+Some specific comments on names for indexing variables, which are conventionally given the labels `i` and `j`:
+
+- When indices are used to specify row and column indices in a dimensional object, it's often better to explicitly call them `row` and `col`. That way you never get confused about whether `i` refers to the row index or the column index.
+- While it's *usually* conventional to assume that `i` indexes the outermost loop, `j` indexes the next loop, and `k` indexes the third level of nested indexing, it's sometimes more readable if `i` and `j` are replaced by something like `inner` and `outer`. More generally, choosing something meaningful helps. In the statistical context, for instance, `t` might be used to iterate over times, `g` iterates over groups, etc. I have found that helpful because those indexing variable are almost always a better match to subscripts or other variables that appear in the mathematical specification of a model. 
+
+It's often valuable to have a system of comprehensible prefixes that make certain information immediately clear (at least to someone who knows the system) from the variable name. Examples of this:
+
+- Use `m_` (for "member") to specify a data member within a class
+- Use `s_` (for "static") to specify a static variable
+
+The book goes on to suggest things like `b` for boolean, but in practice you can use `is` for this purpose: names like `isCompleted` and `isEven()` seem more sensible to me than `bCompleted` or `bEven()`
+
+Another kind of prefixing is to always use `get` and `set` as the prefixes for methods that retrieve or modify member data for an object: `getCommonName()` and `setCommonName()` would likely be names used to get or set the `m_commonName` data member of a class. 
+
+The book also mentions that `lowerCamelCase` and `UpperCamelCase` are traditionally used in C++ for methods and functions, with `UpperCamelCase` being the norm for classes, and `lowerCamelCase` for function/method names. Variables and data members tend to be `snake_case` or `lowerCamelCase`. That's one area where my intuitions are a bit askew coming from R, where `snake_case` predominates except when using encapsulated OOP methods. I'll try to remember that.
+
+Other naming strategies:
+
+- Using constants is helpful. If your code sets `const int SecondsPerHour { 3600 };` it's a lot easier to read later on when `SecondsPerHour` pops up in the subsequent code, and the reader isn't left to guess where the "magic number" 3600 comes from.
+- Using custom exceptions. The book issues a promissory note that chapter 14 will explain all the error handling stuff properly, but the main thing for now is that if you do this well you can end up with more readable code. Makes sense.
+
+## Formatting
+
+I'm skimming this section. It's a long conversation about how disagreements over fairly arbitrary things can lead to messy code and broken hearts. Spaces vs tabs, where to put curly braces, when to insert line breaks, etc etc. As usual, I think the main thing is that there be *some* agreed upon style for a specific project that is followed as consistently as possible, within reason. 
+
+[Back to top](index.html)
+
+
+
