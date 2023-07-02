@@ -2,6 +2,7 @@ cpp := $(patsubst src/%.cpp, bin/%, $(wildcard src/*.cpp))
 notes := $(patsubst notes/%.md, docs/%.html, $(wildcard notes/*.md))
 static := docs/.nojekyll docs/CNAME docs/style.css
 
+.PHONY: dirs clean
 all: dirs $(cpp) $(static) $(notes)
 
 dirs:
