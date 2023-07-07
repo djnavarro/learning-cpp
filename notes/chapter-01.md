@@ -36,7 +36,7 @@ The `--std=c++20` flag tells clang what version of C++ I'm using, and the `-o` f
 
 In practice, this isn't the commmand I actually use. I don't want my binaries to build into in the same folder as my source code, so I keep all the source code in `src` and the binaries in `bin`. Additionally, I've done a bit of tinkering and installed clang 15, and I want to use that as my compiler rather than clang 14 (which is what ubuntu ends up installing with the command above). I could tinker with links to set my default clang to version 15, but at some level I think I prefer the command to explicitly specify the compiler version, so my command would actually look like this:
 
-```bash
+``` bash
 clang++-15 --std=c++20 ./src/helloworld.cpp -o ./bin/helloworld
 ```
 
@@ -44,7 +44,7 @@ As a side benefit, structuring the project this way makes it much easier to avoi
 
 That being said, I don't actually want to type this command for every source file. Instead, because I'm a fundamentally lazy person, I've written a `Makefile` that takes care of that for me, and also renders the markdown files to html. So really the only command I ever use is simply:
 
-```bash
+``` bash
 make
 ```
 
