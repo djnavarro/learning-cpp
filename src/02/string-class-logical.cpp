@@ -1,4 +1,4 @@
-// string-class-examples.cpp
+// string-class-logical.cpp
 #include <iostream>
 #include <string>
 

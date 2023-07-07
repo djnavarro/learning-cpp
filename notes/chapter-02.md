@@ -162,7 +162,7 @@ the 17th character in 'owlbear is the strangest creature' is t
 At this point the book spends quite a bit of time trying to convince C programmers that C++ strings are a better option if you need to do any string comparison, but of course I'm coming from interpreted languages like R and Python, so I'm coming to this part of the discussion already sold. I have not made any serious attempt to use C strings since 1994, and I have no intention of backsliding now. Suffice it to say logical operations on C++ strings have their usual meaning. Some silly code:
 
 ``` cpp
-// string-class-examples.cpp
+// string-class-logical.cpp
 #include <iostream>
 #include <string>
 
