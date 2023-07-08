@@ -24,8 +24,8 @@ $(static): docs/%: static/%
 
 $(notes): docs/%.html: notes/%.md
 	@echo "[rendering]" $<
-	@pandoc $< -o $@ --template=./pandoc/template.html \
-		--standalone --mathjax --toc --toc-depth 2
+	@poetry run codebraid pandoc $< -o $@ --template=./pandoc/template.html \
+		--standalone --mathjax --toc --toc-depth 2 --overwrite
 
 clean:
 	@echo "[deleting] docs"

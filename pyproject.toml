@@ -1,0 +1,14 @@
+[tool.poetry]
+name = "learning-cpp"
+version = "0.1.0"
+description = "Notes for Learning C++"
+authors = ["Danielle Navarro <djnavarro@protonmail.com>"]
+license = "CC-BY 4.0"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+codebraid = "^0.10.3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
