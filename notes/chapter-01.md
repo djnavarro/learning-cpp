@@ -958,8 +958,8 @@ int main() {
 }
 ```
 
-```
-na na na na na na na na hey hey hey goodbye
+```{.bash .cb.nb}
+./bin/01/na-na-hey-hey
 ```
 
 ### The range-based `for` loop
@@ -978,14 +978,10 @@ int main() {
 }
 ```
 
+```{.bash .cb.nb}
+./bin/01/array-iterator
 ```
-1
-1
-2
-3
-5
-8
-```
+
 
 Note that in this code, at each step of the iteration the variable `f` stores a copy of the relevant element of `fib`. However, it's possible to do range-based `for` loops without making copies by using a reference variable. The book promises to discuss this later in the chapter.
 
@@ -993,31 +989,14 @@ Note that in this code, at each step of the iteration the variable `f` stores a 
 
 Initialiser lists are designed to make it easy to write functions that accept a variable number of arguments, and are provided by the `<initializer_list>` library. All values in an initialiser list must be the same type. Here's an example that computes the mean of an arbitrary number of double values:
 
-``` cpp
-// mean-value.cpp
-#include <iostream>
-#include <initializer_list>
-
-double mean(std::initializer_list<double> values) {
-    double tot = 0;
-    for (double v : values) {
-        tot += v;
-    }
-    return tot / values.size();
-} 
-
-int main() {
-    double x_bar = mean({ 2.3, 1.5, 7.8, 11.0 });
-    double y_bar = mean({ 102.5, 59.1, 98.2 });
-    std::cout << "mean x: " << x_bar << std::endl;
-    std::cout << "mean y: " << y_bar << std::endl;
-    return 0;
-}
+```{.bash .cb.run}
+echo '``` cpp'
+cat ./src/01/mean-value.cpp
+echo '```'
 ```
 
-```
-mean x: 5.65
-mean y: 86.6
+```{.bash .cb.nb}
+./bin/01/mean-value
 ```
 
 ## Strings
