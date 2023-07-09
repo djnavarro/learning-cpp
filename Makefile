@@ -24,12 +24,14 @@ $(static): docs/%: static/%
 
 $(notes): docs/%.html: notes/%.md
 	@echo "[rendering]" $<
-	@poetry run codebraid pandoc $< -o $@ --template=./pandoc/template.html \
+	@poetry run codebraid pandoc $< -o $@ --template=./build/template.html \
 		--standalone --mathjax --toc --toc-depth 2 --overwrite
 
 clean:
 	@echo "[deleting] docs"
 	@echo "[deleting] bin"
+	@echo "[deleting] _codebraid"
 	@rm -rf docs
 	@rm -rf bin
+	@rm -rf _codebraid
 

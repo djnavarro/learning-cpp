@@ -8,14 +8,8 @@ title: "1: A crash course in C++ and the standard library"
 
 As is tradition in every computer science text, the book starts with a "hello world" program designed to highlight core behaviour of the language. Here's the source, modified -- per my own tradition -- to print a slightly modified message:
 
-``` cpp
-// helloworld.cpp
-#include <iostream>
-
-int main() {
-    std::cout << "Hello cruel world" << std::endl;
-    return 0; 
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/helloworld.cpp
 ```
 
 ## Compiling helloworld.cpp
@@ -48,16 +42,10 @@ That being said, I don't actually want to type this command for every source fil
 make
 ```
 
-Anyway, once the source has been compiled, I can invoke the executable like so:
+Anyway, once the source has been compiled, I can invoke the executable at the terminal, and out pops the message:
 
-``` bash
-./bin/helloworld
-```
-
-And out pops the message at the terminal:
-
-```
-Hello cruel world
+```{.bash .cb-nb}
+./bin/01/helloworld
 ```
 
 Excellent. The basics are working. 
@@ -82,16 +70,8 @@ Going a little deeper:
 
 If you don't particularly want to namespace every command, as per `std::cout`, you can tell the compiler to make the names in a particular namespace available  with a `using` directive (not dissimilar to calling `library()` in R). So I could have written my helloworld program like this:
 
-``` cpp
-// helloworld-using.cpp
-#include <iostream>
-
-using namespace std;
-
-int main() {
-    cout << "Hello cruel world" << endl;
-    return 0; 
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/helloworld-using.cpp
 ```
 
 In general though it's not a good idea because that leads to namespace conflicts pretty quickly.
@@ -131,30 +111,8 @@ The nomenclature used in C++ when talking about changing variable types is a lit
 
 The book gives this as example code. The idea being that you should be able to reason through the steps that the program is following, what cast operations are taking place, and thereby predict what it will print out at the end.
 
-``` cpp
-// typecasting.cpp
-#include <iostream>
-
-int main() {
-    // variable declarations
-    int someInteger;
-    short someShort;
-    long someLong;
-    float someFloat;
-    double someDouble;
-
-    // some operations that involve casts
-    someInteger = 256;
-    someInteger++;
-    someShort = static_cast<short>(someInteger);
-    someLong = someShort * 10000;
-    someFloat = someLong + 0.785f;
-    someDouble = static_cast<double>(someFloat) / 100000;
-
-    // print output and return
-    std::cout << someDouble << std::endl;
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/typecasting.cpp
 ```
 
 Okay, I'll give it a go. Stepping through it line by line...
@@ -165,6 +123,12 @@ Okay, I'll give it a go. Stepping through it line by line...
 - In the next line we're multiplying by 10000, which gives us an answer of 2570000. That's too large a number to store as a 16 bit integer, but because the output variable `someLong` is typed as a long integer (also 32 bit), coercion takes place. The output is cast implicitly to long there's an implicit cast happening here (called coercion), and the result is stored as a long integer with value 2570000.
 - The next line also involves coercion rather than an explicit cast. We're adding a float (`0.785f`) to a long integer and storing the result as a float. So the output `someFloat` has value 2570000.785.
 - Finally, we explicitly cast `someFloat` to a double precision floating point number, divide it by 100000, and assign the result to `someDouble`. That gives us a value of 25.70000785
+
+Okay, let's check:
+
+```{.bash .cb-nb}
+./bin/01/typecasting
+```
 
 We've lost a little precision in the printed output, however, because the program prints 25.7 to stdout.
 
@@ -186,26 +150,14 @@ Gender benjamin_gender { Gender::male };
 
 The internal coding is revealed by this program:
 
-``` cpp
-// enumerated-types.cpp
-#include <iostream>
-
-int main() {
-    enum class Gender { male, female, nonbinary, other, unspecified };
-    Gender danielle_gender { Gender::female };
-    Gender benjamin_gender { Gender::male };
-
-    std::cout << "Danielle gender: " << static_cast<int>(danielle_gender) << std::endl;
-    std::cout << "Benjamin gender: " << static_cast<int>(benjamin_gender) << std::endl;
-    return 0; 
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/enumerated-types.cpp
 ```
 
 When we run this one, the output looks like this:
 
-```
-Danielle gender: 1
-Benjamin gender: 0
+```{.bash .cb-nb}
+./bin/01/enumerated-types
 ```
 
 ## Structs
@@ -214,14 +166,8 @@ Moving along. The next kind of objects the book considers are **structs**, which
 
 It's not uncommon for C++ code to define a class within a header file which can be made available to the program by an `#include` directive (or, in C++20, imported as a module). Sticking reasonably closely to what is in the book here, I'll write a header file that defines an `Employee` class:
 
-``` cpp
-// employee.h
-struct Employee {
-    char firstInitial;
-    char lastInitial;
-    int employeeNumber;
-    int salary;
-};
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/employee.h
 ```
 
 In the book, the code is a little more elaborate because it explicitly defines a module, but since my compiler has incomplete support for C++20 features, I'm keeping it simple. 
@@ -242,44 +188,14 @@ To see it in action we can write a short program. Again we have a bit of an issu
 
 So my program looks like this:
 
-``` cpp
-// employee.cpp
-#include <iostream>
-#include <sstream>
-#include "employee.h"
-
-int main() {
-    // define the employee record
-    Employee danielle;
-    danielle.firstInitial = 'D';
-    danielle.lastInitial = 'N';
-    danielle.employeeNumber = 69;
-    danielle.salary = 123456;
-
-    // write to stdout
-    std::stringstream ss;
-    ss.str("");
-    ss << "Employee: " << danielle.firstInitial << danielle.lastInitial;
-    std::cout << ss.str() << std::endl;
-
-    ss.str("");
-    ss << "Employee number: #" << danielle.employeeNumber;
-    std::cout << ss.str() << std::endl;
-
-    ss.str("");
-    ss << "Employee salary: $" << danielle.salary;
-    std::cout << ss.str() << std::endl;
-
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/employee.cpp
 ```
 
 When I run this program I get this as output:
 
-```
-Employee: DN
-Employee number: #69
-Employee salary: $123456
+```{.bash .cb-nb}
+./bin/01/employee
 ```
 
 That all seems to make sense. What's next?
@@ -288,26 +204,17 @@ That all seems to make sense. What's next?
 
 Looking ahead, it seems like the book is about to start discussing conditional branching, functions, loops, and all that good stuff. Fair enough. But conditional branching based on testing some boolean expression is never much fun unless you have a something meaningful to test. Ideally you'd have something where the conditional might evaluate differently. So, since we're all statisticians here (I mean, it's just me here and I'm a statistician), this feels like a good moment to divert from the text and write some code that generates Poisson random numbers. To do this I'll use `<random>`:
 
-``` cpp
-// poisson-sample.cpp
-#include <iostream>
-#include <random>
-
-int main() {
-    // set seed using time, define PRNG with Mersenne Twister
-    long unsigned int seed = static_cast<long unsigned int>(time(0));
-    std::mt19937_64 mersenne {seed};
-
-    // sample_poisson() draws from Poisson(4.1) and returns an integer.
-    std::poisson_distribution<int> sample_poisson(4.1);
-
-    // draw poisson sample (passing the PRNG as argument) and write to stdout
-    std::cout << "poisson sample: " << sample_poisson(mersenne) << std::endl;
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/poisson-sample.cpp
 ```
 
-Here's what happens when I repeatedly invoke the `sample-poisson` program at the terminal:
+To check that it works, let's run it:
+
+```{.bash .cb-nb}
+./bin/01/poisson-sample
+```
+
+The output is probabilistic. Repeated invocations produce outout like this:
 
 ```
 poisson sample: 2
@@ -341,31 +248,12 @@ if (value > 4) {
 
 However, the nice thing about having some code to sample random numbers is that I can write something a little less boring here. Here's a small program that samples a Poisson random variate, and prints a message to the terminal that adds a little comment about where the sample falls relative to the distribution mode:
 
-``` cpp
-// poisson-conditional.cpp
-#include <iostream>
-#include <random>
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/poisson-conditional.cpp
+```
 
-int main() {
-    // define a poisson distribution
-    long unsigned int seed = static_cast<long unsigned int>(time(0));
-    std::mt19937_64 mersenne {seed};
-    std::poisson_distribution<int> sample_poisson(4.1);
-
-    // sample a value and write first part of message
-    int value = sample_poisson(mersenne);
-    std::cout << "The sampled value of " << value;
-
-    // remainder of message depends on the value
-    if (value == 4) {
-        std::cout << " is the modal value." << std::endl;
-    } else if (value < 4) {
-        std::cout << " is below the mode." << std::endl;
-    } else {
-        std::cout << " is above the mode." << std::endl;
-    }
-    return 0;
-}
+```{.bash .cb.nb}
+./bin/01/poisson-conditional
 ```
 
 Again, here's some output I get when I repeatedly invoke the `poisson-conditional` function:
@@ -397,28 +285,15 @@ if (<initialiser>; <conditional_expression>) {
 
 The book doesn't give an example of this at this early stage because, rather sensibly, the author hasn't gone down the weird little digression into Poisson variates that I did. But, having done so, it's easy to write a variant of the previous program that creates the random value within the initialiser:
 
-``` cpp
-// poisson-initialised-conditional.cpp
-#include <iostream>
-#include <random>
 
-int main() {
-    // define a poisson distribution
-    long unsigned int seed = static_cast<long unsigned int>(time(0));
-    std::mt19937_64 mersenne {seed};
-    std::poisson_distribution<int> sample_poisson(4.1);
-
-    // conditional statement with an initialiser
-    if (int x = sample_poisson(mersenne); x == 4) {
-        std::cout << x << " is the modal value." << std::endl;
-    } else if (x < 4) {
-        std::cout << x << " is below the mode." << std::endl;
-    } else {
-        std::cout << x << " is above the mode." << std::endl;
-    }
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/poisson-initialised-conditional.cpp
 ```
+
+```{.bash .cb.nb}
+./bin/01/poisson-initialised-conditional
+```
+
 
 In this code, the variable `x` exists only within the scope of the if/else statement. Here's a few results from running this program several times:
 
@@ -431,66 +306,28 @@ In this code, the variable `x` exists only within the scope of the if/else state
 
 ### `switch/case` statements
 
-``` cpp
-// gender-switch.cpp
-#include <iostream>
-
-int main() {
-    enum class Gender { male, female, nonbinary, other, unspecified };
-    Gender danielle_gender { Gender::female };
-
-    std::cout << "Danielle's gender is ";
-    switch (danielle_gender) {
-        case Gender::female:
-        case Gender::male:
-            std::cout << "within the gender binary" << std::endl;
-            break;
-        case Gender::nonbinary:
-        case Gender::other:
-            std::cout << "outside the gender binary" << std::endl;
-            break;
-        default:
-            std::cout << "unspecified" << std::endl;
-    }
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/gender-switch.cpp
 ```
 
 When this code is executed, we get this:
 
-```
-Danielle's gender is within the gender binary
+```{.bash .cb.nb}
+./bin/01/gender-switch
 ```
 
 The reason this happens is due to **fallthrough** behaviour. When a `case` expression that matches the `switch` expression is reached, all subsequent statements are executed until a `break` statement is reached. So even though there's nothing to execute immediately following the `Gender::female` case expression, there's no `break` there either, so the flow "falls through" to the next case. In other words, inthis code male and female genders will both produce "within the gender binary" as the printed message, whereas nonbinary and other genders will produce "outside the gender binary" as the message. If the gender is unspecified, none of the case expressions will match against the switch expression, so the default message at the end is printed. 
 
 Just like with `if/else` blocks, `switch` blocks can use initialisers:
 
-``` cpp
-// gender-switch-2.cpp
-#include <iostream>
-
-int main() {
-    enum class Gender { male, female, nonbinary, other, unspecified };
-
-    switch (Gender x { Gender::unspecified }; x) {
-        case Gender::female:
-        case Gender::male:
-            std::cout << "Within the gender binary" << std::endl;
-            break;
-        case Gender::nonbinary:
-        case Gender::other:
-            std::cout << "Outside the gender binary" << std::endl;
-            break;
-        case Gender::unspecified:
-            std::cout << "Gender unspecified" << std::endl;
-    }
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/gender-switch-2.cpp
 ```
 
 The output here is:
 
-```
-Gender unspecified
+```{.bash .cb.nb}
+./bin/01/gender-switch-2
 ```
 
 ### Conditional operator
@@ -544,30 +381,14 @@ By writing the declaration in this way we are asserting the `main()` function al
 
 Other functions aren't constrained in the same way, and in fact C++ functions don't have to return anything if the only reason to call the function is for its side effects. To do that we set the output type to `void`. Here's an example: 
 
-
-``` cpp
-// char-code.cpp
-#include <iostream>
-
-void print_ascii_code(char c) {
-    std::cout << c << " has integer code " << static_cast<int>(c) << std::endl;
-}
-
-int main() {
-    print_ascii_code('d');
-    print_ascii_code('a');
-    print_ascii_code('n');
-    print_ascii_code('i');
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/char-code.cpp
 ```
 
 When I run this program I get this:
 
-```
-d has integer code 100
-a has integer code 97
-n has integer code 110
-i has integer code 105
+```{.bash .cb.nb}
+./bin/01/char-code
 ```
 
 (The integers correspond to the ASCII codes for each character).
@@ -584,82 +405,26 @@ auto add_numbers(int x, int y) {
 
 2. Every function has a local variable `__func__` that contains the function name. As noted in the book, this can be helpful for logging purposes. Here's a slightly expanded version of the example used in the book:
 
-``` cpp
-// add-with-logging.cpp
-#include <iostream>
-
-int add_numbers(int x, int y) {
-    std::cout << __func__ << "(" << x << ", " << y << ")" << std::endl;
-    return x + y;
-}
-
-int main() {
-    int a = 1;
-    int b = 2;
-    int c = 3;
-    int sum1 = add_numbers(a, b);
-    int sum2 = add_numbers(sum1, c);
-    std::cout << "result: " << sum2 << std::endl;
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/add-with-logging.cpp
 ```
 
 When this executes, we see the following written to stdout:
 
-```
-add_numbers(1, 2)
-add_numbers(3, 3)
-result: 6
+```{.bash .cb.nb}
+./bin/01/add-with-logging
 ```
 
 3. Function overloading is permitted: you can write multiple functions that have the same name but have different signatures. Note that in this case that means the function arguments must be different. It's not sufficient merely to declare a different output type. As an example, we could use this to define addition functions that accept both integers and doubles, returning integers only if both arguments are integers:
 
-``` cpp
-// add-with-overloading.cpp
-#include <iostream>
-
-int add_numbers(int x, int y) {
-    std::cout << __func__ << "(" << x << ", " << y << ")" << std::endl;
-    return x + y;
-}
-
-double add_numbers(double x, double y) {
-    std::cout << __func__ << "(" << x << ", " << y << ")" << std::endl;
-    return x + y;
-}
-
-double add_numbers(int x, double y) {
-    std::cout << __func__ << "(" << x << ", " << y << ")" << std::endl;
-    return static_cast<double>(x) + y;
-}
-
-double add_numbers(double x, int y) {
-    std::cout << __func__ << "(" << x << ", " << y << ")" << std::endl;
-    return x + static_cast<double>(y);
-}
-
-
-int main() {
-    int int_a = 1;
-    int int_b = 2;
-    double dbl_c = 3.45;
-    double dbl_d = 6.78;
-
-    int int_ab = add_numbers(int_a, int_b);
-    double dbl_cd = add_numbers(dbl_c, dbl_d);
-    double dbl_abcd = add_numbers(int_ab, dbl_cd);
-    std::cout << "result: " << dbl_abcd << std::endl;
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/add-with-overloading.cpp
 ```
 
 Running this code produces the following output:
 
-```
-add_numbers(1, 2)
-add_numbers(3.45, 6.78)
-add_numbers(3, 10.23)
-result: 13.23
+```{.bash .cb.nb}
+./bin/01/add-with-overloading
 ```
 
 It works, but it can be a bit risky to abandon type stability. In this case it's quite easy to reason about the output type of a call to `add_numbers()` simply by inspecting the input types, but in my experience things go bad quite quickly when you don't take type stability seriously.
@@ -672,21 +437,14 @@ At this point, the book moves to a discussion of arrays. Specifically, it first 
 
 Here's a simple example:
 
-``` cpp
-// array-danielle.cpp
-#include <iostream>
-#include <array>
-
-int main() {
-    std::array<char, 8> danielle = { 'D', 'a', 'n', 'i', 'e', 'l', 'l', 'e' };
-    std::cout << "Danielle has " << danielle.size() << " letters." << std::endl;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/array-danielle.cpp
 ```
 
 The nice thing here is that C++ arrays have a `.size()` method which makes it easy to do all sort of operations with them. The current example is a bit minimal: I'm just using it to count the letters in my name. Speaking of which, here's the output:
 
-```
-Danielle has 8 letters.
+```{.bash .cb.nb}
+./bin/01/array-danielle
 ```
 
 ## Vectors
@@ -718,56 +476,8 @@ and set $v = x/(x + y)$. Problem solved.
 
 Anyway, here's the code:
 
-
-``` cpp
-// beta-sample.cpp
-#include <iostream>
-#include <vector>
-#include <random>
-
-void print_message(double value, double a, double b) {
-    std::cout << "beta(" << a << "," << b << ") sample: " << value << std::endl;
-}
-
-std::vector<double> draw_betas(double rate, double a, double b) {
-    // distributions
-    std::gamma_distribution<double> gamma_a(a, 1.0);
-    std::gamma_distribution<double> gamma_b(b, 1.0);
-    std::poisson_distribution<int> poisson(rate);
-
-    // mersenne twister numbers
-    std::random_device rd;
-    std::mt19937 mt(rd());
-
-    // draw poisson sample to determine number of betas
-    int n = poisson(mt);
-
-    // draw beta samples and return
-    std::vector<double> beta_variates {};
-    double x, y;
-    for (int i = 0; i < n; i++) {
-        x = gamma_a(mt);
-        y = gamma_b(mt);
-        beta_variates.push_back(x / (x + y));
-    }
-    return beta_variates;
-}
-
-int main() {
-    const double a = 2.0; // shape parameter 1
-    const double b = 1.0; // shape parameter 2
-    const double rate = 2.4; // rate for poisson dist
-
-    // draw samples
-    std::vector<double> betas = draw_betas(rate, a, b);
-
-    // print messages and return
-    std::cout << "collected " << betas.size() << " samples" << std::endl;
-    for (int i = 0; i < betas.size(); i++) {
-        print_message(betas[i], a, b);
-    }
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/beta-sample.cpp
 ```
 
 Technically I'm getting slightly ahead of the book here because it hasn't talked about loops yet, but whatever. A `for` loop is more or less the same thing everywhere. 
@@ -816,38 +526,17 @@ auto [x, y, z] = some_function();
 
 Back in my MATLAB days I used to do this all the time. In R it's slightly trickier to do that unless you're using specialised packages that provide multiple assignment functionality. Anyway, here's a contrived example:
 
-``` cpp
-// structured-binding-asl.cpp
-#include <iostream>
-#include <tuple>
-#include <string>
 
-// somewhat absurd function used to illustrate the point
-std::tuple<int, char, std::string> asl() {
-    return {45, 'F', "Sydney"};
-}
-
-int main() {
-    // use structured bindings to declare and assign multiple 
-    // variables from the output returned by the function call
-    auto [age, sex, location] = asl();
-
-    // messages
-    std::cout << "age: " << age << std::endl;
-    std::cout << "sex: " << sex << std::endl;
-    std::cout << "location: " << location << std::endl;
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/structured-binding-asl.cpp
 ```
 
 For the sake of keeping these notes family-friendly I have restricted myself to "a/s/l", even though the term "structured bindings" itself suggests the possibility of a rather more... expansive... query that might be adopted here. 
 
 Aaaaaaanyway... the results:
 
-```
-age: 45
-sex: F
-location: Sydney
+```{.bash .cb.nb}
+./bin/01/structured-binding-asl
 ```
 
 ## Loops
@@ -869,29 +558,14 @@ $$
 
 terminating at the first $n$ such that $x_n = 1$. This is of course an implementation of the [collatz conjecture](https://en.wikipedia.org/wiki/Collatz_conjecture) which proposes that this collatz sequence, for every integer-valued choice of initial value $x_0$, eventually terminates in 1. Code:
 
-``` cpp
-// collatz.cpp
-#include <iostream>
-
-int main() {
-    int value = 39;
-    std::cout << value;
-    while (value != 1) {
-        value = (value % 2 == 0) ? (value / 2) : (3 * value + 1);
-        std::cout << " -> " << value;
-    }
-    std::cout << std::endl;
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/collatz.cpp
 ```
 
 The results for $x_0 = 39$, where I've manually added linebreaks:
 
-```
-39 -> 118 -> 59 -> 178 -> 89 -> 268 -> 134 -> 67 -> 
-202 -> 101 -> 304 -> 152 -> 76 -> 38 -> 19 -> 58 -> 
-29 -> 88 -> 44 -> 22 -> 11 -> 34 -> 17 -> 52 -> 26 -> 
-13 -> 40 -> 20 -> 10 -> 5 -> 16 -> 8 -> 4 -> 2 -> 1
+```{.bash .cb.nb}
+./bin/01/collatz
 ```
 
 ### The `do/while` loop
@@ -900,29 +574,8 @@ The `do/while` loop is inherently boring, but is very occasionally handy if it i
 
 As a truly absurd example:
 
-``` cpp
-// validation-check.cpp
-#include <iostream>
-#include <ctime>
-
-bool valid_time() {
-    std::time_t elapsed = std::time(nullptr);
-    bool is_valid = elapsed % 2 == 0;
-    if (is_valid) {
-        std::cout << elapsed << " seconds since the epoch" << std::endl;
-    }
-    return is_valid;
-}
-
-int main() {
-    bool valid;
-    int i = 0;
-    do {
-        i++;
-    } while (!valid_time());
-    std::cout << "attempts = " << i << std::endl;
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/validation-check.cpp
 ```
 
 This code checks the current time, measured in number of seconds since the unix epoch. If that number is even, it deems the time to be "valid" and prints the elapsed seconds to stdout. If that number is odd, it deems the time to be "invalid" and refuses to terminate the `do/while` loop. That leads to some entertaining behaviour. About half the time you'll get output like this where it succeeds the first time:
@@ -946,16 +599,8 @@ Suffice it to say, although the idea of using `do/while` loops to implement vali
 
 One of the earlier examples gave an example of a `for` loop that was semi-serious, so I feel justified in being absurd again:
 
-``` cpp
-// na-na-hey-hey.cpp
-#include <iostream>
-
-int main() {
-    for(int i = 0; i < 8; i++) { std::cout << "na "; }
-    for(int i = 0; i < 3; i++) { std::cout << "hey "; }
-    std::cout << "goodbye" << std::endl;
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/na-na-hey-hey.cpp
 ```
 
 ```{.bash .cb.nb}
@@ -966,22 +611,13 @@ int main() {
 
 The range-based `for` loop iterates directly over the elements of a container. It works for a fairly wide range of possible containers: anything that has `.begin()` and `.end()` methods that return iterators will work. Example:
 
-``` cpp
-// array-iterator.cpp
-#include <iostream>
-#include <array>
-
-int main() {
-    std::array<int, 6> fib = { 1, 1, 2, 3, 5, 8 };
-    for(int f : fib) { std::cout << f << std::endl; }
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/array-iterator.cpp
 ```
 
 ```{.bash .cb.nb}
 ./bin/01/array-iterator
 ```
-
 
 Note that in this code, at each step of the iteration the variable `f` stores a copy of the relevant element of `fib`. However, it's possible to do range-based `for` loops without making copies by using a reference variable. The book promises to discuss this later in the chapter.
 
@@ -990,9 +626,7 @@ Note that in this code, at each step of the iteration the variable `f` stores a 
 Initialiser lists are designed to make it easy to write functions that accept a variable number of arguments, and are provided by the `<initializer_list>` library. All values in an initialiser list must be the same type. Here's an example that computes the mean of an arbitrary number of double values:
 
 ```{.bash .cb.run}
-echo '``` cpp'
-cat ./src/01/mean-value.cpp
-echo '```'
+./build/show-source.sh ./src/01/mean-value.cpp
 ```
 
 ```{.bash .cb.nb}
@@ -1003,24 +637,12 @@ echo '```'
 
 The book talks about strings next, but it's mostly a promissory note here. It mentions that the `std::string` type from `<string>` works more or less the way you'd expect for a string type. Here's a quick example:
 
-```cpp
-// simple-string.cpp
-#include <iostream>
-#include <vector>
-#include <string>
-
-int main() {
-    std::vector<std::string> name = { "Daniela", "Jasmine", "Navarro", "Bullock" };
-    for(std::string n : name) { std::cout << n << std::endl; }
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/simple-string.cpp
 ```
 
-```
-Daniela
-Jasmine
-Navarro
-Bullock
+```{.bash .cb.nb}
+./bin/01/simple-string
 ```
 
 ## OOP in C++
@@ -1041,62 +663,14 @@ Okay, after a bit of reading, the basic ideas seem clear:
 
 Here's my first attempt at defining a C++ class. One of my loves in life is gardening, so I'll define a class `Species` that stores the taxonomic (binomial) name of a plant, and (optionally) stores the common name. Obviously this is too simple for real world use, because plants often have more than one common name, and the binomial name for a species is often insufficient to represent the taxonomic relations that we might care about. And of course it also fails to capture any of the practical information about a plant! But whatever. That's not the bloody point. Anyway, here's the code:
 
-``` cpp
-// species-first-pass.cpp
-#include <iostream>
-#include <string>
-#include <optional>
-
-class Species {
-    private:
-        // internal data structure
-        std::string name_binomial;
-        std::optional<std::string> name_common;
-
-    public:
-        // class constructor with one input
-        Species(std::string binomial) {
-            setBinomialName(binomial);
-        }
-
-        // class constructor with two inputs
-        Species(std::string binomial, std::optional<std::string> common) {
-            setBinomialName(binomial);
-            setCommonName(common);
-        }
-
-        // methods to set names
-        void setBinomialName(std::string name) { name_binomial = name; }
-        void setCommonName(std::optional<std::string> name) { name_common = name; }
-
-        // methods to retrieve names
-        std::string getBinomialName() { return name_binomial; }
-        std::optional<std::string> getCommonName() { return name_common; }
-
-        // print method
-        void print() {
-            std::cout << name_binomial;
-            if (name_common.has_value()) {
-                std::cout << " (" << name_common.value() << ")";
-            }
-            std::cout << std::endl;
-        }
-};
-
-int main() {
-    Species yellow_plant { "acacia amoena" };
-    Species purple_plant { "hardenbergia violacea", "happy wanderer" };
-    yellow_plant.print();
-    purple_plant.print();
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/species-first-pass.cpp
 ```
 
 When I run this program, I get this as the output:
 
-```
-acacia amoena
-hardenbergia violacea (happy wanderer)
+```{.bash .cb.nb}
+./bin/01/species-first-pass
 ```
 
 Neat. The output always prints the binomial name of the species, and appends the common name in parentheses if one exists. Additionally, because the `.setCommonName()` method is public, should I later happen to discover to my delight that the *acacia amoena* is commonly referred to as the boomerang wattle, I can update the record like so:
@@ -1129,79 +703,20 @@ Next up the book discusses C++ scopes. It all feels very familiar. Every variabl
 
 Here's an adaptation of the example used in the book:
 
-``` cpp
-// scope-resolution.cpp
-#include <iostream>
-
-// value() is scoped to the Five class
-class Five  {
-    public:
-        int value() { return 5; }
-};
-
-// value() belongs to the global scope
-int value() { return 10; }
-
-// value() belongs to the twenty namespace
-namespace twenty {
-    int value() { return 20; }
-}
-
-int main() {
-    Five five;
-    std::cout << five.value() << std::endl;    // prints 5
-    std::cout << value() << std::endl;         // prints 10
-    std::cout << twenty::value() << std::endl; // prints 20
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/scope-resolution.cpp
 ```
 
-```
-5
-10
-20
+```{.bash .cb.nb}
+./bin/01/scope-resolution
 ```
 
 ## Uniform initialisation 
 
 In early versions of C++, variable initialisation statements looked different depending on what kind of object is being initialised. Since C++11, however, uniform initialisation has been available so you can initialise variables using the same syntax regardless of type. The book gives the following example:
 
-``` cpp
-// circles.cpp
-
-struct CircleStruct {
-    int x, y;
-    double radius;
-};
-
-class CircleClass {
-    public:
-        CircleClass(int x, int y, double radius) 
-            : m_x { x }, m_y { y }, m_radius { radius } {}
-    private:
-        int m_x, m_y;
-        double m_radius;
-};
-
-int main() {
-    // these both use uniform initialisation
-    CircleStruct circle1 { 10, 10, 2.5 };
-    CircleClass circle2 { 10, 10, 2.5};
-
-    // pre C++11, you had to do this:
-    CircleStruct circle3 = { 10, 10, 2.5 };
-    CircleClass circle4(10, 10, 2.5);
-
-    // note that this is not uniform initialisation
-    int a = 3;
-    int b(3);
-
-    // these are both uniform
-    int c = { 3 };
-    int d { 3};
-
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/circles.cpp
 ```
 
 There are some subtle differences between uniform and non-uniform initialisation, particularly in reference to **narrowing**. In old style initialisation, this works...
@@ -1250,49 +765,40 @@ At this stage, a block of memory has been allocated for the integer and `my_int_
 
 My example program:
 
-``` cpp
-// pointer-free-store.cpp
-#include <iostream>
-
-int main() {
-    int* int_ptr { new int }; // declare pointer & allocate memory
-    *int_ptr = 8;             // assign value to the allocated memory
-    std::cout << *int_ptr + 2 << std::endl; // retrieve and print
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/pointer-free-store.cpp
 ```
 
-When executed, it prints 10 to stdout. 
+When executed, it prints 10 to stdout: 
 
+```{.bash .cb.nb}
+./bin/01/pointer-free-store
+```
 
 ### Pointers to stack variables
 
 C++ also allows pointers to variables on the stack (and even pointers to pointers, but whatever). The key thing here is to use `&` ("address of") to return a pointer to a stack-allocated variable. So this works and also prints 10 to stdout:
 
-``` cpp
-// pointer-stack.cpp
-#include <iostream>
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/pointer-stack.cpp
+```
 
-int main() {
-    int value { 8 };          // variable on the stack
-    int* int_ptr { &value };  // declare pointer to it
-    std::cout << *int_ptr + 2 << std::endl; // retrieve and print
-    return 0;
-}
+```{.bash .cb.nb}
+./bin/01/pointer-stack
 ```
 
 ### Pointers to structs and classes
 
 There's a little bit of syntactic sugar for pointers to structs and classes. Copying the code directly from the book. Assume there's a function `getEmployee()` that returns a pointer to an `Employee` instance. Then we could write the salary to stdout like so:
 
-```cpp
+``` cpp
 Employee* anEmployee { getEmployee() }; 
 std::cout << (*anEmployee).salary << std::cout;
 ```
 
 The `->` operator allows a shortcut:
 
-```cpp
+``` cpp
 Employee* anEmployee { getEmployee() }; 
 std::cout << anEmployee->salary << std::cout;
 ```
@@ -1360,22 +866,12 @@ int& x_ref { x };  // reference variable
 
 The equivalence of the original and the reference is illustrated in this simple program:
 
-``` cpp
-// simple-reference.cpp
-#include <iostream>
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/simple-reference.cpp
+```
 
-int main() {
-    int x { 10 };     // original 
-    int& x_ref { x }; // reference
-
-    x_ref++; // change the reference, *and* the original
-    std::cout << x << std::endl; // prints 11
-
-    x++; // change the original, *and* the reference
-    std::cout << x_ref << std::endl; // prints 12
-    
-    return 0;
-}
+```{.bash .cb.nb}
+./bin/01/simple-reference
 ```
 
 References must always be initialised when declared. This won't compile:
@@ -1386,21 +882,14 @@ int& empty_ref;
 
 Along similar lines, you cannot change the mapping once a reference variable is initialised (i.e., it always refers to the same original variable, and you can't move it to a new one). This is illustrated in this program:
 
-``` cpp
-// immovable-reference.cpp
-#include <iostream>
-
-int main() {
-    int x { 3 };
-    int y { 4 };
-
-    int& x_ref { x };
-    x_ref = y;  // changes the value of x to match y
-    std::cout << x << std::endl;
-
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/immovable-reference.cpp
 ```
+
+```{.bash .cb.nb}
+./bin/01/immovable-reference
+```
+
 
 ### Reference-to-const
 
@@ -1425,100 +914,40 @@ val_ref_const = 3.456; // fails, does not compile
 
 This turns out to be super helpful when passing by reference. 
 
-
 ### Pass-by-reference semantics
 
 The main use for references is to avoid making copies of values when passing arguments to a function. You could do this with pointers, of course, but pointers are messier, so it's generally better to do it with references. There can be performance gains by not making unnecessary copies, but there are also other neat things you can do:
 
-``` cpp
-// swap.cpp
-#include <iostream>
-
-void swap(int& first, int& second) {
-    int temp { first };
-    first = second; 
-    second = temp;
-}
-
-int main() {
-    int x { 10 }, y { 20 };
-    std::cout << "original x value is " << x << std::endl;
-    std::cout << "original y value is " << y << std::endl;
-    swap(x, y);
-    std::cout << "swapped x is now " << x << std::endl;
-    std::cout << "swapped y is now " << y << std::endl;
-
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/swap.cpp
 ```
 
-```
-original x value is 10
-original y value is 20
-swapped x is now 20
-swapped y is now 10
+```{.bash .cb.nb}
+./bin/01/swap
 ```
 
 Notice that when passing a reference, it's possible to modify the original variables (outside the scope of the function) by performing operations on the references. That was a handy feature in the `swap()` example, but normally it's undesirable. A more typical scenario is one in which you *don't* want the function to possess the ability to modify the out-of-scope variables that have been passed through the function arguments (because the only reason you've chosen to pass-by-reference rather than pass-by-value is to avoid making copies). In this situation, the best bet is to pass-by-reference-to-const. Because the reference-to-const cannot modify the original variable, it is now impossible for the function to accidentally modify the originals.
 
 Here's the idea:
 
-``` cpp
-// pass-by-reference-to-const.cpp
-#include <iostream>
-#include <string>
-
-// str_print() declares a reference-to-const as the argument
-void str_print(const std::string& x) {
-    std::cout << x << std::endl;
-}
-
-int main() {
-    std::string str { "hello cruel world" }; 
-    str_print( str ); // passing a string variable works
-    str_print( "goodbye cruel world" ); // so does passing a literal
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/pass-by-reference-to-const.cpp
 ```
 
+```{.bash .cb.nb}
+./bin/01/pass-by-reference-to-const
 ```
-hello cruel world
-goodbye cruel world
-```
-
 
 ## Exception handling
 
 The `divide()` function in this code throws an invalid-argument exception if the denominator is zero. The code within `main()` implements a try-catch block to handle such an exception if thrown:
 
-``` cpp
-// try-catch.cpp
-#include <iostream>
-#include <stdexcept>
-
-// a divide() function that throws an error for divide-by-zero
-double divide(double numerator, double denominator) {
-    if (denominator == 0) {
-        throw std::invalid_argument { "Denominator cannot be 0." };
-    }
-    return numerator / denominator; 
-}
-
-int main() {
-    try {
-        std::cout << divide(13, 2) << std::endl;
-        std::cout << divide(13, 0) << std::endl;
-        std::cout << divide(13, 3) << std::endl;
-    } catch (const std::invalid_argument& exception) {
-        std::cout << "Exception caught: " << exception.what() << std::endl;
-    }
-    return 0;
-}
+```{.bash .cb.run}
+./build/show-source.sh ./src/01/try-catch.cpp
 ```
 
-```
-6.5
-Exception caught: Denominator cannot be 0.
+```{.bash .cb.nb}
+./bin/01/try-catch
 ```
 
 Note that when the exception is thrown the `try` code block immediately terminates and is passed to the `catch` code block. The third division is never attempted. 
