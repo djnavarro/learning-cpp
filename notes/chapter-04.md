@@ -6,11 +6,15 @@ title: "4: Designing professional C++ programs"
 
 ## Chapter summary
 
-...Blah blah blah. I'll fill this bit in later...
+The chapter focuses on the software design process. The first part of the of the chapter is focused on principles to consider when designing software:
 
-Okay, so most of this makes sense to me. Fundamentally, the point is that if you're building software rather than writing a script, it's a good idea to spend time sketching out what you think the structure of that software is, *before* you start writing any code. 
+- **Abstraction**: Write code that works in a more general scenarios that the immediate use case. Writing templates is a useful pattern for this (though I haven't gotten to those yet). It's a bit tricky working out how much to abstract though, since premature abstraction can be a mistake too. (I refuse to use the term "code smells" - it has always rubbed me the wrong way - but I guess that's one of those)
+- **Code reuse**: Don't reinvent the wheel every time. Consider using code libraries written by others (assuming the licence allows it), or reuse code you've written. External libraries (e.g. [fmt](https://fmt.dev/)) are a little tricky for me right now because I haven't gotten to [CMake](https://cmake.org/) or [vcpkg](https://vcpkg.io/) yet, but the principles are familiar. The discussion around reuse is generally pretty nuanced, I think. For instance, it talks a lot about the pros and cons of taking a dependency on an external library, which is a refreshing change from a lot of the blanket "dependencies = bad" framing I see online sometimes.
+- **Design from the beginning**: Fundamentally, the point is that if you're building software rather than writing a script, it's a good idea to spend time sketching out what you think the structure of that software is, *before* you start writing any code. 
 
-A design document that specifies this plan might start out as a basic sketch. As you put together the sketch you'll start fleshing out specific classes, their methods and fields, and the ways they interact. It's an iterative process: you might realise some parts of your plan are wrong, redesign, etc. 
+The book then moves into talking about the practicalities of the design process. The goal is to produce a design document that specifies in advance how the software should work. This plan might start out as a basic sketch. As you put together the sketch you'll start fleshing out specific classes, their methods and fields, and the ways they interact. It's an iterative process: you might realise some parts of your plan are wrong, redesign, etc.
+
+Keeping to the spirit of these notes I'll try to do one of these things myself. 
 
 ## An informal sketch
 
@@ -79,12 +83,5 @@ Things are starting to take shape, but we still have some more to consider. The 
 
 - **UserInterface**: this system would take care of the actual "displaying stuff to the user" and the "reading responses from the user" part. It would also handle things like "giving the user the option to exit the game", and also "displaying the game state" (e.g., "You are talking to a Goblin, in the Library") 
 
-Pushing further, if we're thinking of this as a simple game engine, then we'll need some additional mechanisms:
-
-- **GameLoad**: this would have the ability to read a game state from a JSON file or something. 
-- **GameSave**: this would have the ability to write a game state to file. 
-
-In a fancy world you'd separate the "game file" from a specific "save game file", but this setup is so simple that you might as well write everything to the save file. In this sense, a "game file" is exactly identical to the "save game file" corresponding to the initial game state. 
-
-
+In the initial conception, this "engine" would just be a headers-only library (assuming I understand that term correctly). For any specific "game", I'd import the library and then write the code needed to make that particular game. In that situation (assuming the games are short, simple things), this would be enough. But you could imagine taking it further. For instance, you might want the ability to read and write save files so that a player can pick up where they left off. That would require a **SavedGame** system that allows read/write for save game files. Taking it further, you might even imagine a whole system that makes it possible to store the entire game itself as a JSON file or the like, such that the game engine could accept a game file and a saved-game file as input. I'm not planning on anything like that right now, but if I want that to be an option it's important to think about how to serialise/deserialise games and game states. 
 
