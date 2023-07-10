@@ -14,9 +14,9 @@ The chapter focuses on the software design process. The first part of the of the
 
 The book then moves into talking about the practicalities of the design process. The goal is to produce a design document that specifies in advance how the software should work. This plan might start out as a basic sketch. As you put together the sketch you'll start fleshing out specific classes, their methods and fields, and the ways they interact. It's an iterative process: you might realise some parts of your plan are wrong, redesign, etc.
 
-Keeping to the spirit of these notes I'll try to do one of these things myself. 
+Keeping to the spirit of these notes I'll try to do one of these things myself, for a small program I might end up writing one day if I ever feel confident enough at C++ to do so.
 
-## An informal sketch
+## Iteration 1: An informal sketch
 
 Something I've always wanted to do is write a simple game engine for simple text-based games, kind of like the "choose your own adventure" novels and "fighting fantasy" novels I used to read as a kid, or the kind of "twine" games I used to see on the web. Not that the world needs another one of those things, of course, but I kind of want to do it just for fun. So let's imagine something like that. How would I design a game engine like this? It's not a very complicated piece of software, but it would still have quite a few moving parts. 
 
@@ -84,4 +84,25 @@ Things are starting to take shape, but we still have some more to consider. The 
 - **UserInterface**: this system would take care of the actual "displaying stuff to the user" and the "reading responses from the user" part. It would also handle things like "giving the user the option to exit the game", and also "displaying the game state" (e.g., "You are talking to a Goblin, in the Library") 
 
 In the initial conception, this "engine" would just be a headers-only library (assuming I understand that term correctly). For any specific "game", I'd import the library and then write the code needed to make that particular game. In that situation (assuming the games are short, simple things), this would be enough. But you could imagine taking it further. For instance, you might want the ability to read and write save files so that a player can pick up where they left off. That would require a **SavedGame** system that allows read/write for save game files. Taking it further, you might even imagine a whole system that makes it possible to store the entire game itself as a JSON file or the like, such that the game engine could accept a game file and a saved-game file as input. I'm not planning on anything like that right now, but if I want that to be an option it's important to think about how to serialise/deserialise games and game states. 
+
+
+### Post-mortem on iteration 1
+
+In software engineering land, the idea behind a "post-mortem" is to look back at a project (or a stage in the development process for the project) and do a blame-free evaluation of how it went. What worked? What didn't work? What are the lessons for the next step? Fundamental to the process is that it's not meant to be used to pass judgment on persons, and it's not meant to be used as part of someone's career evaluation. I confess I'm skeptical that this works as advertised in practice, because humans are what we are: people blame each other for things all the time even in situations where we're not supposed to, and I've never yet met a manager (in tech or any other industry) who didn't misuse private information when evaluating workers. Maybe one day I'll see a counterexample to this but it hasn't happened yet. Fortunately this isn't a problem in this instance, because it's my own personal project and I am accountable only to myself here :)
+
+- There are places in the sketch where the vagueness about objects suggests I haven't fully decided on the scope of the project. For example, entities that are stored in the inventory can either be "in-use" or "not-in-use", but I'm quite unsure about what constraints exist on the "in-use" entities. At some points I talk as if the protagonist can only use a single entity at a given time, but at other points I seem to be acknowledging that this is too limited (why can't my protagonist wield the "Goblin Sword" while also wearing the "Goblin Hat"?) There may be a need for a "slots" system here. For instance, if the game is a sword-and-sorcery style game, you might want an "in-use-weapon" slot, and "in-use-armour" slot, and maybe more. If the game has more of a romance simulation flavour, there might be slots for the "in-use-outfit" that the protagonist wears on a date, one or more "in-use-tickets" that the protagonist uses to plan a date (e.g., a movie ticket, a go-to-a-picnic ticket, etc). It's not clear to me right now how many game structures I want the engine to be able to support (I'm not sure why a dating simulator needs a combat system, but on the other hand I have dated men in the past so yeah maybe it does), but it does seem clear that a single "in-use" slot is quite limiting. To resolve that, I'll probably need to do some work on clarifying the scope of the project.
+
+- The sketch is quite vague about how the parts of the software should be organised into subsystems. For instance, there's a sense in which **Entity** objects and the **EntityInteraction** system go together as an entity system of some sort. But I'm not sure about where **Action** objects fit. Is there an **ActionHandler** system needed, for example? Should I be making a clearer distinction between actions attached to locations versus actions attached to entities? I'm really not sure, and I think that makes clear to me that this list is lacking some structure. It seems to me that what I have here is a list that summarises the objects I might need, but is missing details about assigning responsibilities. This lack of structure feels like the big missing piece right now. 
+
+- The sketch is also lacking detail about what kinds of methods and fields should belong to these objects. What should be private to the objects, and what should be public? There's no detail on this at all so far. That bothers me less right now: it feels like something I want clarity on before writing any code, but it's probably something that can wait until I have a little more clarity on the structure.
+
+Okay that's good, I think? It gives me a sense of what I need to work on next as I iterate on the design. 
+
+In terms of progress through the book, what I think I'll do now is move onto chapter 5 (which talks about OOP approaches in C++) because that will probably be valuable to me in order to progress to "iteration 2", and then return to this section of the notes later.
+
+## Moar iterations...
+
+...to be added. Maybe.
+
+[Back to top](index.html)
 
