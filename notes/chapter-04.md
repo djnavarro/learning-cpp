@@ -65,7 +65,7 @@ I'm not certain precisely what action types would be needed here, but
 
 Thinking about actions in this sense makes clear that we probably need several qualitative different **Interaction** systems:
 
-- **LocationInteraction**: this system would be responsible for interactions with location. It presents the user with a description of the place and offers a set of actions based on whatever is contained in that place. It would also accept responses from the user, and trigger the appropriate actions. Depending on what the user does, this might then hand over to the entity interaction system, for instance.
+- **LocationInteraction**: this system would be responsible for interactions with location. It presents the user with a description of the place and offers a set of actions based on whatever is contained in that place. It would also accept responses from the user, and trigger the appropriate actions. Depending on what the user does, this might then hand over to the entity interaction system, for instance. Additionally, it would offer the user the ability to move between locations.
 
 - **InventoryInteraction**: this system would be responsible for interactions with the inventory. It would show the user a list of entities currently stored, allow the user to select entities, drop them, destroy them, use them, etc. 
 
